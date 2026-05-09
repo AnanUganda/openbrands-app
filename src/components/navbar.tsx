@@ -43,6 +43,7 @@ export function Navbar() {
     { path: "/", label: "Services" },
     { path: "/work", label: "Work" },
     { path: "/about", label: "About" },
+    { path: "/hiring", label: "Hiring" },
     { path: "/contact", label: "Contact" },
   ];
 

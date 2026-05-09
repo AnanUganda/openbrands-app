@@ -7,6 +7,7 @@ import { Home } from '@/pages/Home';
 import { Contact } from '@/pages/Contact';
 import { About } from '@/pages/About';
 import { Work } from '@/pages/Work';
+import { Hiring } from '@/pages/Hiring';
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/work" element={<Work />} />
+          <Route path="/hiring" element={<Hiring />} />
         </Routes>
         <Footer />
       </div>
