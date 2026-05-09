@@ -83,7 +83,7 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center space-x-4 relative z-50">
-            <Link to="/contact" className="hidden lg:block">
+            <a href="https://calendly.com/openbrand-marketing/30min" target="_blank" rel="noopener noreferrer" className="hidden lg:block">
               <button className="relative group inline-flex items-center justify-center h-10 px-6 font-bold text-sm text-black bg-cyan-400 rounded-full overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]">
                 <span className="relative z-10 flex items-center gap-2">
                   Start Growing
@@ -91,7 +91,7 @@ export function Navbar() {
                 </span>
                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
               </button>
-            </Link>
+            </a>
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden p-2 text-white/80 hover:text-white focus:outline-none rounded-md pointer-events-auto"
@@ -151,11 +151,11 @@ export function Navbar() {
                 transition={{ delay: 0.3 }}
                 className="pt-8 w-full flex justify-center"
               >
-                <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)}>
+                <a href="https://calendly.com/openbrand-marketing/30min" target="_blank" rel="noopener noreferrer" onClick={() => setIsMobileMenuOpen(false)} className="w-full">
                   <Button variant="outline" className="w-full max-w-sm rounded-[24px] py-6 text-lg bg-white/5 border-white/20">
                     Book a free strategy call
                   </Button>
-                </Link>
+                </a>
               </motion.div>
             </div>
           </motion.div>

@@ -335,7 +335,7 @@ export function Footer() {
             <div ref={linksRef} className="flex flex-col items-center gap-6 w-full">
               {/* Primary Call to Action */}
               <div className="flex flex-wrap justify-center gap-4 w-full">
-                <MagneticButton as="a" href="#" className="footer-glass-pill px-8 md:px-10 py-4 md:py-5 rounded-full text-white font-bold text-sm md:text-base flex items-center gap-3 group border border-cyan-500/30 bg-cyan-500/10">
+                <MagneticButton as="a" href="https://calendly.com/openbrand-marketing/30min" target="_blank" rel="noopener noreferrer" className="footer-glass-pill px-8 md:px-10 py-4 md:py-5 rounded-full text-white font-bold text-sm md:text-base flex items-center gap-3 group border border-cyan-500/30 bg-cyan-500/10">
                   Book a free strategy call
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </MagneticButton>

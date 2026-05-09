@@ -66,10 +66,10 @@ export function Contact() {
                   <h3 className="text-xl font-semibold text-white mb-2">Book your free strategy session</h3>
                   <p className="text-zinc-400 mb-8 max-w-md">Pick a time that works for you. We'll take it from there.</p>
                   
-                  <button className="relative group inline-flex items-center justify-center gap-2 bg-white text-black px-8 py-4 rounded-xl font-bold hover:bg-zinc-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+                  <a href="https://calendly.com/openbrand-marketing/30min" target="_blank" rel="noopener noreferrer" className="relative group inline-flex items-center justify-center gap-2 bg-white text-black px-8 py-4 rounded-xl font-bold hover:bg-zinc-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]">
                     Open Calendar
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </button>
+                  </a>
                 </div>
               </div>
             </motion.div>
@@ -120,12 +120,25 @@ export function Contact() {
           >
             <h2 className="text-2xl font-bold text-white mb-6">Or send us a message</h2>
             <div className="bg-white/[0.03] border border-white/10 rounded-3xl p-8 backdrop-blur-sm">
-              <form className="flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
+              <form 
+                action="https://formsubmit.co/hello@openbrands.com" 
+                method="POST" 
+                className="flex flex-col gap-6"
+              >
+                {/* Anti-spam honeypot */}
+                <input type="text" name="_honey" style={{ display: 'none' }} />
+                {/* Disable Captcha (optional, but good for UX) */}
+                <input type="hidden" name="_captcha" value="false" />
+                {/* Success redirection (can be updated to a specific thank you page later) */}
+                <input type="hidden" name="_next" value={window.location.href} />
+                
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-zinc-400 mb-2">Name</label>
                   <input 
                     type="text" 
                     id="name" 
+                    name="name"
+                    required
                     className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-transparent transition-all"
                     placeholder="John Doe"
                   />
@@ -135,6 +148,8 @@ export function Contact() {
                   <input 
                     type="email" 
                     id="email" 
+                    name="email"
+                    required
                     className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-transparent transition-all"
                     placeholder="john@company.com"
                   />
@@ -144,6 +159,7 @@ export function Contact() {
                   <input 
                     type="text" 
                     id="company" 
+                    name="company"
                     className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-transparent transition-all"
                     placeholder="Company Inc."
                   />
@@ -152,6 +168,8 @@ export function Contact() {
                   <label htmlFor="message" className="block text-sm font-medium text-zinc-400 mb-2">Message</label>
                   <textarea 
                     id="message" 
+                    name="message"
+                    required
                     rows={4}
                     className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-transparent transition-all resize-none"
                     placeholder="Tell us about your current lead generation..."
