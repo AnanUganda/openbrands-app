@@ -44,7 +44,7 @@ const phases = [
 
 const inclusions = [
   "Complete Done-For-You Lead Generation Ecosystem",
-  "12 Proprietary Bonuses (Value: $28,500)",
+  "12 Proprietary Bonuses",
   "End-to-end CRM and integration setup",
   "Dedicated senior account manager",
 ];
@@ -154,10 +154,9 @@ export function OfferSection() {
                       Core Investment
                     </span>
                     <div className="flex items-baseline gap-2 mt-2">
-                      <span className="text-5xl md:text-6xl font-black text-white tracking-tighter">
-                        $8,500
+                      <span className="text-4xl md:text-5xl font-black text-white tracking-tighter">
+                        Custom Quote
                       </span>
-                      <span className="text-zinc-500 font-medium">one-time</span>
                     </div>
                   </div>
 

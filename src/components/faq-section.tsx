@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 const faqs = [
   {
-    question: "Isn't $8,500 expensive?",
+    question: "Isn't this expensive?",
     answer: "Compared to what? A failed $20K agency? Or the lost revenue from not getting leads? No, it's a bargain. Plus we guarantee results.",
   },
   {

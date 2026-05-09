@@ -60,10 +60,11 @@ export function About() {
             transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
             className="aspect-square bg-white/[0.03] border border-white/10 rounded-3xl overflow-hidden relative"
           >
-             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-500/10 via-black to-black opacity-60"></div>
-             {/* Abstract techy pattern or image here */}
-             <div className="absolute inset-x-0 bottom-0 p-8 bg-gradient-to-t from-black via-black/80 to-transparent">
-                 <p className="text-white font-medium text-xl">"Marketing isn't magic. It's math, human psychology, and relentless execution."</p>
+             <img src="/anan.jpeg" alt="Anan" className="absolute inset-0 w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-700" />
+             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+             <div className="absolute inset-x-0 bottom-0 p-8 z-10">
+                 <p className="text-white font-medium text-xl italic mb-3">"Marketing isn't magic. It's math, human psychology, and relentless execution."</p>
+                 <p className="text-cyan-400 font-bold tracking-wider uppercase text-sm">— Anan</p>
              </div>
           </motion.div>
         </div>

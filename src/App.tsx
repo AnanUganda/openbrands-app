@@ -12,7 +12,13 @@ export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <div className="min-h-screen flex flex-col font-sans selection:bg-indigo-500/30 bg-black dark text-zinc-50 overflow-clip pt-20 lg:pt-24">
+      {/* Dev Banner */}
+      <div className="fixed top-0 left-0 w-full bg-cyan-400 text-black text-center text-[10px] md:text-xs font-bold py-1.5 z-[9999] uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg">
+        <span className="w-1.5 h-1.5 rounded-full bg-black animate-pulse"></span>
+        Website currently in development
+        <span className="w-1.5 h-1.5 rounded-full bg-black animate-pulse"></span>
+      </div>
+      <div className="min-h-screen flex flex-col font-sans selection:bg-indigo-500/30 bg-black dark text-zinc-50 overflow-clip pt-24 lg:pt-28">
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
