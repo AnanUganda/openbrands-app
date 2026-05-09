@@ -8,6 +8,7 @@ import { PerspectiveCamera } from "@react-three/drei"
 import { degToRad } from "three/src/math/MathUtils.js"
 import { ArrowUpRight, ChevronDown, Menu, X } from "lucide-react"
 import { motion, AnimatePresence } from "motion/react"
+import { Link } from "react-router-dom"
 
 // ============================================================================
 // BEAMS COMPONENT (3D Background)
@@ -513,12 +514,12 @@ export default function EtherealBeamsHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
         >
-          <a href="https://calendly.com/openbrand-marketing/30min" target="_blank" rel="noopener noreferrer">
+          <Link to="/contact">
             <Button className="shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:scale-105 transition-transform duration-300 text-black bg-white hover:bg-gray-100 font-semibold rounded-full px-6 py-4 h-auto text-base">
               Book a free strategy call
               <ArrowUpRight className="ml-2 h-4 w-4" />
             </Button>
-          </a>
+          </Link>
         </motion.div>
       </div>
 
