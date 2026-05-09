@@ -59,9 +59,15 @@ export function Hiring() {
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight mb-8">
             Build the <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">Future</span> of Growth.
           </h1>
-          <p className="text-xl text-zinc-400 leading-relaxed font-medium">
-            We are always looking for relentless, top-tier talent who care about one thing: driving actual results. No fluff, just impact.
+          <p className="text-xl text-zinc-400 leading-relaxed font-medium mb-6">
+            We are always looking for relentless, top-tier talent who care about one thing: driving actual results. No corporate fluff, just real impact.
           </p>
+          <div className="bg-cyan-500/10 border border-cyan-500/20 rounded-2xl p-6 text-left inline-block">
+            <h3 className="text-lg font-bold text-white mb-2">Our Philosophy: Business as Mission</h3>
+            <p className="text-zinc-300 text-sm leading-relaxed">
+              We believe entrepreneurship is a calling to serve others with absolute integrity. We don't just want employees; we want partners who view their work as a mission to genuinely help our clients succeed and bless the communities we impact.
+            </p>
+          </div>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
@@ -119,7 +125,7 @@ export function Hiring() {
         >
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Don't see your role?</h2>
           <p className="text-zinc-400 mb-8 max-w-2xl mx-auto">
-            We are always open to hearing from exceptional talent. If you think you can bring massive value to Open Brands, pitch us your role.
+            We are always open to hearing from exceptional talent who align with our mission-driven approach. If you operate with integrity and can bring massive value to Open Brands, pitch us your role.
           </p>
           <a 
             href="mailto:hello@openbrands.com?subject=Open Pitch: Why you need me at Open Brands"
