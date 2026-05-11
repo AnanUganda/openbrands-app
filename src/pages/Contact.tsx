@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from 'react-helmet-async';
 import { motion } from "motion/react";
 import { Mail, Phone, Globe, MessageCircle, ArrowRight, Clock, CalendarDays, CheckCircle2 } from "lucide-react";
 import { FluidParticlesBackground } from "@/components/ui/fluid-particles-background";
@@ -25,6 +26,10 @@ export function Contact() {
 
   return (
     <div className="relative w-full min-h-screen bg-black overflow-hidden flex-1">
+      <Helmet>
+        <title>Contact Us | Open Brands</title>
+        <meta name="description" content="Get in touch with Open Brands to schedule a strategy call and learn how our Waitlist System™ can scale your B2B service business." />
+      </Helmet>
       <FluidParticlesBackground className="pointer-events-none opacity-50" speedMultiplier={0.2} particleCount={100} />
       {/* Background glow effects */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[150px] pointer-events-none" />

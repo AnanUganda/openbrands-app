@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from 'react-helmet-async';
 import { motion } from "motion/react";
 import { ArrowRight, Briefcase, Palette, MonitorSmartphone, Share2 } from "lucide-react";
 
@@ -41,6 +42,10 @@ const roles = [
 export function Hiring() {
   return (
     <div className="relative w-full min-h-screen bg-black overflow-hidden flex-1 pb-24">
+      <Helmet>
+        <title>Careers & Hiring | Open Brands</title>
+        <meta name="description" content="Join Open Brands and help build the future of B2B growth. We are looking for relentless, top-tier talent who care about driving actual results." />
+      </Helmet>
       {/* Background glow effects */}
       <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-cyan-500/10 rounded-full blur-[150px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[150px] pointer-events-none" />

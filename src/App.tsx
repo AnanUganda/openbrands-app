@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
 import { ScrollToTop } from '@/components/scroll-to-top';
@@ -11,7 +12,8 @@ import { Hiring } from '@/pages/Hiring';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter>
       <ScrollToTop />
       {/* Dev Banner */}
       <div className="fixed top-0 left-0 w-full bg-cyan-400 text-black text-center text-[10px] md:text-xs font-bold py-1.5 z-[9999] uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg">
@@ -30,6 +32,7 @@ export default function App() {
         </Routes>
         <Footer />
       </div>
-    </BrowserRouter>
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }

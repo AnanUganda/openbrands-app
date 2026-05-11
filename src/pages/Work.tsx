@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from 'react-helmet-async';
 import { motion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { ImageAutoSlider } from "@/components/ui/image-auto-slider";
@@ -27,6 +28,10 @@ export function Work() {
 
   return (
     <div className="relative w-full min-h-screen bg-black overflow-hidden flex-1 pb-24">
+      <Helmet>
+        <title>Portfolio & Case Studies | Open Brands</title>
+        <meta name="description" content="Browse our recent success stories and see how our systems drive predictable, scalable growth for B2B businesses and high-ticket consultants." />
+      </Helmet>
       {/* Background glow effects */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[150px] pointer-events-none" />
       

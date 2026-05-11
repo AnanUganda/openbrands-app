@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import EtherealBeamsHero from '@/components/ui/ethereal-beams-hero';
 import { ProblemSection } from '@/components/problem-section';
 import { SolutionSection } from '@/components/solution-section';
@@ -12,6 +13,10 @@ import { FaqSection } from '@/components/faq-section';
 export function Home() {
   return (
     <>
+      <Helmet>
+        <title>Open Brands | Results-Driven B2B Marketing Agency</title>
+        <meta name="description" content="We build structured, done-for-you lead generation systems that drive real growth for B2B service businesses and high-ticket offers." />
+      </Helmet>
       <EtherealBeamsHero />
       <ProblemSection />
       <SolutionSection />

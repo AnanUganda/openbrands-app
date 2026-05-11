@@ -1,10 +1,15 @@
 import React from "react";
+import { Helmet } from 'react-helmet-async';
 import { motion } from "motion/react";
 import { ArrowRight, Target, Users, ShieldCheck, HeartHandshake, Eye, Handshake, CheckCircle2 } from "lucide-react";
 
 export function About() {
   return (
     <div className="relative w-full min-h-screen bg-black overflow-hidden flex-1 pb-24">
+      <Helmet>
+        <title>Our Story | Open Brands</title>
+        <meta name="description" content="Discover why Open Brands was founded and learn about our mission to help B2B service businesses scale with predictability and integrity." />
+      </Helmet>
       {/* Background glow effects */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[150px] pointer-events-none" />
       <div className="absolute bottom-1/3 left-[-10%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[150px] pointer-events-none" />
