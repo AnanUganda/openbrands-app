@@ -17,7 +17,7 @@ export default function SplitHero() {
       <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-12">
         
         {/* ── Left: Text Content (60%) ── */}
-        <div className="relative z-10 w-full lg:w-[58%] flex flex-col justify-center order-2 lg:order-1">
+        <div className="relative z-10 w-full lg:w-[58%] flex flex-col justify-center order-1">
           <motion.h1 
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#1A1A1A] tracking-tighter leading-[1.05] mb-5 text-balance"
             initial={{ opacity: 0, y: 20 }}
@@ -69,7 +69,7 @@ export default function SplitHero() {
 
         {/* ── Right: Image & Cards (42%) — extends left via negative margin ── */}
         <motion.div 
-          className="relative z-10 w-full lg:w-[42%] order-1 lg:order-2 lg:-mr-8 xl:-mr-12"
+          className="relative z-10 w-full lg:w-[42%] order-2 lg:-mr-8 xl:-mr-12"
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
