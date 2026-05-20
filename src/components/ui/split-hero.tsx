@@ -67,76 +67,79 @@ export default function SplitHero() {
           </motion.div>
         </div>
 
-        {/* ── Right: Image & Cards (42%) — extends left via negative margin ── */}
+        {/* ── Right: Image & Cards (42%) ── */}
         <motion.div 
           className="relative z-10 w-full lg:w-[42%] order-2 lg:-mr-8 xl:-mr-12"
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
         >
-          {/* Image container — taller on desktop, shorter on mobile */}
-          <div className="relative w-full h-[55vw] sm:h-[50vw] md:h-[45vw] lg:h-[78vh] min-h-[300px] max-h-[700px] rounded-[2rem] overflow-hidden shadow-2xl shadow-black/10">
+          {/* Image container — tall enough to hold all three cards without overlap */}
+          <div className="relative w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-black/10"
+               style={{ minHeight: '520px', height: 'clamp(520px, 75vh, 700px)' }}>
             <img 
               src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2000&q=80" 
               alt="Modern Property" 
-              className="w-full h-full object-cover object-center"
+              className="absolute inset-0 w-full h-full object-cover object-center"
             />
             
             {/* Subtle brand overlay */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 to-transparent mix-blend-overlay pointer-events-none"></div>
+            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 to-transparent mix-blend-overlay pointer-events-none" />
 
-            {/* Card: Inquiries Count */}
+            {/* ── Card 1: Inquiries — top-left ── */}
             <motion.div 
-              className="absolute top-5 left-5 sm:top-8 sm:left-8 bg-white/90 backdrop-blur-md rounded-2xl p-3.5 sm:p-5 shadow-lg border border-white/50 w-40 sm:w-48"
+              className="absolute top-6 left-6 bg-white/92 backdrop-blur-md rounded-2xl px-5 py-4 shadow-lg border border-white/60 w-44 sm:w-52"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
-              whileHover={{ y: -5 }}
+              whileHover={{ y: -4 }}
             >
-              <div className="flex items-center gap-1.5 mb-1">
-                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                <p className="text-[10px] sm:text-xs text-gray-400 font-medium uppercase tracking-wider">This Month</p>
+              <div className="flex items-center gap-1.5 mb-2">
+                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse shrink-0" />
+                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest">This Month</p>
               </div>
-              <p className="text-2xl sm:text-3xl font-bold text-[#1A1A1A] tracking-tight">+43</p>
-              <p className="text-[11px] sm:text-xs text-gray-500 font-medium leading-snug mt-1">Qualified Property Inquiries</p>
+              <p className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] tracking-tight leading-none">+43</p>
+              <p className="text-xs text-gray-500 font-medium leading-snug mt-2">Qualified Property<br/>Inquiries</p>
             </motion.div>
 
-            {/* Card: New Buyer Notification */}
+            {/* ── Card 2: Notification — top-right ── */}
             <motion.div 
-              className="absolute top-1/2 -translate-y-1/2 right-4 sm:right-6 bg-white/90 backdrop-blur-md rounded-2xl p-3 sm:p-4 shadow-lg border border-white/50 w-44 sm:w-52"
+              className="absolute top-6 right-6 bg-white/92 backdrop-blur-md rounded-2xl px-4 py-3.5 shadow-lg border border-white/60 w-44 sm:w-52"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.8, ease: "easeOut" }}
-              whileHover={{ scale: 1.04 }}
+              whileHover={{ scale: 1.03 }}
             >
-              <div className="flex items-start gap-2.5">
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-cyan-400 flex items-center justify-center shrink-0">
-                  <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+              <div className="flex items-start gap-3">
+                <div className="w-9 h-9 rounded-full bg-cyan-400 flex items-center justify-center shrink-0">
+                  <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
                 </div>
                 <div>
-                  <p className="text-[11px] sm:text-xs font-bold text-[#1A1A1A] leading-tight">New Buyer Inquiry Received</p>
-                  <p className="text-[10px] sm:text-[11px] text-gray-400 mt-0.5">3 minutes ago</p>
+                  <p className="text-xs font-bold text-[#1A1A1A] leading-snug">New Buyer Inquiry Received</p>
+                  <p className="text-[11px] text-gray-400 mt-1">3 minutes ago</p>
                 </div>
               </div>
             </motion.div>
 
-            {/* Card: Campaign Performance */}
+            {/* ── Card 3: Campaign Performance — bottom, full-width ── */}
             <motion.div 
-              className="absolute bottom-5 left-5 right-5 sm:bottom-8 sm:left-8 sm:right-8 md:left-auto md:right-6 md:w-64 lg:w-72 bg-white/90 backdrop-blur-md rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-xl border border-white/50"
+              className="absolute bottom-6 left-6 right-6 bg-white/92 backdrop-blur-md rounded-2xl px-5 py-4 shadow-xl border border-white/60"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1, ease: "easeOut" }}
-              whileHover={{ y: -5 }}
+              whileHover={{ y: -4 }}
             >
-              <p className="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Campaign Performance</p>
-              <div className="flex items-end gap-2 mb-2">
-                <p className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] tracking-tight">4.7x</p>
-                <span className="text-sm font-semibold text-green-500 mb-1">↑ ROAS</span>
+              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2">Campaign Performance</p>
+              <div className="flex items-end gap-2 mb-3">
+                <p className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] tracking-tight leading-none">4.7x</p>
+                <span className="text-sm font-bold text-green-500 mb-0.5">↑ ROAS</span>
               </div>
               <div className="w-full bg-gray-100 rounded-full h-1.5 mb-2">
                 <div className="bg-cyan-400 h-1.5 rounded-full" style={{ width: '82%' }} />
               </div>
-              <p className="text-[11px] sm:text-xs text-gray-500">Return on Ad Spend · this campaign</p>
+              <p className="text-xs text-gray-500">Return on Ad Spend · this campaign</p>
             </motion.div>
           </div>
         </motion.div>
