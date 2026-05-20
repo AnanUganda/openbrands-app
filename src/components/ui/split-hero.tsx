@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Play, Star } from 'lucide-react';
+import { ArrowRight, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function SplitHero() {
@@ -85,48 +85,58 @@ export default function SplitHero() {
             {/* Subtle brand overlay */}
             <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 to-transparent mix-blend-overlay pointer-events-none"></div>
 
-            {/* Card: Offer */}
+            {/* Card: Inquiries Count */}
             <motion.div 
-              className="absolute top-5 left-5 sm:top-8 sm:left-8 bg-white/90 backdrop-blur-md rounded-2xl p-3.5 sm:p-5 shadow-lg border border-white/50 w-32 sm:w-40"
+              className="absolute top-5 left-5 sm:top-8 sm:left-8 bg-white/90 backdrop-blur-md rounded-2xl p-3.5 sm:p-5 shadow-lg border border-white/50 w-40 sm:w-48"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
               whileHover={{ y: -5 }}
             >
-              <p className="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider mb-1">Limited Offer</p>
-              <p className="text-xl sm:text-2xl font-bold text-[#1A1A1A] mb-2 sm:mb-3">15% Off</p>
-              <button className="w-full bg-cyan-50 hover:bg-cyan-100 text-cyan-700 text-xs sm:text-sm font-semibold py-1.5 sm:py-2 rounded-xl transition-colors">
-                Inquire
-              </button>
+              <div className="flex items-center gap-1.5 mb-1">
+                <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                <p className="text-[10px] sm:text-xs text-gray-400 font-medium uppercase tracking-wider">This Month</p>
+              </div>
+              <p className="text-2xl sm:text-3xl font-bold text-[#1A1A1A] tracking-tight">+43</p>
+              <p className="text-[11px] sm:text-xs text-gray-500 font-medium leading-snug mt-1">Qualified Property Inquiries</p>
             </motion.div>
 
-            {/* Card: Virtual Tour */}
+            {/* Card: New Buyer Notification */}
             <motion.div 
-              className="absolute top-1/2 -translate-y-1/2 right-4 sm:right-6 bg-white/90 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 pr-4 sm:pr-5 shadow-lg border border-white/50 flex items-center gap-2 sm:gap-3 cursor-pointer group"
+              className="absolute top-1/2 -translate-y-1/2 right-4 sm:right-6 bg-white/90 backdrop-blur-md rounded-2xl p-3 sm:p-4 shadow-lg border border-white/50 w-44 sm:w-52"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.8, ease: "easeOut" }}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.04 }}
             >
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-100 flex items-center justify-center group-hover:bg-cyan-50 transition-colors shrink-0">
-                <Play className="w-3 h-3 sm:w-4 sm:h-4 text-[#1A1A1A] ml-0.5 sm:ml-1 group-hover:text-cyan-600 transition-colors" />
+              <div className="flex items-start gap-2.5">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-cyan-400 flex items-center justify-center shrink-0">
+                  <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                </div>
+                <div>
+                  <p className="text-[11px] sm:text-xs font-bold text-[#1A1A1A] leading-tight">New Buyer Inquiry Received</p>
+                  <p className="text-[10px] sm:text-[11px] text-gray-400 mt-0.5">3 minutes ago</p>
+                </div>
               </div>
-              <span className="text-xs sm:text-sm font-semibold text-[#1A1A1A] whitespace-nowrap">Virtual Tour</span>
             </motion.div>
 
-            {/* Card: Property Details */}
+            {/* Card: Campaign Performance */}
             <motion.div 
-              className="absolute bottom-5 left-5 right-5 sm:bottom-8 sm:left-8 sm:right-8 md:left-auto md:right-6 md:w-72 lg:w-80 bg-white/90 backdrop-blur-md rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xl border border-white/50"
+              className="absolute bottom-5 left-5 right-5 sm:bottom-8 sm:left-8 sm:right-8 md:left-auto md:right-6 md:w-64 lg:w-72 bg-white/90 backdrop-blur-md rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-xl border border-white/50"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1, ease: "easeOut" }}
               whileHover={{ y: -5 }}
             >
-              <p className="text-xs sm:text-sm font-medium text-gray-500 mb-1">The Ridge House</p>
-              <p className="text-2xl sm:text-3xl font-bold text-[#1A1A1A] mb-2 sm:mb-3 tracking-tight">$2,850,000</p>
-              <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
-                Contemporary masterpiece with panoramic valley views and brand-new amenities.
-              </p>
+              <p className="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">Campaign Performance</p>
+              <div className="flex items-end gap-2 mb-2">
+                <p className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] tracking-tight">4.7x</p>
+                <span className="text-sm font-semibold text-green-500 mb-1">↑ ROAS</span>
+              </div>
+              <div className="w-full bg-gray-100 rounded-full h-1.5 mb-2">
+                <div className="bg-cyan-400 h-1.5 rounded-full" style={{ width: '82%' }} />
+              </div>
+              <p className="text-[11px] sm:text-xs text-gray-500">Return on Ad Spend · this campaign</p>
             </motion.div>
           </div>
         </motion.div>
