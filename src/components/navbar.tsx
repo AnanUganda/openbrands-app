@@ -11,6 +11,7 @@ export function Navbar() {
 
   const navLinks = [
     { path: '/', label: 'Services' },
+    { path: '/templates', label: 'Templates' },
     { path: '/hiring', label: 'Hiring' },
     { path: '/work', label: 'Results' },
     { path: '/about', label: 'About' },

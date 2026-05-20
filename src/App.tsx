@@ -11,6 +11,8 @@ import { Work } from '@/pages/Work';
 import { Hiring } from '@/pages/Hiring';
 import { Blog } from '@/pages/Blog';
 import { BlogPost } from '@/pages/BlogPost';
+import { Templates } from '@/pages/Templates';
+import { TemplateDetail } from '@/pages/TemplateDetail';
 
 export default function App() {
   return (
@@ -30,6 +32,8 @@ export default function App() {
           <Route path="/hiring" element={<Hiring />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/templates" element={<Templates />} />
+          <Route path="/templates/:slug" element={<TemplateDetail />} />
         </Routes>
         <Footer />
       </div>
