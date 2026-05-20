@@ -13,6 +13,7 @@ import { Blog } from '@/pages/Blog';
 import { BlogPost } from '@/pages/BlogPost';
 import { Templates } from '@/pages/Templates';
 import { TemplateDetail } from '@/pages/TemplateDetail';
+import { NotFound } from '@/pages/NotFound';
 
 export default function App() {
   return (
@@ -34,6 +35,8 @@ export default function App() {
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/templates" element={<Templates />} />
           <Route path="/templates/:slug" element={<TemplateDetail />} />
+          {/* Catch-all: any unknown URL → 404 page */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
       </div>

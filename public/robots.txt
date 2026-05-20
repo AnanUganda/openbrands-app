@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://openbrands.studio/sitemap.xml
+# Block old ghost paths from previous website version
+Disallow: /websites/
+Disallow: /aboutme
+
+Sitemap: https://www.openbrands.studio/sitemap.xml
