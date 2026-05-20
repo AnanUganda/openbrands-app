@@ -1,167 +1,167 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { Menu, X, ChevronDown } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
-
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "default" | "outline" | "ghost"
-  size?: "sm" | "lg"
-  children: React.ReactNode
-}
-
-const Button = ({ variant = "default", size = "sm", className = "", children, ...props }: ButtonProps) => {
-  const baseClasses =
-    "inline-flex items-center justify-center font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 disabled:pointer-events-none disabled:opacity-50"
-
-  const variants = {
-    default: "bg-[#1A1A1A] text-white hover:bg-gray-800",
-    outline: "border border-gray-200 bg-white backdrop-blur-xl text-[#1A1A1A] hover:bg-gray-50 hover:border-gray-300",
-    ghost: "text-gray-600 hover:text-[#1A1A1A] hover:bg-gray-100",
-  }
-
-  const sizes = {
-    sm: "h-9 px-4 py-2 text-sm",
-    lg: "px-8 py-6 text-lg",
-  }
-
-  return (
-    <button
-      className={`group relative overflow-hidden rounded-full ${baseClasses} ${variants[variant]} ${sizes[size]} ${className}`}
-      {...props}
-    >
-      <span className="relative z-10 flex items-center">{children}</span>
-      <div className="absolute inset-0 -top-2 -bottom-2 bg-gradient-to-r from-transparent via-black/5 to-transparent skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
-    </button>
-  )
-}
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { cn } from '@/lib/utils';
+import { useScroll } from '@/components/ui/use-scroll';
+import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
 
 export function Navbar() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const scrolled = useScroll(10);
   const location = useLocation();
 
   const navLinks = [
-    { path: "/", label: "Services" },
-    { path: "/hiring", label: "Hiring" },
-    { path: "/work", label: "Results" },
-    { path: "/about", label: "About" },
-    { path: "/contact", label: "Contact" },
+    { path: '/', label: 'Services' },
+    { path: '/hiring', label: 'Hiring' },
+    { path: '/work', label: 'Results' },
+    { path: '/about', label: 'About' },
+    { path: '/contact', label: 'Contact' },
   ];
 
-  return (
-    <>
-      <div className="fixed top-0 left-0 right-0 z-[100] p-4 md:p-6 pointer-events-none flex justify-center">
-        <nav className="pointer-events-auto w-full max-w-[1200px] bg-white/80 backdrop-blur-2xl border border-black/5 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.05)] transition-all duration-300 flex items-center justify-between px-4 md:px-6 py-3">
-          <Link to="/" className="text-[#1A1A1A] font-bold text-lg md:text-xl tracking-tight flex items-center gap-3 md:gap-2 relative z-50 group">
-            <div className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-[0_0_15px_rgba(34,211,238,0.3)]">
-              <div className="w-3 h-3 bg-white rounded-full"></div>
-            </div>
-            <div className="flex flex-col md:flex-row md:items-center md:gap-1 leading-none text-left pt-1 md:pt-0">
-              <span>Open</span>
-              <span className="text-cyan-400">Brands</span>
-            </div>
-          </Link>
+  React.useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [open]);
 
-          <div className="hidden lg:flex items-center space-x-1 text-sm font-medium text-gray-500">
+  // Close mobile menu on route change
+  React.useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
+  return (
+    <header
+      className={cn(
+        'sticky top-0 z-50 w-full border-b border-transparent transition-all duration-300',
+        {
+          'bg-white/95 backdrop-blur-lg border-gray-200/80 shadow-sm': scrolled && !open,
+          'bg-white/90': open && !scrolled,
+          'bg-transparent': !scrolled && !open,
+        },
+      )}
+    >
+      <nav
+        className={cn(
+          'mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 md:px-8 lg:px-12 transition-all duration-300',
+          { 'h-14': scrolled },
+        )}
+      >
+        {/* Logo */}
+        <Link
+          to="/"
+          className="flex items-center gap-2.5 text-[#1A1A1A] font-bold text-xl tracking-tight group shrink-0"
+        >
+          <div className="w-8 h-8 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform shadow-[0_0_12px_rgba(34,211,238,0.25)]">
+            <div className="w-3 h-3 bg-white rounded-full" />
+          </div>
+          <span>Open</span>
+          <span className="text-cyan-500">Brands</span>
+        </Link>
+
+        {/* Desktop nav links */}
+        <div className="hidden lg:flex items-center gap-1 text-sm font-medium text-gray-500">
+          {navLinks.map((link) => {
+            const isActive = location.pathname === link.path;
+            return (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={cn(
+                  'relative px-4 py-2 rounded-full transition-colors duration-200',
+                  isActive
+                    ? 'text-[#1A1A1A] font-semibold bg-black/5'
+                    : 'hover:text-[#1A1A1A] hover:bg-black/5',
+                )}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Desktop CTA */}
+        <div className="hidden lg:flex items-center gap-3">
+          <Link
+            to="/contact"
+            className="inline-flex items-center gap-2 h-9 px-5 rounded-full border border-gray-200 bg-white text-sm font-semibold text-[#1A1A1A] hover:bg-gray-50 hover:border-gray-300 transition-all"
+          >
+            Get in Touch
+          </Link>
+          <Link
+            to="/contact"
+            className="inline-flex items-center gap-2 h-9 px-5 rounded-full bg-[#1A1A1A] text-sm font-semibold text-white hover:bg-black transition-all shadow-sm"
+          >
+            Book a Call
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </Link>
+        </div>
+
+        {/* Mobile menu toggle */}
+        <button
+          onClick={() => setOpen(!open)}
+          className="lg:hidden flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 bg-white text-[#1A1A1A] hover:bg-gray-50 transition-all"
+          aria-label="Toggle menu"
+        >
+          <MenuToggleIcon open={open} className="size-5" duration={300} />
+        </button>
+      </nav>
+
+      {/* Mobile drawer */}
+      <div
+        className={cn(
+          'fixed top-[calc(4rem)] right-0 bottom-0 left-0 z-50 lg:hidden border-t border-gray-100 overflow-hidden transition-all duration-300 ease-in-out',
+          open
+            ? 'opacity-100 pointer-events-auto translate-y-0'
+            : 'opacity-0 pointer-events-none -translate-y-2',
+          scrolled ? 'top-[3.5rem]' : 'top-16',
+          open ? 'bg-white/98 backdrop-blur-xl' : '',
+        )}
+      >
+        <div className="flex h-full w-full flex-col justify-between p-6 pb-12">
+          {/* Nav links */}
+          <div className="grid gap-1 pt-2">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
               return (
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`relative px-5 py-2.5 rounded-full transition-colors duration-300 ${isActive ? "text-[#1A1A1A] font-semibold" : "hover:text-[#1A1A1A]"}`}
-                >
-                  {isActive && (
-                    <motion.div
-                      layoutId="navbar-active-pill"
-                      className="absolute inset-0 bg-black/5 rounded-full"
-                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                    />
+                  onClick={() => setOpen(false)}
+                  className={cn(
+                    'flex items-center px-4 py-3 rounded-xl text-lg font-semibold transition-colors',
+                    isActive
+                      ? 'text-[#1A1A1A] bg-black/5'
+                      : 'text-gray-500 hover:text-[#1A1A1A] hover:bg-black/5',
                   )}
-                  <span className="relative z-10 tracking-wide">{link.label}</span>
+                >
+                  {link.label}
                 </Link>
               );
             })}
           </div>
 
-          <div className="flex items-center space-x-4 relative z-50">
-            <Link to="/contact" className="hidden lg:block">
-              <button className="relative group inline-flex items-center justify-center h-10 px-6 font-bold text-sm text-black bg-cyan-400 rounded-full overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]">
-                <span className="relative z-10 flex items-center gap-2">
-                  Book Strategy Call
-                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" /></svg>
-                </span>
-                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-              </button>
-            </Link>
-            <button 
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 text-black/80 hover:text-black focus:outline-none rounded-md pointer-events-auto"
+          {/* Mobile CTAs */}
+          <div className="flex flex-col gap-3">
+            <Link
+              to="/contact"
+              onClick={() => setOpen(false)}
+              className="w-full inline-flex items-center justify-center h-12 rounded-full border border-gray-200 bg-white text-base font-semibold text-[#1A1A1A] hover:bg-gray-50 transition-all"
             >
-              <AnimatePresence mode="wait">
-                {isMobileMenuOpen ? (
-                  <motion.div
-                    key="close"
-                    initial={{ opacity: 0, rotate: -90 }}
-                    animate={{ opacity: 1, rotate: 0 }}
-                    exit={{ opacity: 0, rotate: 90 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <X className="w-6 h-6" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="menu"
-                    initial={{ opacity: 0, rotate: 90 }}
-                    animate={{ opacity: 1, rotate: 0 }}
-                    exit={{ opacity: 0, rotate: -90 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Menu className="w-6 h-6" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </button>
+              Get in Touch
+            </Link>
+            <Link
+              to="/contact"
+              onClick={() => setOpen(false)}
+              className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full bg-[#1A1A1A] text-base font-semibold text-white hover:bg-black transition-all"
+            >
+              Book a Strategy Call
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </Link>
           </div>
-        </nav>
+        </div>
       </div>
-
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "100vh", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed top-0 left-0 w-full bg-white/95 backdrop-blur-xl z-[90] overflow-hidden lg:hidden pt-24 border-b border-black/10"
-          >
-            <div className="flex flex-col items-center justify-center space-y-8 px-6 text-2xl font-semibold text-black/60 pb-12">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  to={link.path}
-                  className={`transition-colors ${location.pathname === link.path ? "text-black" : "hover:text-black"}`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-              
-              <motion.div
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="pt-8 w-full flex justify-center"
-              >
-                <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)} className="w-full">
-                  <Button variant="outline" className="w-full max-w-sm rounded-[24px] py-6 text-lg border-gray-200 text-[#1A1A1A] shadow-sm">
-                    Book Strategy Call
-                  </Button>
-                </Link>
-              </motion.div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+    </header>
   );
 }
