@@ -493,9 +493,9 @@ export default function EtherealBeamsHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          Predictable Leads for Your Business{" "}
+          Qualified Property Inquiries.{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">
-            Without the Guesswork
+            Without the Guesswork.
           </span>
         </motion.h1>
         
@@ -505,7 +505,7 @@ export default function EtherealBeamsHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
         >
-          We help businesses build a reliable flow of qualified leads through a structured done-for-you system focused on real business growth.
+          We build strategic digital systems for real estate companies, developers, and premium property brands that turn professional presentation into predictable leads — not generic websites or scattered ads.
         </motion.p>
 
         <motion.div 
@@ -516,17 +516,20 @@ export default function EtherealBeamsHero() {
         >
           <Link to="/contact">
             <Button className="shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:scale-105 transition-transform duration-300 text-black bg-white hover:bg-gray-100 font-semibold rounded-full px-6 py-4 h-auto text-base">
-              Book a free strategy call
+              Book a Strategy Call
               <ArrowUpRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
+          <p className="mt-8 text-sm md:text-base text-gray-400 font-medium tracking-wide">
+            For property businesses ready to compete on trust and execution.
+          </p>
         </motion.div>
       </div>
 
       {/* Tools Carousel */}
       <div className="absolute bottom-12 left-0 w-full z-20 pointer-events-auto flex flex-col items-center">
         <p className="text-center text-sm md:text-base text-gray-400 mb-8 font-medium">
-          Powered by Industry-Leading Tools
+          Built on Modern Infrastructure
         </p>
         <div className="relative flex w-full overflow-hidden justify-center items-center h-16">
           {/* Fading Edges */}

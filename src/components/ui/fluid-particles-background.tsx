@@ -100,13 +100,13 @@ function createNoise() {
 const COLOR_SCHEME = {
   light: {
     particle: {
-      color: "rgba(0, 0, 0, 0.07)",
+      color: "rgba(6, 182, 212, ", // Cyan colored particles
     },
-    background: "rgba(255, 255, 255, 0.12)",
+    background: "rgba(247, 247, 247, 0.2)", // matches #F7F7F7
   },
   dark: {
     particle: {
-      color: "rgba(6, 182, 212, 0.2)", // Cyan colored particles for the dark theme
+      color: "rgba(6, 182, 212, ", // Cyan colored particles for the dark theme
     },
     background: "rgba(0, 0, 0, 0.12)", // slightly change bg for trails
   },
@@ -162,8 +162,8 @@ export const FluidParticlesBackground = ({
     }));
 
     const animate = () => {
-      // For this specific dark theme, force the dark scheme.
-      const scheme = COLOR_SCHEME.dark;
+      // For this specific light theme, force the light scheme.
+      const scheme = COLOR_SCHEME.light;
 
       // Clear canvas with a semi-transparent background to create trails
       ctx.fillStyle = scheme.background;
@@ -201,7 +201,7 @@ export const FluidParticlesBackground = ({
         if (particle.y > canvas.height) particle.y = 0;
 
         // Draw particle
-        ctx.fillStyle = `rgba(6, 182, 212, ${opacity})`; // Cyan glow
+        ctx.fillStyle = `${scheme.particle.color}${opacity})`; // Cyan glow
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
         ctx.fill();

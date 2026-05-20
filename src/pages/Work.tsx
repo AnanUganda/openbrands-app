@@ -27,13 +27,13 @@ export function Work() {
   ];
 
   return (
-    <div className="relative w-full min-h-screen bg-black overflow-hidden flex-1 pb-24">
+    <div className="relative w-full min-h-screen bg-[#F7F7F7] overflow-hidden flex-1 pb-24">
       <Helmet>
         <title>Portfolio & Case Studies | Open Brands</title>
         <meta name="description" content="Browse our recent success stories and see how our systems drive predictable, scalable growth for B2B businesses and high-ticket consultants." />
       </Helmet>
       {/* Background glow effects */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-400/10 rounded-full blur-[150px] pointer-events-none" />
       
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-20 pt-16 md:pt-24 mb-16">
         <motion.div
@@ -42,13 +42,13 @@ export function Work() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-center"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold tracking-wider uppercase mb-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-50 border border-cyan-100 text-cyan-700 text-xs font-semibold tracking-wider uppercase mb-6">
             Our Portfolio
           </div>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight mb-8">
-            Proof is in the <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">Pipeline</span>.
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-[#1A1A1A] tracking-tight mb-8">
+            Proof is in the <span className="text-transparent bg-clip-text bg-gradient-to-b from-[#1A1A1A] to-gray-500">Pipeline</span>.
           </h1>
-          <p className="text-xl text-zinc-400 max-w-2xl mx-auto font-medium">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto font-medium">
             Browse our recent success stories and see how our systems drive predictable, scalable growth for businesses.
           </p>
         </motion.div>
@@ -69,13 +69,13 @@ export function Work() {
                        <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10 duration-300"></div>
                        <img src={study.image} alt={study.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
                    </div>
-                   <div className="flex justify-between items-start">
+                   <div className="flex justify-between items-start mt-4">
                        <div>
-                           <div className="text-cyan-400 font-medium text-sm mb-2">{study.category}</div>
-                           <h3 className="text-2xl font-bold text-white mb-2">{study.title}</h3>
-                           <div className="text-zinc-400 font-semibold">{study.stats}</div>
+                           <div className="text-cyan-700 font-medium text-sm mb-2">{study.category}</div>
+                           <h3 className="text-2xl font-bold text-[#1A1A1A] mb-2">{study.title}</h3>
+                           <div className="text-gray-600 font-semibold">{study.stats}</div>
                        </div>
-                       <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white group-hover:bg-white group-hover:text-black group-hover:border-transparent transition-all duration-300">
+                       <div className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:bg-[#1A1A1A] group-hover:text-white group-hover:border-transparent transition-all duration-300">
                            <ArrowUpRight className="w-5 h-5" />
                        </div>
                    </div>

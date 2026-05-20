@@ -89,16 +89,16 @@ export const ImageAutoSlider = () => {
         }
       `}</style>
       
-      <section className="w-full bg-[#020202] relative flex flex-col items-center border-t border-white/5 z-20 pb-16">
+      <section className="w-full bg-[#F7F7F7] relative flex flex-col items-center border-t border-gray-200 z-20 pb-16">
         {/* Title Section placed above the showcase */}
         <div className="w-full text-center pt-24 md:pt-32 pb-12 shrink-0 relative z-30">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tighter">Our Work</h2>
-          <p className="text-lg md:text-xl text-zinc-400 mt-4 font-medium">A glimpse into the results we drive</p>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#1A1A1A] tracking-tighter">Modern Property Brands, Built to Convert</h2>
+          <p className="text-lg md:text-xl text-gray-600 mt-4 font-medium">Selected projects focused on trust, conversion, and long-term scalability.</p>
         </div>
 
         {/* Scrolling images container */}
         <div className="relative w-full h-[600px] md:h-[800px] overflow-hidden scroll-container-mask shrink-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#020202] via-[#020202]/20 to-[#020202] z-0 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#F7F7F7] via-[#F7F7F7]/20 to-[#F7F7F7] z-0 pointer-events-none" />
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 w-full h-[150%] px-4 md:px-8 lg:px-12 -mt-24">
             
@@ -107,7 +107,7 @@ export const ImageAutoSlider = () => {
               {dup1.map((image, index) => (
                 <div
                   key={`c1-${index}`}
-                  className="port-image w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-white/5 aspect-[4/3] md:aspect-[3/4] lg:aspect-[4/3]"
+                  className="port-image w-full rounded-2xl overflow-hidden shadow-sm hover:shadow-md border border-gray-200 bg-white aspect-[4/3] md:aspect-[3/4] lg:aspect-[4/3]"
                 >
                   <img
                     src={image}
@@ -124,7 +124,7 @@ export const ImageAutoSlider = () => {
               {dup2.map((image, index) => (
                 <div
                   key={`c2-${index}`}
-                  className="port-image w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-white/5 aspect-[4/3] md:aspect-[3/4] lg:aspect-[4/3]"
+                  className="port-image w-full rounded-2xl overflow-hidden shadow-sm hover:shadow-md border border-gray-200 bg-white aspect-[4/3] md:aspect-[3/4] lg:aspect-[4/3]"
                 >
                   <img
                     src={image}
@@ -141,7 +141,7 @@ export const ImageAutoSlider = () => {
               {dup3.map((image, index) => (
                 <div
                   key={`c3-${index}`}
-                  className="port-image w-full rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-white/5 aspect-[4/3] md:aspect-[3/4] lg:aspect-[4/3]"
+                  className="port-image w-full rounded-2xl overflow-hidden shadow-sm hover:shadow-md border border-gray-200 bg-white aspect-[4/3] md:aspect-[3/4] lg:aspect-[4/3]"
                 >
                   <img
                     src={image}

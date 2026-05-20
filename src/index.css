@@ -29,8 +29,25 @@
   100% { transform: translateY(30%) translateX(30%) rotate(-360deg); }
 }
 
+@keyframes logo-marquee {
+  to { transform: translateX(-33.3333%); }
+}
+
+.animate-logo-marquee {
+  animation: logo-marquee 30s linear infinite;
+}
+
 body {
-  background-color: #0a0a0f;
-  color: white;
+  background-color: #F7F7F7;
+  color: #1A1A1A;
   overflow-x: hidden;
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 800 !important;
+    letter-spacing: -0.05em !important;
+    color: #4A4A4A !important;
+    line-height: 1.05 !important;
+  }
 }

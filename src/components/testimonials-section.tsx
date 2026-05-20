@@ -1,65 +1,36 @@
 import { motion } from "motion/react";
-import { Star } from "lucide-react";
+import { Star, Quote } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const testimonials = [
   {
     name: "Jeremy Horning",
     role: "Urban Sheds",
-    content: "I’ve known Anan even before he got into website design, and it’s been amazing to watch how quickly and passionately he dove into the craft. Once he decided to pursue design, he fully committed himself—learning from top-tier online courses and some of the best teachers out there. In no time, he mastered tools like Figma and Wix Studio.\n\nWhen my Urban Sheds website needed a revamp, I didn’t hesitate to hire him—and I’m so glad I did. Anan brought a fresh, creative approach to the project, and he was incredibly easy to communicate with throughout the entire process. He not only redesigned the site beautifully but also seamlessly migrated my large blog to the new Wix Studio platform as well as set up the backend database for 100's of dynamic pages.\n\nThe final result speaks for itself—the new website continues to receive many compliments from visitors. I’m really happy with the outcome and look forward to working with him again in the future. Highly recommended!",
-    className: "md:col-span-1 md:row-span-2 flex flex-col",
+    content: "Anan brought a fresh, creative approach to the project, and he was incredibly easy to communicate with throughout the entire process. He redesigned the site beautifully, migrated our large blog into Wix Studio, and set up the backend database for hundreds of dynamic pages. The final result continues to receive compliments from visitors.",
   },
   {
     name: "Zack Morgan",
     role: "Morgan Concrete Services",
-    content: "Anan was great to work with and had excellent communication. He was patient during the process, and I am very please with the new website and logo design.",
-    className: "md:col-span-1",
+    content: "Anan was great to work with and had excellent communication. He was patient during the process, and I am very pleased with the new website and logo design.",
   },
   {
     name: "Josh Reiff",
     role: "Reiff Design Build",
-    content: "Highly recommend open brands for your website needs! They did a phenomenal job with our contractor site, and we get compliments on it all the time!",
-    className: "md:col-span-1",
-  },
-  {
-    name: "Gabe Byler",
-    role: "Byler Outdoors",
-    content: "I used Anan to design a billboard for my business. He has a natural talent for designing things artistically and professionally. Highly recommend!",
-    className: "md:col-span-1",
+    content: "Highly recommend Open Brands for your website needs. They did a phenomenal job with our contractor site, and we get compliments on it all the time.",
   },
   {
     name: "Jeriah Raber",
     role: "Willow Hill Doodles",
-    content: "The people were kind and the work was professional. What more do you want? Conversions. :) And that's what I got. The new site was hardly live before the difference in sales was showing. We are very happy with our experience",
-    className: "md:col-span-1",
+    content: "The work was professional, and the difference in sales was noticeable almost immediately after launch. We are very happy with the experience.",
   },
 ];
 
 export function TestimonialsSection() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-      },
-    },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: "easeOut" as const },
-    },
-  };
-
   return (
-    <section className="relative w-full py-24 md:py-32 bg-black overflow-hidden z-10 border-t border-white/5">
+    <section className="relative w-full py-24 md:py-32 bg-[#F7F7F7] overflow-hidden z-10 border-t border-gray-200">
       {/* Background glow effects */}
-      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 translate-y-1/2 w-[400px] h-[400px] bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-cyan-400/10 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 translate-y-1/2 w-[400px] h-[400px] bg-cyan-400/10 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-20">
         <motion.div
@@ -67,60 +38,85 @@ export function TestimonialsSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-16 md:mb-20"
+          className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight mb-6">
-            Trusted by great businesses
+          <p className="text-sm uppercase text-gray-500 tracking-widest mb-3 font-semibold">
+            Featured Reviews
+          </p>
+          <h2 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] tracking-tight">
+            Client Highlights
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-cyan-500/10 via-cyan-500/50 to-cyan-500/10 mx-auto rounded-full mt-6 flex-shrink-0" />
         </motion.div>
 
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-auto"
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="relative flex items-center justify-center py-12 sm:py-20 min-h-[450px]"
         >
-          {testimonials.map((testimonial, i) => (
-            <motion.div
-              key={i}
-              variants={cardVariants}
-              whileHover={{ y: -5 }}
-              className={cn(
-                "group relative p-6 md:p-8 rounded-3xl bg-white/[0.03] border border-white/10 backdrop-blur-md overflow-hidden transition-all duration-500 hover:bg-white/[0.05] hover:border-cyan-500/30",
-                testimonial.className
-              )}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="container max-w-full flex justify-center items-center h-full relative flex-wrap md:flex-nowrap gap-8 md:gap-0 mt-12 md:mt-0">
+            {testimonials.map((testimonial, i) => {
+              // Create a fan out effect based on index
+              const rotations = [-12, -4, 4, 12];
+              const rotation = rotations[i] || 0;
               
-              <div className="relative z-10 flex flex-col h-full">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-cyan-500/10 flex items-center justify-center text-cyan-400 font-bold text-lg border border-cyan-500/20 group-hover:bg-cyan-500/20 transition-colors duration-500 shrink-0">
-                      {testimonial.name.charAt(0)}
-                    </div>
-                    <div>
-                      <h4 className="text-white font-semibold text-base">{testimonial.name}</h4>
-                      <p className="text-gray-400 text-xs">{testimonial.role}</p>
+              return (
+                <motion.div
+                  key={i}
+                  whileHover={{ scale: 1.05, zIndex: 50, rotate: 0 }}
+                  initial={{ rotate: rotation }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="group"
+                  style={{
+                    position: 'relative',
+                    width: '320px',
+                    height: '340px',
+                    background: 'linear-gradient(rgba(255, 255, 255, 0.8), transparent)',
+                    border: '1px solid rgba(0, 0, 0, 0.05)',
+                    boxShadow: 'rgba(0, 0, 0, 0.1) 0px 25px 25px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: '1rem',
+                    margin: typeof window !== 'undefined' && window.innerWidth >= 768 ? '0px -40px' : '0px',
+                    backdropFilter: 'blur(10px)',
+                    zIndex: i,
+                  }}
+                >
+                  <div className="absolute inset-4 rounded-xl bg-white/95 text-[#1A1A1A] shadow-xl ring-1 ring-gray-200 overflow-hidden flex flex-col">
+                    <div className="p-6 flex flex-col h-full">
+                      <div className="inline-flex items-center justify-center h-8 w-8 rounded-lg bg-gray-50 ring-1 ring-gray-200 mb-4 shrink-0">
+                        <Quote className="h-4 w-4 text-cyan-600" />
+                      </div>
+                      <p className="text-[13px] leading-relaxed text-gray-700 mb-4 flex-grow overflow-hidden line-clamp-6">
+                        "{testimonial.content}"
+                      </p>
+                      <div className="pt-3 border-t border-gray-100 flex items-center justify-between mt-auto shrink-0">
+                        <div className="flex items-center gap-3">
+                          <div className="h-8 w-8 rounded-full bg-cyan-50 border border-cyan-100 flex items-center justify-center text-cyan-700 font-bold text-xs shrink-0">
+                            {testimonial.name.charAt(0)}
+                          </div>
+                          <div>
+                            <div className="text-xs font-semibold text-[#1A1A1A]">
+                              {testimonial.name}
+                            </div>
+                            <div className="text-[11px] text-gray-500">
+                              {testimonial.role}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1 bg-gray-50 px-2 py-1 rounded-full border border-gray-100 shrink-0">
+                          <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                          <span className="text-[11px] font-semibold text-[#1A1A1A]">5.0</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 bg-white/5 px-2 py-1 rounded-full border border-white/5">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3 h-3 fill-cyan-400 text-cyan-400" />
-                    ))}
-                    <span className="text-white text-xs font-semibold ml-1">5.0</span>
-                  </div>
-                </div>
-                
-                <div className="text-zinc-200 text-[15px] md:text-base font-medium leading-relaxed tracking-normal flex-1 space-y-4">
-                  {testimonial.content.split('\n\n').map((paragraph, pIdx) => (
-                    <p key={pIdx}>"{paragraph}"</p>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          ))}
+                </motion.div>
+              );
+            })}
+          </div>
         </motion.div>
       </div>
     </section>
