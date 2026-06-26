@@ -1,4 +1,6 @@
 import { motion } from "motion/react";
+import { Layout, Pointer, Zap, LineChart } from "lucide-react";
+import { Feature108 } from "@/components/ui/shadcnblocks-com-feature108";
 
 /* ─────────────────────────────────────────────
    Card 1 – Conversion-Focused Website mockup
@@ -309,69 +311,136 @@ const features = [
 ];
 
 export function FeaturesSection() {
+  const tabsData = [
+    {
+      value: "tab-1",
+      icon: <Layout className="h-auto w-4 shrink-0" />,
+      label: "Websites",
+      content: {
+        badge: "Core Solution",
+        title: "Conversion-Focused Websites",
+        description:
+          "Digital experiences that signal credibility and turn visitors into serious property inquiries.",
+        buttonText: "See Showcase",
+        imageSrc: "/portfolio/URban.png",
+        imageAlt: "Urban Sheds Websites Portfolio Showcase",
+      },
+    },
+    {
+      value: "tab-2",
+      icon: <Zap className="h-auto w-4 shrink-0" />,
+      label: "Campaigns",
+      content: {
+        badge: "Growth Pipeline",
+        title: "Lead Generation Campaigns",
+        description:
+          "Paid traffic engineered to reach high-intent property buyers and investors — not casual browsers.",
+        buttonText: "Review ROI Metrics",
+        mockup: <LeadGenMockup />,
+      },
+    },
+    {
+      value: "tab-3",
+      icon: <Pointer className="h-auto w-4 shrink-0" />,
+      label: "Automation",
+      content: {
+        badge: "Operational Excellence",
+        title: "CRM & Follow-Up Systems",
+        description:
+          "Automated pipelines that capture every lead, organize follow-ups, and close the gap between inquiry and sale.",
+        buttonText: "Test Pipelines",
+        mockup: <CRMMockup />,
+      },
+    },
+    {
+      value: "tab-4",
+      icon: <LineChart className="h-auto w-4 shrink-0" />,
+      label: "Optimization",
+      content: {
+        badge: "Data Intelligence",
+        title: "Growth Optimization",
+        description:
+          "Ongoing data-driven improvements so your cost per inquiry drops while lead quality keeps climbing.",
+        buttonText: "Check Performance",
+        mockup: <GrowthMockup />,
+      },
+    },
+  ];
+
   return (
-    <section className="relative w-full py-24 md:py-32 bg-white overflow-hidden z-10 border-t border-gray-100">
-      {/* Background glows */}
-      <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-cyan-400/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-blue-400/10 rounded-full blur-[120px] pointer-events-none" />
+    <>
+      {/* ── Section A: Radix Tabs Layout Showcase (Feature108) ── */}
+      <Feature108
+        badge="Our Core Services"
+        heading="Systemized Acquisition Tabs"
+        description="A unified, tabbed overview of our four core system solutions designed to scale property growth."
+        tabs={tabsData}
+      />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-20">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-16 md:mb-20"
-        >
-          <p className="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-3">
-            Our Core Services
-          </p>
-          <h2 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] tracking-tight mb-4">
-            What We Build
-          </h2>
-          <p className="text-lg text-gray-500 max-w-2xl mx-auto">
-            Four precision-built systems that work together to generate qualified property
-            inquiries and convert them into paying clients.
-          </p>
-          <div className="w-20 h-1 bg-gradient-to-r from-cyan-400/30 via-cyan-400 to-cyan-400/30 mx-auto rounded-full mt-6" />
-        </motion.div>
+      {/* ── Section B: Original Grid Layout Showcase (Coexisting) ── */}
+      <section className="relative w-full py-24 md:py-32 bg-white overflow-hidden z-10 border-t border-gray-100">
+        {/* Background glows */}
+        <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-cyan-400/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-blue-400/10 rounded-full blur-[120px] pointer-events-none" />
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {features.map((f, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.6, delay: idx * 0.1, ease: "easeOut" }}
-              className={`group relative rounded-2xl border ${f.border} bg-gradient-to-br ${f.accent} p-6 lg:p-8 overflow-hidden transition-all duration-500 hover:shadow-xl hover:-translate-y-1`}
-            >
-              {/* Top row: tag + title */}
-              <div className="flex items-start justify-between mb-3">
-                <span className={`text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${f.tagColor}`}>
-                  {f.tag}
-                </span>
-              </div>
-              <h3 className="text-xl font-bold text-[#0F1C2E] tracking-tight mb-2">
-                {f.title}
-              </h3>
-              <p className="text-sm text-gray-500 leading-relaxed mb-6">
-                {f.description}
-              </p>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-20">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="text-center mb-16 md:mb-20"
+          >
+            <p className="text-xs uppercase tracking-widest text-gray-400 font-semibold mb-3">
+              Our Core Services
+            </p>
+            <h2 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] tracking-tight mb-4">
+              What We Build
+            </h2>
+            <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+              Four precision-built systems that work together to generate qualified property
+              inquiries and convert them into paying clients.
+            </p>
+            <div className="w-20 h-1 bg-gradient-to-r from-cyan-400/30 via-cyan-400 to-cyan-400/30 mx-auto rounded-full mt-6" />
+          </motion.div>
 
-              {/* Visual mockup */}
-              <div className="transform group-hover:scale-[1.01] transition-transform duration-500">
-                {f.mockup}
-              </div>
+          {/* Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+            {features.map((f, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.6, delay: idx * 0.1, ease: "easeOut" }}
+                className={`group relative rounded-2xl border ${f.border} bg-gradient-to-br ${f.accent} p-6 lg:p-8 overflow-hidden transition-all duration-500 hover:shadow-xl hover:-translate-y-1`}
+              >
+                {/* Top row: tag + title */}
+                <div className="flex items-start justify-between mb-3">
+                  <span className={`text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full ${f.tagColor}`}>
+                    {f.tag}
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold text-[#0F1C2E] tracking-tight mb-2">
+                  {f.title}
+                </h3>
+                <p className="text-sm text-gray-500 leading-relaxed mb-6">
+                  {f.description}
+                </p>
 
-              {/* Subtle corner glow on hover */}
-              <div className="absolute -bottom-8 -right-8 w-32 h-32 rounded-full bg-cyan-300/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-            </motion.div>
-          ))}
+                {/* Visual mockup */}
+                <div className="transform group-hover:scale-[1.01] transition-transform duration-500">
+                  {f.mockup}
+                </div>
+
+                {/* Subtle corner glow on hover */}
+                <div className="absolute -bottom-8 -right-8 w-32 h-32 rounded-full bg-cyan-300/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

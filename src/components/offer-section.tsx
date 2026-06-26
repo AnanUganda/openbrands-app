@@ -182,7 +182,7 @@ export function OfferSection() {
                         Custom Quote
                       </span>
                       <span className="text-sm text-gray-500 mt-1">
-                        Typical range: <span className="text-[#1A1A1A] font-semibold">$15,000 – $50,000+</span> depending on scope.
+                        Typical range: <span className="text-[#1A1A1A] font-semibold">$3,000 – $5,000</span> depending on scope.
                       </span>
                     </div>
                   </div>

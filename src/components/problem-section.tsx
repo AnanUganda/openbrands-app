@@ -1,31 +1,25 @@
 import { motion } from "motion/react";
-import { Activity, Target, Unplug } from "lucide-react";
+import { Quote } from "lucide-react";
+import { SectionLabel } from "./ui/section-label";
+
+const painPoints = [
+  "I built my website, but it doesn't bring clients",
+  "I paid a designer, but nothing changed in my business",
+  "People visit my site, but don't contact me",
+  "My website looks fine, but it doesn't convert",
+  "I have no idea why I'm not getting traffic",
+  "My competitors seem to be getting all the clients online",
+];
 
 export function ProblemSection() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, ease: "easeOut" as const },
-    },
-  };
-
   return (
-    <section className="relative w-full py-24 md:py-32 bg-[#F7F7F7] overflow-hidden z-10">
-      {/* Background glow effects */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px] pointer-events-none" />
+    <section className="relative w-full py-24 md:py-32 bg-[#0D0D0D] overflow-hidden z-10">
+      
+      {/* Background structural grid (optional full width) */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{
+          backgroundSize: '100px 100px',
+          backgroundImage: 'linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)',
+      }} />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-20">
         <motion.div
@@ -33,102 +27,54 @@ export function ProblemSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-20"
+          className="text-center mb-16 md:mb-20 flex flex-col items-center"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] tracking-tight mb-6 max-w-[800px] mx-auto">
-            Most property businesses already have what they need to grow.
+          <SectionLabel label="The Harsh Reality" />
+          
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight max-w-[800px] mx-auto text-balance">
+            Most Service Websites Fail to Bring in Clients
           </h2>
-          <p className="text-[22px] font-normal text-gray-600 max-w-3xl mx-auto">
-            They’re just not using it properly.
-          </p>
-          <p className="text-lg text-gray-500 max-w-2xl mx-auto mt-4">
-            The gap isn’t visibility. It’s trust, systems, and conversion.
-          </p>
-          <div className="w-24 h-1 bg-gradient-to-r from-cyan-400/20 via-cyan-400 to-cyan-400/20 mx-auto rounded-full mt-8" />
         </motion.div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12"
-        >
-          {/* Card 1 */}
-          <motion.div
-            variants={cardVariants}
-            whileHover={{ y: -10, scale: 1.02 }}
-            className="group relative p-8 rounded-3xl bg-white border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-md hover:border-cyan-200"
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-cyan-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            
-            <div className="relative z-10">
-              <div className="w-14 h-14 rounded-2xl bg-cyan-50 flex items-center justify-center mb-8 shadow-inner ring-1 ring-cyan-100 group-hover:bg-cyan-100 group-hover:ring-cyan-300 transition-all duration-500">
-                <Activity className="w-7 h-7 text-cyan-600 group-hover:text-cyan-700 transition-colors duration-500" />
-              </div>
-              <h3 className="text-xl md:text-2xl font-semibold text-[#1A1A1A] mb-4 leading-snug">
-                Trust Barrier
-              </h3>
-              <p className="text-gray-600 text-base leading-relaxed">
-                Outdated sites, weak branding, and sloppy communication kill deals before the first conversation. Buyers decide in seconds.
-              </p>
-            </div>
-          </motion.div>
+        {/* 3×2 Grid of Styled Boxes */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-20">
+          {painPoints.map((pain, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.5, delay: idx * 0.08, ease: "easeOut" }}
+              className="group relative p-8 md:p-10 bg-[#0D0D0D] border border-white/[0.1] hover:border-[#BFF549]/40 transition-all duration-300"
+            >
+              {/* Corner nodes */}
+              <div className="absolute top-[-1px] left-[-1px] w-2 h-2 bg-[#BFF549] z-10 transition-transform duration-300 group-hover:scale-125" />
+              <div className="absolute top-[-1px] right-[-1px] w-2 h-2 bg-[#BFF549] z-10 transition-transform duration-300 group-hover:scale-125" />
+              <div className="absolute bottom-[-1px] left-[-1px] w-2 h-2 bg-[#BFF549] z-10 transition-transform duration-300 group-hover:scale-125" />
+              <div className="absolute bottom-[-1px] right-[-1px] w-2 h-2 bg-[#BFF549] z-10 transition-transform duration-300 group-hover:scale-125" />
 
-          {/* Card 2 */}
-          <motion.div
-            variants={cardVariants}
-            whileHover={{ y: -10, scale: 1.02 }}
-            className="group relative p-8 rounded-3xl bg-white border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-md hover:border-cyan-200"
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-cyan-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            
-            <div className="relative z-10">
-              <div className="w-14 h-14 rounded-2xl bg-cyan-50 flex items-center justify-center mb-8 shadow-inner ring-1 ring-cyan-100 group-hover:bg-cyan-100 group-hover:ring-cyan-300 transition-all duration-500">
-                <Target className="w-7 h-7 text-cyan-600 group-hover:text-cyan-700 transition-colors duration-500" />
+              {/* Dotted grid background */}
+              <div 
+                className="absolute inset-0 pointer-events-none opacity-[0.04] transition-opacity duration-300 group-hover:opacity-[0.08]" 
+                style={{
+                  backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
+                  backgroundSize: '16px 16px'
+                }}
+              />
+              
+              <div className="relative z-10 flex flex-col items-start h-full">
+                <div className="text-[#BFF549] mb-4 sm:mb-6">
+                  <Quote className="w-5 h-5 opacity-80" />
+                </div>
+                <p className="text-white text-xl sm:text-2xl font-bold leading-[1.15] tracking-tight group-hover:text-gray-100 transition-colors mt-auto">
+                  "{pain}"
+                </p>
               </div>
-              <h3 className="text-xl md:text-2xl font-semibold text-[#1A1A1A] mb-4 leading-snug">
-                System Leakage
-              </h3>
-              <p className="text-gray-600 text-base leading-relaxed">
-                Missed follow-ups and broken processes lose qualified prospects every month. In property, one lost inquiry can cost six figures.
-              </p>
-            </div>
-          </motion.div>
+            </motion.div>
+          ))}
+        </div>
 
-          {/* Card 3 */}
-          <motion.div
-            variants={cardVariants}
-            whileHover={{ y: -10, scale: 1.02 }}
-            className="group relative p-8 rounded-3xl bg-white border border-gray-200 shadow-sm overflow-hidden transition-all duration-500 hover:shadow-md hover:border-cyan-200"
-          >
-             <div className="absolute inset-0 bg-gradient-to-br from-cyan-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-             
-            <div className="relative z-10">
-              <div className="w-14 h-14 rounded-2xl bg-cyan-50 flex items-center justify-center mb-8 shadow-inner ring-1 ring-cyan-100 group-hover:bg-cyan-100 group-hover:ring-cyan-300 transition-all duration-500">
-                <Unplug className="w-7 h-7 text-cyan-600 group-hover:text-cyan-700 transition-colors duration-500" />
-              </div>
-              <h3 className="text-xl md:text-2xl font-semibold text-[#1A1A1A] mb-4 leading-snug">
-                Invisible Growth
-              </h3>
-              <p className="text-gray-600 text-base leading-relaxed">
-                Without clear tracking, you can’t answer: Which channel actually delivers? What’s our real conversion rate? Where should we double down?
-              </p>
-            </div>
-          </motion.div>
-        </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-          className="mt-20 text-center"
-        >
-          <p className="text-xl md:text-2xl font-medium text-[#1A1A1A] max-w-4xl mx-auto leading-relaxed">
-            We eliminate these leaks and build the systems that create measurable, predictable growth.
-          </p>
-        </motion.div>
       </div>
     </section>
   );

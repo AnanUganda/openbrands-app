@@ -88,6 +88,13 @@ export default defineType({
       initialValue: false,
     }),
     defineField({
+      name: 'highlights',
+      title: 'Core Highlights / Features list',
+      description: 'Short items to display as bullet checkmarks in the sidebar (e.g. "Full source code", "HMR ready")',
+      type: 'array',
+      of: [{ type: 'string' }],
+    }),
+    defineField({
       name: 'publishedAt',
       title: 'Published At',
       type: 'datetime',

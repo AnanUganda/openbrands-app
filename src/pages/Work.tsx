@@ -1,92 +1,215 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from 'react-helmet-async';
 import { motion } from "motion/react";
-import { ArrowUpRight } from "lucide-react";
-import { ImageAutoSlider } from "@/components/ui/image-auto-slider";
+import { ArrowUpRight, Sparkles, Code, Briefcase } from "lucide-react";
+import { sanityClient, urlFor } from "@/lib/sanity";
+
+interface ShowcaseItem {
+  _id: string;
+  _type: 'project' | 'template';
+  title: string;
+  slug: { current: string };
+  category: string;
+  metrics?: string;
+  tagline?: string;
+  mainImage: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  price?: number;
+  isFree?: boolean;
+  techLabel?: string;
+  featured?: boolean;
+  liveUrl?: string;
+}
 
 export function Work() {
-  const caseStudies = [
-    {
-      title: "Consortium Studio",
-      category: "B2B SaaS Lead Gen",
-      stats: "+340% Pipeline Growth",
-      image: "/portfolio/Lifecall%20display%202.png" 
-    },
-    {
-      title: "Heritage Heights",
-      category: "High-Ticket Real Estate",
-      stats: "12x ROAS",
-      image: "/portfolio/Torify%20Case%202.png"
-    },
-    {
-      title: "Pro Coach",
-      category: "Consulting & Coaching",
-      stats: "$1.2M Added Revenue",
-      image: "/portfolio/Pro%20coach.png"
-    }
-  ];
+  const [items, setItems] = useState<ShowcaseItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchShowcase = async () => {
+      try {
+        const data = await sanityClient.fetch(
+          `*[_type in ["project", "template"] && defined(slug.current)] | order(featured desc, publishedAt desc) {
+            _id,
+            _type,
+            title,
+            slug,
+            category,
+            metrics,
+            tagline,
+            mainImage,
+            price,
+            isFree,
+            techLabel,
+            featured,
+            liveUrl
+          }`
+        );
+        setItems(data);
+      } catch (err) {
+        console.error("Error fetching showcase items:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchShowcase();
+  }, []);
 
   return (
-    <div className="relative w-full min-h-screen bg-[#F7F7F7] overflow-hidden flex-1 pb-24">
+    <div className="relative w-full min-h-screen bg-[#0D0D0D] overflow-hidden flex-1 pb-24 text-white">
       <Helmet>
-        <title>Portfolio & Case Studies | Open Brands</title>
-        <meta name="description" content="Browse our recent success stories and see how our systems drive predictable, scalable growth for B2B businesses and high-ticket consultants." />
+        <title>Projects & Templates | Open Brands</title>
+        <meta name="description" content="Explore our portfolio of B2B lead generation projects and premium website templates designed for serious property brands." />
       </Helmet>
-      {/* Background glow effects */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-cyan-400/10 rounded-full blur-[150px] pointer-events-none" />
-      
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-20 pt-16 md:pt-24 mb-16">
+
+      {/* Background structural grid */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.02] z-0" style={{
+          backgroundSize: '100px 100px',
+          backgroundImage: 'linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)',
+      }} />
+
+      {/* Hero Section */}
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12 relative z-20 pt-20 md:pt-28 mb-16">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center"
+          className="text-center flex flex-col items-center"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-50 border border-cyan-100 text-cyan-700 text-xs font-semibold tracking-wider uppercase mb-6">
-            Our Portfolio
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-sm border-l-2 border-[#BFF549] bg-white/[0.03] text-xs font-bold tracking-widest uppercase text-gray-300 shadow-sm backdrop-blur-md mb-6">
+            <Sparkles className="w-3.5 h-3.5 text-[#BFF549]" />
+            Projects & Templates
           </div>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-[#1A1A1A] tracking-tight mb-8">
-            Proof is in the <span className="text-transparent bg-clip-text bg-gradient-to-b from-[#1A1A1A] to-gray-500">Pipeline</span>.
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5rem] font-bold text-white tracking-tighter mb-8 leading-[1.05] drop-shadow-lg">
+            Our Work & <span className="text-gray-500">Digital Assets</span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto font-medium">
-            Browse our recent success stories and see how our systems drive predictable, scalable growth for businesses.
+          <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto font-medium leading-relaxed text-balance">
+            A curated, high-end collection of conversion-focused website templates and successful real-world pipeline outcomes we've engineered for our B2B clients.
           </p>
         </motion.div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-20 pt-8 md:pt-12 pb-24">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {caseStudies.map((study, idx) => (
-               <motion.div
-                 key={idx}
-                 initial={{ opacity: 0, y: 20 }}
-                 whileInView={{ opacity: 1, y: 0 }}
-                 viewport={{ once: true, margin: "-50px" }}
-                 transition={{ duration: 0.6, delay: idx * 0.1, ease: "easeOut" }}
-                 className="group cursor-pointer"
-               >
-                   <div className="aspect-[4/3] rounded-2xl overflow-hidden mb-6 relative">
-                       <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10 duration-300"></div>
-                       <img src={study.image} alt={study.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
-                   </div>
-                   <div className="flex justify-between items-start mt-4">
-                       <div>
-                           <div className="text-cyan-700 font-medium text-sm mb-2">{study.category}</div>
-                           <h3 className="text-2xl font-bold text-[#1A1A1A] mb-2">{study.title}</h3>
-                           <div className="text-gray-600 font-semibold">{study.stats}</div>
-                       </div>
-                       <div className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 group-hover:bg-[#1A1A1A] group-hover:text-white group-hover:border-transparent transition-all duration-300">
-                           <ArrowUpRight className="w-5 h-5" />
-                       </div>
-                   </div>
-               </motion.div>
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12 relative z-20">
+        {/* Assets Grid */}
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-[#161616] rounded-sm border border-white/[0.08] overflow-hidden animate-pulse aspect-[4/3] p-6 space-y-4">
+                <div className="w-full h-44 bg-white/[0.05] rounded-sm" />
+                <div className="h-4 bg-white/[0.05] rounded w-1/3" />
+                <div className="h-6 bg-white/[0.05] rounded w-3/4" />
+                <div className="h-4 bg-white/[0.05] rounded w-1/2" />
+              </div>
             ))}
-        </div>
-      </div>
+          </div>
+        ) : items.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-24 border border-white/[0.08] bg-[#161616] shadow-sm rounded-sm px-6"
+          >
+            <h3 className="text-2xl font-bold text-white mb-2">No showcase items found</h3>
+            <p className="text-gray-400 max-w-md mx-auto">
+              We are currently updating our portfolio. Check back shortly to explore our latest projects and premium templates!
+            </p>
+          </motion.div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {items.map((item, idx) => {
+              const isProject = item._type === 'project';
+              
+              return (
+                <motion.div
+                  key={item._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: idx * 0.05 }}
+                  className="group flex flex-col bg-[#0D0D0D] border border-white/[0.08] shadow-sm overflow-hidden hover:border-[#BFF549]/40 transition-all duration-500 relative"
+                >
+                  {/* Image / Cover Section */}
+                  <div className="aspect-[4/3] bg-[#161616] overflow-hidden relative border-b border-white/[0.08] shrink-0">
+                    {item.mainImage ? (
+                      <img
+                        src={urlFor(item.mainImage).width(800).height(600).url()}
+                        alt={item.title}
+                        className="w-full h-full object-cover opacity-90 transition-all duration-700 ease-out group-hover:scale-105 group-hover:opacity-100"
+                        fetchPriority={idx < 3 ? "high" : "auto"}
+                      />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center text-white/[0.2] relative bg-[#111]">
+                        <span className="font-extrabold uppercase tracking-widest text-xs">Open Brands</span>
+                        <span className="text-[10px] uppercase font-bold mt-1 text-[#BFF549]/70">{isProject ? 'Project' : 'Template'}</span>
+                      </div>
+                    )}
+                    
+                    {/* Badge overlays */}
+                    <div className="absolute top-4 left-4 flex gap-2 z-20">
+                      <span className={`text-[10px] font-bold px-3 py-1 rounded-sm uppercase tracking-wider shadow-sm flex items-center gap-1 border ${
+                        isProject
+                          ? 'bg-white/[0.1] text-white border-white/[0.2] backdrop-blur-md'
+                          : 'bg-[#BFF549] text-[#0D0D0D] border-[#BFF549]'
+                      }`}>
+                        {isProject ? <Briefcase className="w-3 h-3" /> : <Code className="w-3 h-3" />}
+                        {isProject ? 'Project' : 'Template'}
+                      </span>
+                      {item.featured && (
+                        <span className="bg-[#BFF549]/10 text-[#BFF549] border border-[#BFF549]/30 backdrop-blur-md text-[10px] font-bold px-3 py-1 rounded-sm uppercase tracking-wider shadow-sm flex items-center gap-0.5">
+                          ★ Featured
+                        </span>
+                      )}
+                    </div>
+                  </div>
 
-      {/* Re-use the existing image slider for the visual heavy lifting */}
-      <div className="mt-8 mb-16">
-        <ImageAutoSlider />
+                  {/* Content Section */}
+                  <div className="p-8 flex flex-col flex-grow relative z-20">
+                    <div className="flex items-center justify-between mb-4 text-xs font-semibold tracking-widest text-gray-400 uppercase">
+                      <span>{item.category}</span>
+                      {item.techLabel && (
+                        <span className="bg-white/[0.05] text-[#BFF549] px-2 py-0.5 rounded-sm text-[10px] border border-white/[0.08] font-medium">
+                          {item.techLabel}
+                        </span>
+                      )}
+                    </div>
+
+                    <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-[#BFF549] transition-colors line-clamp-2 leading-tight tracking-tight">
+                      {item.title}
+                    </h3>
+
+                    <p className="text-gray-400 text-sm mb-6 line-clamp-3 leading-relaxed flex-grow">
+                      {item.tagline || (isProject ? "Check out the detailed metrics, strategy execution, and key business outcomes we achieved for this client project." : "Explore the live sandbox, screenshots, and included capabilities for this premium website starter kit.")}
+                    </p>
+
+                    <div className="border-t border-white/[0.08] pt-6 mt-auto flex items-center justify-between">
+                      {/* Highlight Stat / Price */}
+                      <div>
+                        {isProject ? (
+                          <div className="text-lg font-bold text-white tracking-tight leading-none">{item.metrics || "Success story"}</div>
+                        ) : (
+                          <div className="text-lg font-bold text-white tracking-tight leading-none">
+                            {item.isFree ? 'Free' : `$${item.price}`}
+                          </div>
+                        )}
+                        <div className="text-[10px] text-gray-500 uppercase tracking-widest font-semibold mt-1">
+                          {isProject ? 'Outcome achieved' : 'Investment cost'}
+                        </div>
+                      </div>
+
+                      {/* View Live Site Button */}
+                      <a
+                        href={item.liveUrl || "/contact"}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 bg-white/[0.05] border border-white/[0.1] text-white hover:bg-[#BFF549] hover:text-[#0D0D0D] px-4 py-2.5 rounded-sm text-xs font-bold transition-all duration-300 shadow-sm shrink-0"
+                      >
+                        View Live Site
+                        <ArrowUpRight className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
     </div>

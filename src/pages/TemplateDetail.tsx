@@ -24,24 +24,28 @@ interface Template {
 
 const QUERY = `*[_type == "template" && slug.current == $slug][0] {
   _id, title, slug, tagline, description, mainImage, screenshots,
-  liveUrl, price, isFree, category, techLabel, featured
+  liveUrl, price, isFree, category, techLabel, featured, highlights
 }`;
 
-const RELATED_QUERY = `*[_type == "template" && slug.current != $slug && category == $category][0..2] {
+const RELATED_QUERY = `*[_type == "template" && slug.current != $slug && category == $category && defined(slug.current)][0..2] {
   _id, title, slug, tagline, mainImage, price, isFree, category
 }`;
 
 export function TemplateDetail() {
   const { slug } = useParams<{ slug: string }>();
-  const [template, setTemplate] = useState<Template | null>(null);
+  const [template, setTemplate] = useState<any>(null);
   const [related, setRelated] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeImage, setActiveImage] = useState<any>(null);
 
   useEffect(() => {
     if (!slug) return;
     sanityClient.fetch(QUERY, { slug }).then(async (data) => {
       setTemplate(data);
       setLoading(false);
+      if (data?.mainImage) {
+        setActiveImage(data.mainImage);
+      }
       if (data?.category) {
         const rel = await sanityClient.fetch(RELATED_QUERY, { slug, category: data.category });
         setRelated(rel);
@@ -79,9 +83,9 @@ export function TemplateDetail() {
 
       {/* Hero Image */}
       <div className="relative w-full h-[45vh] md:h-[55vh] bg-gray-200 overflow-hidden">
-        {template.mainImage ? (
+        {activeImage ? (
           <img
-            src={urlFor(template.mainImage).width(1600).url()}
+            src={urlFor(activeImage).width(1600).url()}
             alt={template.title}
             className="w-full h-full object-cover"
           />
@@ -140,19 +144,40 @@ export function TemplateDetail() {
 
             {/* Screenshots */}
             {template.screenshots?.length > 0 && (
-              <div>
+              <div className="border-t border-gray-200/60 pt-10">
                 <h2 className="text-xl font-bold text-[#1A1A1A] mb-4">Screenshots</h2>
                 <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin">
+                  {/* Default main image option */}
+                  <div
+                    onClick={() => setActiveImage(template.mainImage)}
+                    className={`shrink-0 rounded-2xl overflow-hidden border cursor-pointer shadow-sm w-44 md:w-56 h-32 transition-all duration-300 ${
+                      activeImage === template.mainImage ? 'border-cyan-500 scale-103 ring-2 ring-cyan-500/20' : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <img
+                      src={urlFor(template.mainImage).width(300).height(200).url()}
+                      alt="Widescreen Cover"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
                   {template.screenshots.map((img, i) => (
-                    <div key={i} className="shrink-0 rounded-xl overflow-hidden border border-gray-200 shadow-sm w-64 md:w-80 h-48">
+                    <div
+                      key={i}
+                      onClick={() => setActiveImage(img)}
+                      className={`shrink-0 rounded-2xl overflow-hidden border cursor-pointer shadow-sm w-44 md:w-56 h-32 transition-all duration-300 ${
+                        activeImage === img ? 'border-cyan-500 scale-103 ring-2 ring-cyan-500/20' : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
                       <img
-                        src={urlFor(img).width(640).url()}
+                        src={urlFor(img).width(300).height(200).url()}
                         alt={`Screenshot ${i + 1}`}
                         className="w-full h-full object-cover"
                       />
                     </div>
                   ))}
                 </div>
+                <p className="text-xs text-gray-400 mt-2 italic">Click any card to expand it as the hero image above.</p>
               </div>
             )}
           </div>
@@ -177,12 +202,21 @@ export function TemplateDetail() {
 
               {/* What you get */}
               <div className="space-y-2">
-                {['Full source code', 'Free updates', 'WhatsApp support'].map((item) => (
-                  <div key={item} className="flex items-center gap-2 text-sm text-gray-600">
-                    <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
-                    {item}
-                  </div>
-                ))}
+                {template.highlights && template.highlights.length > 0 ? (
+                  template.highlights.map((item: string) => (
+                    <div key={item} className="flex items-start gap-2.5 text-sm text-gray-600 leading-tight">
+                      <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </div>
+                  ))
+                ) : (
+                  ['Full source code', 'Free updates', 'WhatsApp support'].map((item) => (
+                    <div key={item} className="flex items-center gap-2 text-sm text-gray-600">
+                      <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
+                      {item}
+                    </div>
+                  ))
+                )}
               </div>
 
               <div className="border-t border-gray-100" />
@@ -225,7 +259,7 @@ export function TemplateDetail() {
             <h2 className="text-2xl font-bold text-[#1A1A1A] mb-8">More {template.category} Templates</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {related.map((t) => (
-                <Link key={t._id} to={`/templates/${t.slug.current}`}
+                <Link key={t._id} to={`/templates/${t.slug?.current || ""}`}
                   className="group bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-md hover:-translate-y-1 transition-all duration-300">
                   <div className="h-44 bg-gray-100 overflow-hidden">
                     {t.mainImage && (

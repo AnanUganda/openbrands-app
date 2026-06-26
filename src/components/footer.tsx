@@ -3,44 +3,39 @@
 import * as React from "react";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
-import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ArrowRight, PlayCircle } from "lucide-react";
+
+// Register ScrollTrigger safely for React
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 // -------------------------------------------------------------------------
 // 1. THEME-ADAPTIVE INLINE STYLES
 // -------------------------------------------------------------------------
 const STYLES = `
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap');
-
 .cinematic-footer-wrapper {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  -webkit-font-smoothing: antialiased;
+  /* Dynamic Variables for Open Brands dark theme */
+  --pill-bg-1: rgba(255, 255, 255, 0.03);
+  --pill-bg-2: rgba(255, 255, 255, 0.01);
+  --pill-shadow: rgba(0, 0, 0, 0.5);
+  --pill-highlight: rgba(255, 255, 255, 0.1);
+  --pill-inset-shadow: rgba(0, 0, 0, 0.8);
+  --pill-border: rgba(255, 255, 255, 0.08);
   
-  --foreground: #1a1a1a;
-  --background: #f7f7f7;
-  --primary: #06b6d4; /* cyan-500 */
-  --secondary: #0891b2; /* cyan-600 */
-  --destructive: #06b6d4; /* using cyan instead of red for heartbeat */
-  
-  /* Dynamic Variables using standard shadcn/tailwind v4 tokens */
-  --pill-bg-1: color-mix(in oklch, var(--foreground) 3%, transparent);
-  --pill-bg-2: color-mix(in oklch, var(--foreground) 1%, transparent);
-  --pill-shadow: color-mix(in oklch, var(--background) 50%, transparent);
-  --pill-highlight: color-mix(in oklch, var(--foreground) 10%, transparent);
-  --pill-inset-shadow: color-mix(in oklch, var(--background) 80%, transparent);
-  --pill-border: color-mix(in oklch, var(--foreground) 10%, transparent);
-  
-  --pill-bg-1-hover: color-mix(in oklch, var(--primary) 15%, transparent);
-  --pill-bg-2-hover: color-mix(in oklch, var(--primary) 5%, transparent);
-  --pill-border-hover: color-mix(in oklch, var(--primary) 50%, transparent);
-  --pill-shadow-hover: color-mix(in oklch, var(--primary) 30%, transparent);
-  --pill-highlight-hover: color-mix(in oklch, var(--foreground) 20%, transparent);
+  --pill-bg-1-hover: rgba(255, 255, 255, 0.08);
+  --pill-bg-2-hover: rgba(255, 255, 255, 0.02);
+  --pill-border-hover: rgba(191, 245, 73, 0.3);
+  --pill-shadow-hover: rgba(0, 0, 0, 0.7);
+  --pill-highlight-hover: rgba(255, 255, 255, 0.2);
 }
 
 @keyframes footer-breathe {
-  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
-  100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.7; }
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+  100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
 }
 
 @keyframes footer-scroll-marquee {
@@ -49,8 +44,8 @@ const STYLES = `
 }
 
 @keyframes footer-heartbeat {
-  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px color-mix(in oklch, var(--destructive) 50%, transparent)); }
-  15%, 45% { transform: scale(1.2); filter: drop-shadow(0 0 10px color-mix(in oklch, var(--destructive) 80%, transparent)); }
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(191, 245, 73, 0.5)); }
+  15%, 45% { transform: scale(1.2); filter: drop-shadow(0 0 10px rgba(191, 245, 73, 0.8)); }
   30% { transform: scale(1); }
 }
 
@@ -70,18 +65,18 @@ const STYLES = `
 .footer-bg-grid {
   background-size: 60px 60px;
   background-image: 
-    linear-gradient(to right, color-mix(in oklch, var(--foreground) 3%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklch, var(--foreground) 3%, transparent) 1px, transparent 1px);
-  mask-image: linear-gradient(to bottom, transparent, black 40%, black 70%, transparent);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black 40%, black 70%, transparent);
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
 }
 
-/* Theme-adaptive Aurora Glow */
+/* Theme-adaptive Aurora Glow - Open Brands Lime */
 .footer-aurora {
   background: radial-gradient(
     circle at 50% 50%, 
-    color-mix(in oklch, var(--primary) 15%, transparent) 0%, 
-    color-mix(in oklch, var(--secondary) 15%, transparent) 40%, 
+    rgba(191, 245, 73, 0.05) 0%, 
+    rgba(191, 245, 73, 0.02) 40%, 
     transparent 70%
   );
 }
@@ -104,9 +99,8 @@ const STYLES = `
   border-color: var(--pill-border-hover);
   box-shadow: 
       0 20px 40px -10px var(--pill-shadow-hover), 
-      0 0 20px -5px color-mix(in oklch, var(--primary) 40%, transparent),
       inset 0 1px 1px var(--pill-highlight-hover);
-  color: var(--foreground);
+  color: white;
 }
 
 /* Giant Background Text Masking */
@@ -116,34 +110,33 @@ const STYLES = `
   font-weight: 900;
   letter-spacing: -0.05em;
   color: transparent;
-  -webkit-text-stroke: 1px color-mix(in oklch, var(--foreground) 5%, transparent);
-  background: linear-gradient(180deg, color-mix(in oklch, var(--foreground) 10%, transparent) 0%, transparent 60%);
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.05);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
   -webkit-background-clip: text;
   background-clip: text;
 }
 
 /* Metallic Text Glow */
 .footer-text-glow {
-  background: linear-gradient(180deg, var(--foreground) 0%, color-mix(in oklch, var(--foreground) 40%, transparent) 100%);
+  background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.4) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0px 0px 20px color-mix(in oklch, var(--foreground) 15%, transparent));
+  filter: drop-shadow(0px 0px 20px rgba(255, 255, 255, 0.15));
 }
 `;
 
 // -------------------------------------------------------------------------
 // 2. MAGNETIC BUTTON PRIMITIVE (Zero Dependency)
 // -------------------------------------------------------------------------
-export type MagneticButtonProps = {
-  as?: React.ElementType;
-  className?: string;
-  children?: React.ReactNode;
-  [key: string]: any;
-};
+export type MagneticButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & 
+  React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+    as?: React.ElementType;
+    to?: string;
+  };
 
 const MagneticButton = React.forwardRef<HTMLElement, MagneticButtonProps>(
-  ({ className, children, as: Component = "button", ...props }, forwardedRef) => {
+  ({ className, children, as: Component = "button", to, ...props }, forwardedRef) => {
     const localRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
@@ -194,6 +187,24 @@ const MagneticButton = React.forwardRef<HTMLElement, MagneticButtonProps>(
       return () => ctx.revert();
     },[]);
 
+    // If using React Router's Link
+    if (Component === Link) {
+      return (
+        <Link
+          to={to!}
+          ref={(node: any) => {
+            (localRef as any).current = node;
+            if (typeof forwardedRef === "function") forwardedRef(node);
+            else if (forwardedRef) (forwardedRef as any).current = node;
+          }}
+          className={cn("cursor-pointer", className)}
+          {...(props as any)}
+        >
+          {children}
+        </Link>
+      );
+    }
+
     return (
       <Component
         ref={(node: HTMLElement) => {
@@ -216,17 +227,66 @@ MagneticButton.displayName = "MagneticButton";
 // -------------------------------------------------------------------------
 const MarqueeItem = () => (
   <div className="flex items-center space-x-12 px-6">
-    <span>Conversion-Focused Systems</span> <span className="text-cyan-500/60">✦</span>
-    <span>Qualified Lead Flow</span> <span className="text-gray-400/50">✦</span>
-    <span>Strategic Infrastructure</span> <span className="text-cyan-500/60">✦</span>
-    <span>Measurable Growth</span> <span className="text-gray-400/50">✦</span>
-    <span>Customer Acquisition</span> <span className="text-cyan-500/60">✦</span>
-    <span>CRM Automation</span> <span className="text-gray-400/50">✦</span>
-    <span>Conversion Optimization</span> <span className="text-cyan-500/60">✦</span>
+    <span>High-Converting Websites</span> <span className="text-[#BFF549]/60">✦</span>
+    <span>SEO Systems</span> <span className="text-gray-500/60">✦</span>
+    <span>Lead Generation</span> <span className="text-[#BFF549]/60">✦</span>
+    <span>Brand Authority</span> <span className="text-gray-500/60">✦</span>
+    <span>Service Businesses</span> <span className="text-[#BFF549]/60">✦</span>
   </div>
 );
 
 export function Footer() {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const giantTextRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const linksRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!wrapperRef.current) return;
+
+    // React strict mode compatible GSAP context cleanup
+    const ctx = gsap.context(() => {
+      // Background Parallax
+      gsap.fromTo(
+        giantTextRef.current,
+        { y: "10vh", scale: 0.8, opacity: 0 },
+        {
+          y: "0vh",
+          scale: 1,
+          opacity: 1,
+          ease: "power1.out",
+          scrollTrigger: {
+            trigger: wrapperRef.current,
+            start: "top 80%",
+            end: "bottom bottom",
+            scrub: 1,
+          },
+        }
+      );
+
+      // Staggered Content Reveal
+      gsap.fromTo(
+        [headingRef.current, linksRef.current],
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.15,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: wrapperRef.current,
+            start: "top 40%",
+            end: "bottom bottom",
+            scrub: 1,
+          },
+        }
+      );
+    }, wrapperRef);
+
+    return () => ctx.revert();
+  },[]);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -235,59 +295,78 @@ export function Footer() {
     <>
       <style dangerouslySetInnerHTML={{ __html: STYLES }} />
       
-      <div className="relative w-full mt-24">
-        <footer className="relative flex h-[80vh] min-h-[600px] w-full flex-col justify-between overflow-hidden bg-[#F7F7F7] text-[#1A1A1A] cinematic-footer-wrapper border-t border-gray-200">
+      {/* 
+        The "Curtain Reveal" Wrapper:
+        It sits in standard flow. Because it has clip-path, its contents
+        are ONLY visible within its bounding box. 
+      */}
+      <div
+        ref={wrapperRef}
+        className="relative h-screen w-full"
+        style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
+      >
+        {/* The actual footer stays fixed to the viewport underneath everything */}
+        <footer className="fixed bottom-0 left-0 flex h-screen w-full flex-col justify-between overflow-hidden bg-[#0D0D0D] text-white cinematic-footer-wrapper">
           
           {/* Ambient Light & Grid Background */}
-          <div className="footer-aurora absolute left-1/2 top-1/2 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] blur-[80px] pointer-events-none z-0" />
+          <div className="footer-aurora absolute left-1/2 top-1/2 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] blur-[120px] pointer-events-none z-0" />
           <div className="footer-bg-grid absolute inset-0 z-0 pointer-events-none" />
 
           {/* Giant background text */}
           <div
-            className="footer-giant-bg-text absolute -bottom-[2vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 pointer-events-none select-none tracking-tighter"
+            ref={giantTextRef}
+            className="footer-giant-bg-text absolute -bottom-[5vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 pointer-events-none select-none tracking-tighter"
           >
-            BRANDS
+            OPEN BRANDS
           </div>
 
           {/* 1. Diagonal Sleek Marquee (Top of footer) */}
-          <div className="absolute top-12 left-0 w-full overflow-hidden border-y border-gray-200 bg-white/60 backdrop-blur-md py-4 z-10 -rotate-2 scale-110 shadow-lg">
+          <div className="absolute top-12 left-0 w-full overflow-hidden border-y border-white/[0.05] bg-[#0D0D0D]/60 backdrop-blur-md py-4 z-10 -rotate-2 scale-110 shadow-2xl">
             <div className="flex w-max animate-footer-scroll-marquee text-xs md:text-sm font-bold tracking-[0.3em] text-gray-500 uppercase">
+              <MarqueeItem />
+              <MarqueeItem />
               <MarqueeItem />
               <MarqueeItem />
             </div>
           </div>
 
           {/* 2. Main Center Content */}
-          <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 mt-16 w-full max-w-5xl mx-auto">
-            <h2
-              className="text-4xl md:text-6xl lg:text-7xl font-bold footer-text-glow tracking-tighter mb-6 text-center max-w-4xl"
-            >
-              Ready for Predictable Property Inquiries?
-            </h2>
-            <p className="text-lg md:text-xl text-gray-600 max-w-2xl text-center mb-12">
-              Let’s review your current setup and map what’s possible.
-            </p>
+          <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 mt-20 w-full max-w-5xl mx-auto text-center">
+            <div ref={headingRef} className="flex flex-col items-center max-w-4xl mx-auto">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold footer-text-glow tracking-tight mb-6 text-balance leading-tight">
+                Ready to Turn Your Website Into a Lead Generator?
+              </h2>
+              <p className="text-lg md:text-xl text-gray-400 mb-12 text-balance leading-relaxed max-w-2xl">
+                Your website should be your best salesperson — working 24/7 to bring you clients.<br/>
+                <span className="text-white font-medium">If it's not doing that yet, it's time to fix it.</span>
+              </p>
+            </div>
 
             {/* Interactive Magnetic Pills Layout */}
-            <div className="flex flex-col items-center gap-6 w-full">
-              {/* Primary Call to Action */}
+            <div ref={linksRef} className="flex flex-col items-center gap-6 w-full">
+              {/* Primary CTA Links */}
               <div className="flex flex-wrap justify-center gap-4 w-full">
-                <MagneticButton as={Link} to="/contact" className="footer-glass-pill px-8 md:px-10 py-4 md:py-5 rounded-full text-cyan-800 font-bold text-sm md:text-base flex items-center gap-3 group border border-cyan-300 bg-cyan-100">
-                  Book a Strategy Call
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <MagneticButton as={Link} to="/contact" className="footer-glass-pill px-8 md:px-10 py-4 md:py-5 rounded-full text-white font-bold text-sm md:text-base flex items-center gap-3 group">
+                  <span className="text-xl">👉</span>
+                  Book a Free Strategy Call
+                </MagneticButton>
+                
+                <MagneticButton as={Link} to="/projects" className="footer-glass-pill px-8 md:px-10 py-4 md:py-5 rounded-full text-white font-bold text-sm md:text-base flex items-center gap-3 group">
+                  <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
+                  View Our Work
                 </MagneticButton>
               </div>
 
               {/* Secondary Text Links */}
-              <div className="flex flex-wrap justify-center gap-3 md:gap-6 w-full mt-4">
-                <MagneticButton as={Link} to="#" className="footer-glass-pill px-6 py-3 rounded-full text-gray-500 font-medium text-xs md:text-sm hover:text-[#1A1A1A]">
-                  Privacy Policy
+              <div className="flex flex-wrap justify-center gap-3 md:gap-6 w-full mt-2">
+                <MagneticButton as={Link} to="/about" className="footer-glass-pill px-6 py-3 rounded-full text-gray-400 font-medium text-xs md:text-sm hover:text-white">
+                  Our Story
                 </MagneticButton>
-                <MagneticButton as={Link} to="#" className="footer-glass-pill px-6 py-3 rounded-full text-gray-500 font-medium text-xs md:text-sm hover:text-[#1A1A1A]">
-                  Terms of Service
+                <MagneticButton as={Link} to="/blog" className="footer-glass-pill px-6 py-3 rounded-full text-gray-400 font-medium text-xs md:text-sm hover:text-white">
+                  Blog
                 </MagneticButton>
-                <MagneticButton as={Link} to="/contact" className="footer-glass-pill px-6 py-3 rounded-full text-gray-500 font-medium text-xs md:text-sm hover:text-[#1A1A1A]">
-                  Contact
+                <MagneticButton as={Link} to="/hiring" className="footer-glass-pill px-6 py-3 rounded-full text-gray-400 font-medium text-xs md:text-sm hover:text-white">
+                  Hiring
                 </MagneticButton>
               </div>
             </div>
@@ -297,20 +376,26 @@ export function Footer() {
           <div className="relative z-20 w-full pb-8 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
             
             {/* Copyright */}
-            <div className="text-gray-500 text-[10px] md:text-xs font-semibold tracking-widest uppercase order-2 md:order-1">
+            <div className="text-gray-500 text-[10px] md:text-xs font-semibold tracking-widest uppercase order-2 md:order-1 flex items-center gap-2">
+              <div className="w-5 h-5 bg-[#BFF549] rounded-md flex items-center justify-center">
+                <div className="w-1.5 h-1.5 bg-[#0D0D0D] rounded-full" />
+              </div>
               © {new Date().getFullYear()} Open Brands. All rights reserved.
             </div>
 
             {/* "Made with Love" Badge */}
-            <div className="footer-glass-pill px-6 py-3 rounded-full flex items-center gap-2 order-1 md:order-2 cursor-default border-gray-200">
-              <span className="text-gray-500 text-[10px] md:text-xs font-bold uppercase tracking-widest">Modern digital systems for serious property businesses.</span>
+            <div className="footer-glass-pill px-6 py-3 rounded-full flex items-center gap-2 order-1 md:order-2 cursor-default border-white/[0.05]">
+              <span className="text-gray-500 text-[10px] md:text-xs font-bold uppercase tracking-widest">Crafted with</span>
+              <span className="animate-footer-heartbeat text-sm md:text-base text-[#BFF549]">❤</span>
+              <span className="text-gray-500 text-[10px] md:text-xs font-bold uppercase tracking-widest">by</span>
+              <span className="text-white font-black text-xs md:text-sm tracking-normal ml-1">Open Brands</span>
             </div>
 
             {/* Back to top */}
             <MagneticButton
               as="button"
               onClick={scrollToTop}
-              className="w-12 h-12 rounded-full footer-glass-pill flex items-center justify-center text-gray-500 hover:text-[#1A1A1A] group order-3"
+              className="w-12 h-12 rounded-full footer-glass-pill flex items-center justify-center text-gray-500 hover:text-white group order-3"
             >
               <svg className="w-5 h-5 transform group-hover:-translate-y-1.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>

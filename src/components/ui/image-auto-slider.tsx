@@ -1,4 +1,4 @@
-import React from 'react';
+import { SectionLabel } from './section-label';
 
 export const ImageAutoSlider = () => {
   // Images for the infinite scroll - using the local portfolio folder
@@ -55,11 +55,11 @@ export const ImageAutoSlider = () => {
         }
 
         .infinite-scroll-up {
-          animation: scroll-up 60s linear infinite;
+          animation: scroll-up 120s linear infinite;
         }
         
         .infinite-scroll-down {
-          animation: scroll-down 60s linear infinite;
+          animation: scroll-down 120s linear infinite;
         }
 
         .scroll-container-mask {
@@ -80,25 +80,33 @@ export const ImageAutoSlider = () => {
         }
 
         .port-image {
-          transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease;
+          transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease, border-color 0.6s ease;
         }
 
         .port-image:hover {
           transform: scale(1.02);
           filter: brightness(1.1);
+          border-color: rgba(191,245,73,0.4);
         }
       `}</style>
       
-      <section className="w-full bg-[#F7F7F7] relative flex flex-col items-center border-t border-gray-200 z-20 pb-16">
+      <section className="w-full bg-[#0D0D0D] relative flex flex-col items-center border-t border-white/[0.08] z-20 pb-16">
+        {/* Structural Grid Overlay */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.02] z-0" style={{
+            backgroundSize: '100px 100px',
+            backgroundImage: 'linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)',
+        }} />
+
         {/* Title Section placed above the showcase */}
-        <div className="w-full text-center pt-24 md:pt-32 pb-12 shrink-0 relative z-30">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#1A1A1A] tracking-tighter">Modern Property Brands, Built to Convert</h2>
-          <p className="text-lg md:text-xl text-gray-600 mt-4 font-medium">Selected projects focused on trust, conversion, and long-term scalability.</p>
+        <div className="max-w-[1400px] w-full px-4 md:px-8 lg:px-12 text-center pt-24 md:pt-32 pb-12 shrink-0 relative z-30">
+          <SectionLabel label="Our Portfolio" />
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tighter drop-shadow-lg">Modern Service Websites, Built to Convert</h2>
+          <p className="text-lg md:text-xl text-gray-400 mt-4 font-medium">Selected projects focused on trust, conversion, and long-term scalability.</p>
         </div>
 
         {/* Scrolling images container */}
-        <div className="relative w-full h-[600px] md:h-[800px] overflow-hidden scroll-container-mask shrink-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#F7F7F7] via-[#F7F7F7]/20 to-[#F7F7F7] z-0 pointer-events-none" />
+        <div className="relative max-w-[1400px] mx-auto w-full h-[600px] md:h-[800px] overflow-hidden scroll-container-mask shrink-0 z-10">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0D0D0D] via-transparent to-[#0D0D0D] z-10 pointer-events-none" />
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 w-full h-[150%] px-4 md:px-8 lg:px-12 -mt-24">
             
@@ -107,12 +115,12 @@ export const ImageAutoSlider = () => {
               {dup1.map((image, index) => (
                 <div
                   key={`c1-${index}`}
-                  className="port-image w-full rounded-2xl overflow-hidden shadow-sm hover:shadow-md border border-gray-200 bg-white aspect-[4/3] md:aspect-[3/4] lg:aspect-[4/3]"
+                  className="port-image w-full rounded-sm overflow-hidden shadow-sm bg-[#161616] border border-white/[0.08] aspect-[4/3] md:aspect-[3/4] lg:aspect-[4/3]"
                 >
                   <img
                     src={image}
                     alt={`Portfolio item ${(index % col1.length) + 1}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover opacity-90"
                     loading="lazy"
                   />
                 </div>
@@ -124,12 +132,12 @@ export const ImageAutoSlider = () => {
               {dup2.map((image, index) => (
                 <div
                   key={`c2-${index}`}
-                  className="port-image w-full rounded-2xl overflow-hidden shadow-sm hover:shadow-md border border-gray-200 bg-white aspect-[4/3] md:aspect-[3/4] lg:aspect-[4/3]"
+                  className="port-image w-full rounded-sm overflow-hidden shadow-sm bg-[#161616] border border-white/[0.08] aspect-[4/3] md:aspect-[3/4] lg:aspect-[4/3]"
                 >
                   <img
                     src={image}
                     alt={`Portfolio item ${(index % col2.length) + 1}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover opacity-90"
                     loading="lazy"
                   />
                 </div>
@@ -141,12 +149,12 @@ export const ImageAutoSlider = () => {
               {dup3.map((image, index) => (
                 <div
                   key={`c3-${index}`}
-                  className="port-image w-full rounded-2xl overflow-hidden shadow-sm hover:shadow-md border border-gray-200 bg-white aspect-[4/3] md:aspect-[3/4] lg:aspect-[4/3]"
+                  className="port-image w-full rounded-sm overflow-hidden shadow-sm bg-[#161616] border border-white/[0.08] aspect-[4/3] md:aspect-[3/4] lg:aspect-[4/3]"
                 >
                   <img
                     src={image}
                     alt={`Portfolio item ${(index % col3.length) + 1}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover opacity-90"
                     loading="lazy"
                   />
                 </div>
@@ -155,8 +163,6 @@ export const ImageAutoSlider = () => {
 
           </div>
         </div>
-        
-        {/* Gradients on top and bottom specifically to fade out the moving elements even more, moved inside the scrolling container relative wrapper */}
       </section>
     </>
   );
