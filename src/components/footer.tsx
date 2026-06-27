@@ -1,17 +1,10 @@
-"use client";
-
 import * as React from "react";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { ArrowRight, PlayCircle } from "lucide-react";
-
-// Register ScrollTrigger safely for React
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import { motion } from "motion/react";
 
 // -------------------------------------------------------------------------
 // 1. THEME-ADAPTIVE INLINE STYLES
@@ -236,57 +229,6 @@ const MarqueeItem = () => (
 );
 
 export function Footer() {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const giantTextRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const linksRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (!wrapperRef.current) return;
-
-    // React strict mode compatible GSAP context cleanup
-    const ctx = gsap.context(() => {
-      // Background Parallax
-      gsap.fromTo(
-        giantTextRef.current,
-        { y: "10vh", scale: 0.8, opacity: 0 },
-        {
-          y: "0vh",
-          scale: 1,
-          opacity: 1,
-          ease: "power1.out",
-          scrollTrigger: {
-            trigger: wrapperRef.current,
-            start: "top 80%",
-            end: "bottom bottom",
-            scrub: 1,
-          },
-        }
-      );
-
-      // Staggered Content Reveal
-      gsap.fromTo(
-        [headingRef.current, linksRef.current],
-        { y: 50, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.15,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: wrapperRef.current,
-            start: "top 40%",
-            end: "bottom bottom",
-            scrub: 1,
-          },
-        }
-      );
-    }, wrapperRef);
-
-    return () => ctx.revert();
-  },[]);
-
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -301,7 +243,6 @@ export function Footer() {
         are ONLY visible within its bounding box. 
       */}
       <div
-        ref={wrapperRef}
         className="relative h-screen w-full"
         style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
       >
@@ -313,12 +254,15 @@ export function Footer() {
           <div className="footer-bg-grid absolute inset-0 z-0 pointer-events-none" />
 
           {/* Giant background text */}
-          <div
-            ref={giantTextRef}
+          <motion.div
+            initial={{ y: "8vh", scale: 0.9, opacity: 0 }}
+            whileInView={{ y: "0vh", scale: 1, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
             className="footer-giant-bg-text absolute -bottom-[5vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 pointer-events-none select-none tracking-tighter"
           >
             OPEN BRANDS
-          </div>
+          </motion.div>
 
           {/* 1. Diagonal Sleek Marquee (Top of footer) */}
           <div className="absolute top-12 left-0 w-full overflow-hidden border-y border-white/[0.05] bg-[#0D0D0D]/60 backdrop-blur-md py-4 z-10 -rotate-2 scale-110 shadow-2xl">
@@ -332,7 +276,13 @@ export function Footer() {
 
           {/* 2. Main Center Content */}
           <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 mt-20 w-full max-w-5xl mx-auto text-center">
-            <div ref={headingRef} className="flex flex-col items-center max-w-4xl mx-auto">
+            <motion.div
+              initial={{ y: 40, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="flex flex-col items-center max-w-4xl mx-auto"
+            >
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold footer-text-glow tracking-tight mb-6 text-balance leading-tight">
                 Ready to Turn Your Website Into a Lead Generator?
               </h2>
@@ -340,10 +290,16 @@ export function Footer() {
                 Your website should be your best salesperson — working 24/7 to bring you clients.<br/>
                 <span className="text-white font-medium">If it's not doing that yet, it's time to fix it.</span>
               </p>
-            </div>
+            </motion.div>
 
             {/* Interactive Magnetic Pills Layout */}
-            <div ref={linksRef} className="flex flex-col items-center gap-6 w-full">
+            <motion.div
+              initial={{ y: 40, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
+              className="flex flex-col items-center gap-6 w-full"
+            >
               {/* Primary CTA Links */}
               <div className="flex flex-wrap justify-center gap-4 w-full">
                 <MagneticButton as={Link} to="/contact" className="footer-glass-pill px-8 md:px-10 py-4 md:py-5 rounded-full text-white font-bold text-sm md:text-base flex items-center gap-3 group">
@@ -369,7 +325,7 @@ export function Footer() {
                   Hiring
                 </MagneticButton>
               </div>
-            </div>
+            </motion.div>
           </div>
 
           {/* 3. Bottom Bar / Credits */}

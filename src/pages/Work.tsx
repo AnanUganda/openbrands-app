@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Helmet } from 'react-helmet-async';
+import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { ArrowUpRight, Sparkles, Code, Briefcase } from "lucide-react";
 import { sanityClient, urlFor } from "@/lib/sanity";
@@ -93,8 +94,8 @@ export function Work() {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-[#161616] rounded-sm border border-white/[0.08] overflow-hidden animate-pulse aspect-[4/3] p-6 space-y-4">
-                <div className="w-full h-44 bg-white/[0.05] rounded-sm" />
+              <div key={i} className="bg-[#161616] rounded-xl border border-white/[0.08] overflow-hidden animate-pulse aspect-[4/3] p-6 space-y-4">
+                <div className="w-full h-44 bg-white/[0.05] rounded-lg" />
                 <div className="h-4 bg-white/[0.05] rounded w-1/3" />
                 <div className="h-6 bg-white/[0.05] rounded w-3/4" />
                 <div className="h-4 bg-white/[0.05] rounded w-1/2" />
@@ -105,7 +106,7 @@ export function Work() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-24 border border-white/[0.08] bg-[#161616] shadow-sm rounded-sm px-6"
+            className="text-center py-24 border border-white/[0.08] bg-[#161616] shadow-sm rounded-xl px-6"
           >
             <h3 className="text-2xl font-bold text-white mb-2">No showcase items found</h3>
             <p className="text-gray-400 max-w-md mx-auto">
@@ -116,6 +117,9 @@ export function Work() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {items.map((item, idx) => {
               const isProject = item._type === 'project';
+              const detailUrl = isProject 
+                ? `/projects/${item.slug.current}` 
+                : `/templates/${item.slug.current}`;
               
               return (
                 <motion.div
@@ -123,22 +127,26 @@ export function Work() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: idx * 0.05 }}
-                  className="group flex flex-col bg-[#0D0D0D] border border-white/[0.08] shadow-sm overflow-hidden hover:border-[#BFF549]/40 transition-all duration-500 relative"
+                  className="group flex flex-col bg-[#161616]/40 backdrop-blur-sm border border-white/[0.08] shadow-sm rounded-2xl overflow-hidden hover:border-[#BFF549]/40 hover:bg-[#161616]/60 transition-all duration-500 relative"
                 >
                   {/* Image / Cover Section */}
-                  <div className="aspect-[4/3] bg-[#161616] overflow-hidden relative border-b border-white/[0.08] shrink-0">
+                  <Link to={detailUrl} className="aspect-[4/3] bg-[#161616] overflow-hidden relative border-b border-white/[0.08] shrink-0 block">
                     {item.mainImage ? (
                       <img
                         src={urlFor(item.mainImage).width(800).height(600).url()}
                         alt={item.title}
-                        className="w-full h-full object-cover opacity-90 transition-all duration-700 ease-out group-hover:scale-105 group-hover:opacity-100"
+                        className="w-full h-full object-cover opacity-85 transition-all duration-700 ease-out group-hover:scale-105 group-hover:opacity-100"
                         fetchPriority={idx < 3 ? "high" : "auto"}
                       />
                     ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center text-white/[0.2] relative bg-[#111]">
-                        <span className="font-extrabold uppercase tracking-widest text-xs">Open Brands</span>
-                        <span className="text-[10px] uppercase font-bold mt-1 text-[#BFF549]/70">{isProject ? 'Project' : 'Template'}</span>
-                      </div>
+                      <img
+                        src={isProject 
+                          ? "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80" 
+                          : "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&w=800&q=80"
+                        }
+                        alt={item.title}
+                        className="w-full h-full object-cover opacity-75 transition-all duration-700 ease-out group-hover:scale-105 group-hover:opacity-90"
+                      />
                     )}
                     
                     {/* Badge overlays */}
@@ -157,52 +165,51 @@ export function Work() {
                         </span>
                       )}
                     </div>
-                  </div>
+                  </Link>
 
                   {/* Content Section */}
-                  <div className="p-8 flex flex-col flex-grow relative z-20">
-                    <div className="flex items-center justify-between mb-4 text-xs font-semibold tracking-widest text-gray-400 uppercase">
+                  <div className="p-6 flex flex-col flex-grow relative z-20">
+                    <div className="flex items-center justify-between mb-3 text-[10px] font-bold tracking-widest text-gray-400 uppercase">
                       <span>{item.category}</span>
                       {item.techLabel && (
-                        <span className="bg-white/[0.05] text-[#BFF549] px-2 py-0.5 rounded-sm text-[10px] border border-white/[0.08] font-medium">
+                        <span className="bg-white/[0.05] text-[#BFF549] px-2 py-0.5 rounded-sm text-[9px] border border-white/[0.08] font-semibold">
                           {item.techLabel}
                         </span>
                       )}
                     </div>
 
-                    <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-[#BFF549] transition-colors line-clamp-2 leading-tight tracking-tight">
-                      {item.title}
+                    <h3 className="text-xl font-bold text-white mb-6 group-hover:text-[#BFF549] transition-colors line-clamp-2 leading-snug tracking-tight">
+                      <Link to={detailUrl}>
+                        {item.title}
+                      </Link>
                     </h3>
 
-                    <p className="text-gray-400 text-sm mb-6 line-clamp-3 leading-relaxed flex-grow">
-                      {item.tagline || (isProject ? "Check out the detailed metrics, strategy execution, and key business outcomes we achieved for this client project." : "Explore the live sandbox, screenshots, and included capabilities for this premium website starter kit.")}
-                    </p>
-
-                    <div className="border-t border-white/[0.08] pt-6 mt-auto flex items-center justify-between">
+                    <div className="pt-4 border-t border-white/[0.06] mt-auto flex items-center justify-between">
                       {/* Highlight Stat / Price */}
                       <div>
-                        {isProject ? (
-                          <div className="text-lg font-bold text-white tracking-tight leading-none">{item.metrics || "Success story"}</div>
-                        ) : (
-                          <div className="text-lg font-bold text-white tracking-tight leading-none">
-                            {item.isFree ? 'Free' : `$${item.price}`}
-                          </div>
-                        )}
-                        <div className="text-[10px] text-gray-500 uppercase tracking-widest font-semibold mt-1">
-                          {isProject ? 'Outcome achieved' : 'Investment cost'}
+                        <div className="text-base font-bold text-white tracking-tight leading-none">
+                          {isProject ? (
+                            item.metrics || "Success story"
+                          ) : (
+                            item.isFree ? 'Free' : `$${item.price}`
+                          )}
+                        </div>
+                        <div className="text-[9px] text-gray-500 uppercase tracking-widest font-bold mt-1">
+                          {isProject ? 'Outcome' : 'Investment'}
                         </div>
                       </div>
 
-                      {/* View Live Site Button */}
-                      <a
-                        href={item.liveUrl || "/contact"}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 bg-white/[0.05] border border-white/[0.1] text-white hover:bg-[#BFF549] hover:text-[#0D0D0D] px-4 py-2.5 rounded-sm text-xs font-bold transition-all duration-300 shadow-sm shrink-0"
+                      {/* Explore Button */}
+                      <Link
+                        to={detailUrl}
+                        className="inline-flex items-center gap-2 h-9 px-4 rounded-full border border-white/10 bg-white/5 text-[11px] font-semibold text-white hover:bg-[#BFF549] hover:text-[#0D0D0D] hover:border-[#BFF549] hover:shadow-[0_0_15px_rgba(191,245,73,0.3)] transition-all duration-300 group/btn shrink-0"
                       >
-                        View Live Site
-                        <ArrowUpRight className="w-3.5 h-3.5" />
-                      </a>
+                        <span>Explore</span>
+                        <div className="relative w-3 h-3 overflow-hidden shrink-0">
+                          <ArrowUpRight className="w-3 h-3 absolute inset-0 transition-transform duration-300 ease-out group-hover/btn:translate-x-4 group-hover/btn:-translate-y-4" />
+                          <ArrowUpRight className="w-3 h-3 absolute inset-0 -translate-x-4 translate-y-4 transition-transform duration-300 ease-out group-hover/btn:translate-x-0 group-hover/btn:translate-y-0" />
+                        </div>
+                      </Link>
                     </div>
                   </div>
                 </motion.div>

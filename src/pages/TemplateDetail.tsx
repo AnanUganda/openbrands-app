@@ -59,60 +59,66 @@ export function TemplateDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F7F7F7] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-2 border-[#1A1A1A] border-t-transparent" />
+      <div className="min-h-screen bg-[#0D0D0D] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-10 w-10 border-2 border-white border-t-transparent" />
       </div>
     );
   }
 
   if (!template) {
     return (
-      <div className="min-h-screen bg-[#F7F7F7] flex flex-col items-center justify-center gap-4">
-        <p className="text-xl font-bold text-[#1A1A1A]">Template not found.</p>
-        <Link to="/templates" className="text-cyan-600 underline text-sm">← Back to Templates</Link>
+      <div className="min-h-screen bg-[#0D0D0D] flex flex-col items-center justify-center gap-4 text-white">
+        <p className="text-xl font-bold">Template not found.</p>
+        <Link to="/projects" className="text-[#BFF549] hover:underline text-sm">← Back to Showcase</Link>
       </div>
     );
   }
 
   return (
-    <div className="relative w-full min-h-screen bg-[#F7F7F7] flex-1">
+    <div className="relative w-full min-h-screen bg-[#0D0D0D] text-white flex-1 pb-24">
       <Helmet>
         <title>{template.title} | Open Brands Templates</title>
         <meta name="description" content={template.tagline || `Premium real estate template — ${template.title}`} />
       </Helmet>
 
       {/* Hero Image */}
-      <div className="relative w-full h-[45vh] md:h-[55vh] bg-gray-200 overflow-hidden">
+      <div className="relative w-full h-[45vh] md:h-[55vh] bg-[#161616] overflow-hidden border-b border-white/[0.08]">
         {activeImage ? (
           <img
             src={urlFor(activeImage).width(1600).url()}
             alt={template.title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover opacity-75"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200" />
+          <img
+            src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1600&q=80"
+            alt={template.title}
+            className="w-full h-full object-cover opacity-60"
+          />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D] to-transparent" />
 
         {/* Back button */}
         <Link
-          to="/templates"
-          className="absolute top-6 left-6 inline-flex items-center gap-2 bg-white/90 backdrop-blur text-[#1A1A1A] text-sm font-semibold px-4 py-2 rounded-full shadow hover:bg-white transition-all"
+          to="/projects"
+          className="absolute top-6 left-6 inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/10 backdrop-blur text-white text-sm font-semibold px-4 py-2 rounded-full shadow transition-all z-20"
         >
-          <ArrowLeft className="w-4 h-4" /> All Templates
+          <ArrowLeft className="w-4 h-4" /> All Work
         </Link>
 
         {/* Title overlay */}
         <div className="absolute bottom-8 left-6 right-6 md:left-12">
           <div className="flex flex-wrap gap-2 mb-3">
-            {template.isFree && (
-              <span className="bg-green-400 text-green-900 text-xs font-bold px-3 py-1 rounded-full">Free</span>
+            {template.isFree ? (
+              <span className="bg-[#BFF549] text-[#0D0D0D] text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Free</span>
+            ) : (
+              <span className="bg-[#BFF549]/20 text-[#BFF549] border border-[#BFF549]/30 backdrop-blur-md text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Premium</span>
             )}
             {template.category && (
-              <span className="bg-white/90 text-gray-700 text-xs font-semibold px-3 py-1 rounded-full">{template.category}</span>
+              <span className="bg-white/10 border border-white/10 text-white text-xs font-semibold px-3 py-1 rounded-full">{template.category}</span>
             )}
             {template.techLabel && (
-              <span className="bg-cyan-400/90 text-cyan-900 text-xs font-semibold px-3 py-1 rounded-full">{template.techLabel}</span>
+              <span className="bg-white/10 border border-white/10 text-white text-xs font-semibold px-3 py-1 rounded-full">{template.techLabel}</span>
             )}
           </div>
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight drop-shadow">
@@ -130,28 +136,28 @@ export function TemplateDetail() {
 
             {/* Tagline */}
             {template.tagline && (
-              <p className="text-xl text-gray-600 leading-relaxed border-l-4 border-cyan-400 pl-5">
+              <p className="text-xl text-gray-300 leading-relaxed border-l-4 border-[#BFF549] pl-5">
                 {template.tagline}
               </p>
             )}
 
             {/* Rich Text Description */}
             {template.description && (
-              <div className="prose prose-gray max-w-none text-gray-700 leading-relaxed">
+              <div className="prose prose-invert prose-gray max-w-none text-gray-300 leading-relaxed">
                 <PortableText value={template.description} />
               </div>
             )}
 
             {/* Screenshots */}
             {template.screenshots?.length > 0 && (
-              <div className="border-t border-gray-200/60 pt-10">
-                <h2 className="text-xl font-bold text-[#1A1A1A] mb-4">Screenshots</h2>
+              <div className="border-t border-white/[0.08] pt-10">
+                <h2 className="text-xl font-bold text-white mb-4">Screenshots</h2>
                 <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin">
                   {/* Default main image option */}
                   <div
                     onClick={() => setActiveImage(template.mainImage)}
                     className={`shrink-0 rounded-2xl overflow-hidden border cursor-pointer shadow-sm w-44 md:w-56 h-32 transition-all duration-300 ${
-                      activeImage === template.mainImage ? 'border-cyan-500 scale-103 ring-2 ring-cyan-500/20' : 'border-gray-200 hover:border-gray-300'
+                      activeImage === template.mainImage ? 'border-[#BFF549] scale-[1.03] ring-2 ring-[#BFF549]/20' : 'border-white/10 hover:border-white/30'
                     }`}
                   >
                     <img
@@ -166,7 +172,7 @@ export function TemplateDetail() {
                       key={i}
                       onClick={() => setActiveImage(img)}
                       className={`shrink-0 rounded-2xl overflow-hidden border cursor-pointer shadow-sm w-44 md:w-56 h-32 transition-all duration-300 ${
-                        activeImage === img ? 'border-cyan-500 scale-103 ring-2 ring-cyan-500/20' : 'border-gray-200 hover:border-gray-300'
+                        activeImage === img ? 'border-[#BFF549] scale-[1.03] ring-2 ring-[#BFF549]/20' : 'border-white/10 hover:border-white/30'
                       }`}
                     >
                       <img
@@ -177,7 +183,7 @@ export function TemplateDetail() {
                     </div>
                   ))}
                 </div>
-                <p className="text-xs text-gray-400 mt-2 italic">Click any card to expand it as the hero image above.</p>
+                <p className="text-xs text-gray-500 mt-2 italic">Click any card to expand it as the hero image above.</p>
               </div>
             )}
           </div>
@@ -188,38 +194,38 @@ export function TemplateDetail() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="sticky top-24 bg-white rounded-3xl border border-gray-200 shadow-md p-7 flex flex-col gap-5"
+              className="sticky top-24 bg-[#161616] rounded-3xl border border-white/[0.08] shadow-md p-7 flex flex-col gap-5"
             >
               {/* Price */}
               <div>
-                <p className="text-sm text-gray-400 font-medium mb-1">Price</p>
-                <p className="text-4xl font-bold text-[#1A1A1A] tracking-tight">
+                <p className="text-xs text-gray-500 font-bold uppercase tracking-widest mb-1">Price</p>
+                <p className="text-4xl font-extrabold text-white tracking-tight leading-none">
                   {template.isFree ? 'Free' : `$${template.price}`}
                 </p>
               </div>
 
-              <div className="border-t border-gray-100" />
+              <div className="border-t border-white/[0.06]" />
 
               {/* What you get */}
               <div className="space-y-2">
                 {template.highlights && template.highlights.length > 0 ? (
                   template.highlights.map((item: string) => (
-                    <div key={item} className="flex items-start gap-2.5 text-sm text-gray-600 leading-tight">
-                      <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
+                    <div key={item} className="flex items-start gap-2.5 text-sm text-gray-300 leading-tight">
+                      <CheckCircle2 className="w-4 h-4 text-[#BFF549] shrink-0 mt-0.5" />
                       <span>{item}</span>
                     </div>
                   ))
                 ) : (
                   ['Full source code', 'Free updates', 'WhatsApp support'].map((item) => (
-                    <div key={item} className="flex items-center gap-2 text-sm text-gray-600">
-                      <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
-                      {item}
+                    <div key={item} className="flex items-center gap-2 text-sm text-gray-300">
+                      <CheckCircle2 className="w-4 h-4 text-[#BFF549] shrink-0" />
+                      <span>{item}</span>
                     </div>
                   ))
                 )}
               </div>
 
-              <div className="border-t border-gray-100" />
+              <div className="border-t border-white/[0.06]" />
 
               {/* CTAs */}
               <div className="flex flex-col gap-3">
@@ -237,7 +243,7 @@ export function TemplateDetail() {
                     href={template.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full inline-flex items-center justify-center gap-2 border border-gray-200 bg-white text-[#1A1A1A] px-5 py-3.5 rounded-2xl text-sm font-semibold hover:border-gray-300 hover:bg-gray-50 transition-all"
+                    className="w-full inline-flex items-center justify-center gap-2 border border-white/10 bg-white/5 text-white px-5 py-3.5 rounded-2xl text-sm font-semibold hover:bg-white hover:text-black hover:border-white transition-all cursor-pointer"
                   >
                     <ExternalLink className="w-4 h-4" />
                     View Live Demo
@@ -245,7 +251,7 @@ export function TemplateDetail() {
                 )}
               </div>
 
-              <p className="text-[11px] text-gray-400 text-center">
+              <p className="text-[11px] text-gray-500 text-center">
                 We'll respond on WhatsApp within 24 hours.
               </p>
             </motion.div>
@@ -255,26 +261,26 @@ export function TemplateDetail() {
 
         {/* Related Templates */}
         {related.length > 0 && (
-          <div className="mt-20 border-t border-gray-200 pt-12">
-            <h2 className="text-2xl font-bold text-[#1A1A1A] mb-8">More {template.category} Templates</h2>
+          <div className="mt-20 border-t border-white/[0.08] pt-12">
+            <h2 className="text-2xl font-bold text-white mb-8">More {template.category} Templates</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {related.map((t) => (
                 <Link key={t._id} to={`/templates/${t.slug?.current || ""}`}
-                  className="group bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-                  <div className="h-44 bg-gray-100 overflow-hidden">
+                  className="group bg-[#161616]/40 backdrop-blur-sm rounded-2xl border border-white/[0.08] overflow-hidden hover:border-[#BFF549]/40 hover:bg-[#161616]/60 hover:-translate-y-1 transition-all duration-300">
+                  <div className="h-44 bg-[#161616] overflow-hidden border-b border-white/[0.08]">
                     {t.mainImage && (
                       <img src={urlFor(t.mainImage).width(500).url()} alt={t.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100" />
                     )}
                   </div>
-                  <div className="p-4">
+                  <div className="p-5">
                     <div className="flex justify-between items-start gap-2">
-                      <p className="font-bold text-[#1A1A1A] text-sm">{t.title}</p>
-                      <span className="text-sm font-bold text-[#1A1A1A] shrink-0">
+                      <p className="font-bold text-white text-sm group-hover:text-[#BFF549] transition-colors">{t.title}</p>
+                      <span className="text-sm font-bold text-[#BFF549] shrink-0">
                         {t.isFree ? 'Free' : `$${t.price}`}
                       </span>
                     </div>
-                    <p className="text-xs text-gray-500 mt-1 line-clamp-2">{t.tagline}</p>
+                    <p className="text-xs text-gray-400 mt-2 line-clamp-2">{t.tagline}</p>
                   </div>
                 </Link>
               ))}

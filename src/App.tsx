@@ -8,6 +8,8 @@ import { Home } from '@/pages/Home';
 import { Contact } from '@/pages/Contact';
 import { About } from '@/pages/About';
 import { Work } from '@/pages/Work';
+import { ProjectDetail } from '@/pages/ProjectDetail';
+import { TemplateDetail } from '@/pages/TemplateDetail';
 import { Hiring } from '@/pages/Hiring';
 import { Blog } from '@/pages/Blog';
 import { BlogPost } from '@/pages/BlogPost';
@@ -26,6 +28,8 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/projects" element={<Work />} />
+          <Route path="/projects/:slug" element={<ProjectDetail />} />
+          <Route path="/templates/:slug" element={<TemplateDetail />} />
           <Route path="/hiring" element={<Hiring />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
