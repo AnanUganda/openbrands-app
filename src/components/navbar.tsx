@@ -54,13 +54,13 @@ export function Navbar() {
         {/* Logo */}
         <Link
           to="/"
-          className="flex items-center gap-2.5 text-white font-bold text-xl tracking-tight group shrink-0"
+          className="flex items-center group shrink-0"
         >
-          <div className="w-8 h-8 bg-[#BFF549] rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform shadow-[0_0_12px_rgba(191,245,73,0.25)]">
-            <div className="w-3 h-3 bg-[#0D0D0D] rounded-full" />
-          </div>
-          <span>Open</span>
-          <span className="text-[#BFF549]">Brands</span>
+          <img
+            src="/portfolio/logo.png"
+            alt="Open Brands"
+            className="h-10 w-auto object-contain group-hover:opacity-90 transition-opacity"
+          />
         </Link>
 
         {/* Desktop nav links */}

@@ -333,9 +333,11 @@ export function Footer() {
             
             {/* Copyright */}
             <div className="text-gray-500 text-[10px] md:text-xs font-semibold tracking-widest uppercase order-2 md:order-1 flex items-center gap-2">
-              <div className="w-5 h-5 bg-[#BFF549] rounded-md flex items-center justify-center">
-                <div className="w-1.5 h-1.5 bg-[#0D0D0D] rounded-full" />
-              </div>
+              <img
+                src="/portfolio/logo.png"
+                alt="Open Brands"
+                className="h-6 w-auto object-contain opacity-70"
+              />
               © {new Date().getFullYear()} Open Brands. All rights reserved.
             </div>
 

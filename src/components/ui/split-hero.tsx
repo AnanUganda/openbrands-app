@@ -52,6 +52,8 @@ function HeroSplineBackground() {
   );
 }
 
+
+
 function HeroContent() {
   return (
     <div className="text-white px-4 md:px-8 lg:px-12 max-w-[1400px] mx-auto w-full flex flex-col justify-center h-full pt-20 relative z-10">
