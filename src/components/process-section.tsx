@@ -1,25 +1,25 @@
 import { motion, useScroll } from "motion/react";
 import { useRef } from "react";
-import { Search, PenTool, Rocket } from "lucide-react";
+import { Search, PenTool, Rocket, ArrowRight } from "lucide-react";
 import { SectionLabel } from "./ui/section-label";
 
 const steps = [
   {
     number: "01",
-    title: "Strategy & SEO",
-    description: "We research your audience and competitors to position you as the clear choice. Then we build a keyword strategy to get you found.",
+    title: "Strategy",
+    description: "Research audience and build a targeted keyword strategy.",
     icon: Search,
   },
   {
     number: "02",
-    title: "Design & Copy",
-    description: "We write persuasive copy and design a premium, trust-building website that guides visitors toward contacting you.",
+    title: "Design and Develop",
+    description: "Design premium sites with persuasive copy to drive contacts.",
     icon: PenTool,
   },
   {
     number: "03",
-    title: "Launch & Scale",
-    description: "We deploy your optimized website, connect tracking systems, and launch campaigns to start driving high-quality leads.",
+    title: "Launch",
+    description: "Deploy optimized site and campaigns to drive quality leads.",
     icon: Rocket,
   },
 ];
@@ -85,6 +85,19 @@ export function ProcessSection() {
             ))}
           </div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
+          className="mt-16 md:mt-24 flex justify-center relative z-20"
+        >
+          <a href="/contact" className="group flex items-center justify-center gap-2 rounded-full border border-transparent bg-[#BFF549] px-7 py-4 text-base font-bold text-[#0D0D0D] transition-all hover:bg-[#d4ff6e] hover:shadow-[0_0_30px_rgba(191,245,73,0.2)]">
+            Start Your Project
+            <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+          </a>
+        </motion.div>
       </div>
     </section>
   );

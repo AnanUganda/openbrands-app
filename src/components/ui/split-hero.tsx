@@ -76,7 +76,7 @@ function HeroContent() {
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-sm border-l-2 border-[#BFF549] bg-white/[0.03] text-xs font-bold tracking-widest uppercase text-gray-300 shadow-sm backdrop-blur-md">
-            BUILT FOR GROWTH
+            DRIVEN BY RESULTS
           </div>
         </motion.div>
 
@@ -86,12 +86,12 @@ function HeroContent() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          Turn Your Website Into a{' '}
-          <span className="text-[#BFF549] drop-shadow-md">Client-Generating System.</span>
+          Turn Your Website Into a Client-Generating{' '}
+          <span className="text-[#BFF549] drop-shadow-md">System.</span>
         </motion.h1>
         
         <motion.p 
-          className="text-gray-300 text-lg sm:text-xl md:text-2xl leading-relaxed mb-10 text-balance w-full max-w-2xl drop-shadow-md font-medium"
+          className="text-gray-300 text-base sm:text-lg md:text-xl leading-relaxed mb-10 text-balance w-full max-w-2xl drop-shadow-md font-normal"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
@@ -136,7 +136,15 @@ function HeroContent() {
 
 function LogoMarquee() {
   const logos = [
-    "ACME Corp", "GlobalTech", "Nexus", "Pinnacle", "Astra", "Zenith", "Quantum"
+    "/software/Antigravity.png",
+    "/software/Framer.png",
+    "/software/GA.png",
+    "/software/Meta.png",
+    "/software/chimp.png",
+    "/software/convertkit.png",
+    "/software/google ads.png",
+    "/software/hubspot.png",
+    "/software/zappie.png",
   ];
 
   return (
@@ -148,16 +156,21 @@ function LogoMarquee() {
       }} />
       
       <div className="max-w-7xl mx-auto px-6 mb-6">
-        <p className="text-center text-xs font-bold tracking-widest text-gray-500 uppercase">Trusted by ambitious brands worldwide</p>
+        <p className="text-center text-xs font-bold tracking-widest text-gray-500 uppercase">Our Tech Stack</p>
       </div>
 
-      <div className="flex w-[300%] sm:w-[200%] md:w-full">
+      {/* Gradient mask for fade in/out effect */}
+      <div 
+        className="flex w-[300%] sm:w-[200%] md:w-full"
+        style={{
+          maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+          WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
+        }}
+      >
         <div className="flex w-full animate-logo-marquee items-center justify-around gap-8 md:gap-16 px-4 md:px-8">
           {[...logos, ...logos, ...logos].map((logo, idx) => (
             <div key={idx} className="flex items-center justify-center shrink-0">
-              <span className="text-xl md:text-2xl font-black text-white/[0.15] tracking-tighter uppercase whitespace-nowrap hover:text-white/[0.3] transition-colors cursor-default">
-                {logo}
-              </span>
+              <img src={logo} alt="Tech Stack Logo" className="h-8 md:h-12 object-contain opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" />
             </div>
           ))}
         </div>

@@ -133,11 +133,11 @@ export function Contact() {
                   </div>
                 </a>
                 <div className="pt-4 border-t border-white/[0.08] flex items-center gap-4">
-                  <a href="#" className="w-10 h-10 rounded-full bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-gray-400 hover:text-[#0D0D0D] hover:bg-[#BFF549] hover:border-[#BFF549] transition-all">
-                    <Globe className="w-5 h-5" />
+                  <a href="#" aria-label="Visit our website" className="w-10 h-10 rounded-full bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-gray-400 hover:text-[#0D0D0D] hover:bg-[#BFF549] hover:border-[#BFF549] transition-all">
+                    <Globe className="w-5 h-5" aria-hidden="true" />
                   </a>
-                  <a href="#" className="w-10 h-10 rounded-full bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-gray-400 hover:text-[#0D0D0D] hover:bg-[#BFF549] hover:border-[#BFF549] transition-all">
-                    <MessageCircle className="w-5 h-5" />
+                  <a href="#" aria-label="Message us" className="w-10 h-10 rounded-full bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-gray-400 hover:text-[#0D0D0D] hover:bg-[#BFF549] hover:border-[#BFF549] transition-all">
+                    <MessageCircle className="w-5 h-5" aria-hidden="true" />
                   </a>
                 </div>
               </div>
@@ -167,32 +167,35 @@ export function Contact() {
                 
                 <div>
                   <label htmlFor="name" className="block text-[11px] font-bold font-mono uppercase tracking-[0.1em] text-gray-500 mb-2">Name</label>
-                  <input 
-                    type="text" 
-                    id="name" 
+                  <input
+                    type="text"
+                    id="name"
                     name="name"
                     required
+                    autoComplete="name"
                     className="w-full bg-[#0A0A0A] border border-white/[0.08] rounded-xl px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-[#BFF549]/50 focus:border-[#BFF549] transition-all shadow-inner"
                     placeholder="John Doe"
                   />
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-[11px] font-bold font-mono uppercase tracking-[0.1em] text-gray-500 mb-2">Email</label>
-                  <input 
-                    type="email" 
-                    id="email" 
+                  <input
+                    type="email"
+                    id="email"
                     name="email"
                     required
+                    autoComplete="email"
                     className="w-full bg-[#0A0A0A] border border-white/[0.08] rounded-xl px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-[#BFF549]/50 focus:border-[#BFF549] transition-all shadow-inner"
                     placeholder="john@company.com"
                   />
                 </div>
                 <div>
                   <label htmlFor="company" className="block text-[11px] font-bold font-mono uppercase tracking-[0.1em] text-gray-500 mb-2">Company</label>
-                  <input 
-                    type="text" 
-                    id="company" 
+                  <input
+                    type="text"
+                    id="company"
                     name="company"
+                    autoComplete="organization"
                     className="w-full bg-[#0A0A0A] border border-white/[0.08] rounded-xl px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-[#BFF549]/50 focus:border-[#BFF549] transition-all shadow-inner"
                     placeholder="Company Inc."
                   />
