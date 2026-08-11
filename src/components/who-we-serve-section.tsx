@@ -84,10 +84,6 @@ const framerEase = [0.16, 1, 0.3, 1];
 export function WhoWeServeSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  const toggleAccordion = (index: number) => {
-    setOpenIndex((prev) => (prev === index ? null : index));
-  };
-
   return (
     <section id="who-we-serve" className="relative w-full py-24 md:py-32 bg-[#FBFBFB] text-[#0D0D0D] overflow-hidden z-10 border-t border-gray-200/80">
       
@@ -124,23 +120,29 @@ export function WhoWeServeSection() {
             const IconComp = sector.icon;
 
             return (
-              <div key={sector.id} className="py-4 sm:py-6 transition-colors">
+              <div 
+                key={sector.id}
+                onMouseEnter={() => setOpenIndex(idx)}
+                onClick={() => setOpenIndex((prev) => (prev === idx ? null : idx))}
+                className="py-4 sm:py-6 transition-colors group cursor-pointer"
+              >
                 
                 {/* Collapsed Header Bar */}
-                <div
-                  onClick={() => toggleAccordion(idx)}
-                  className="flex items-center justify-between gap-4 w-full cursor-pointer group py-2"
-                >
+                <div className="flex items-center justify-between gap-4 w-full py-2">
                   <div className="flex items-center gap-4 sm:gap-6">
-                    {/* Service Icon */}
+                    {/* Service Icon Container: Maintains grey-ish background, icon lights up green when open/hovered */}
                     <div
-                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-500 ${
-                        isOpen
-                          ? "bg-[#0D0D0D] text-[#BFF549] scale-105 shadow-md"
-                          : "bg-gray-100 text-[#0D0D0D] border border-gray-200/90 group-hover:bg-gray-200 group-hover:scale-105"
+                      className={`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gray-100/90 border border-gray-200/90 flex items-center justify-center shrink-0 transition-all duration-300 ${
+                        isOpen ? "scale-105 shadow-xs" : "group-hover:scale-105"
                       }`}
                     >
-                      <IconComp className="w-5 h-5 sm:w-6 sm:h-6" />
+                      <IconComp
+                        className={`w-5 h-5 sm:w-6 sm:h-6 transition-colors duration-300 ${
+                          isOpen
+                            ? "text-[#6bb90c]"
+                            : "text-[#0D0D0D] group-hover:text-[#6bb90c]"
+                        }`}
+                      />
                     </div>
 
                     {/* Service Title */}
@@ -155,24 +157,13 @@ export function WhoWeServeSection() {
                     </h3>
                   </div>
 
-                  {/* Expand Toggle Pill Indicator */}
-                  <div className="flex items-center gap-3">
-                    <span
-                      className={`hidden sm:inline-block text-xs font-bold px-4 py-2 rounded-full transition-all duration-300 ${
-                        isOpen
-                          ? "bg-[#0D0D0D] text-white"
-                          : "bg-gray-100 text-gray-600 group-hover:bg-gray-200"
-                      }`}
-                    >
-                      {isOpen ? "Active Sector" : "Explore"}
-                    </span>
-                    <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-500 ${
-                        isOpen ? "bg-[#0D0D0D] text-[#BFF549] rotate-180" : "bg-gray-100 text-gray-600 group-hover:bg-gray-200"
-                      }`}
-                    >
-                      <ChevronDown className="w-4 h-4" />
-                    </div>
+                  {/* Clean Chevron Indicator (Text Pill Removed) */}
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 bg-gray-100/90 border border-gray-200/90 ${
+                      isOpen ? "rotate-180 text-[#0D0D0D]" : "text-gray-400 group-hover:text-[#0D0D0D]"
+                    }`}
+                  >
+                    <ChevronDown className="w-4 h-4" />
                   </div>
                 </div>
 
