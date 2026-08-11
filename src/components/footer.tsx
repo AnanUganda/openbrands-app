@@ -315,9 +315,6 @@ export function Footer() {
 
               {/* Secondary Text Links */}
               <div className="flex flex-wrap justify-center gap-3 md:gap-6 w-full mt-2">
-                <MagneticButton as={Link} to="/about" className="bg-white/80 border border-gray-200 px-6 py-3 rounded-full text-gray-600 font-semibold text-xs md:text-sm hover:text-[#0D0D0D] hover:bg-white shadow-xs">
-                  Our Story
-                </MagneticButton>
                 <MagneticButton as={Link} to="/blog" className="bg-white/80 border border-gray-200 px-6 py-3 rounded-full text-gray-600 font-semibold text-xs md:text-sm hover:text-[#0D0D0D] hover:bg-white shadow-xs">
                   Blog
                 </MagneticButton>

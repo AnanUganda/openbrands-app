@@ -1,273 +1,293 @@
 import React from "react";
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from "react-helmet-async";
 import { motion } from "motion/react";
-import { Mail, Phone, Globe, MessageCircle, ArrowRight, Clock, CalendarDays } from "lucide-react";
-import { FluidParticlesBackground } from "@/components/ui/fluid-particles-background";
+import { Mail, Phone, Globe, MessageCircle, ArrowRight, Clock, CalendarDays, CheckCircle2 } from "lucide-react";
+import { SectionLabel } from "@/components/ui/section-label";
+import { SplitTextReveal } from "@/components/ui/split-text-reveal";
 
 export function Contact() {
   const faqs = [
     {
-      q: "What happens in the strategy call?",
-      a: "We dive deep into your current lead generation process, identify gaps, and outline exactly how our Waitlist System™ would work for your specific business case."
+      q: "What happens on the strategy call?",
+      a: "We review your current website, identify why it's not converting visitors, and lay out a clear plan to turn it into a lead-generating engine."
     },
     {
-      q: "How quickly can we start?",
-      a: "Depending on our current capacity, we typically onboard new clients within 7-10 business days from the signed agreement."
+      q: "How fast can we launch?",
+      a: "Most website projects launch within 1–2 weeks from initial kickoff."
     },
     {
-      q: "What should I prepare?",
-      a: "Just bring a clear understanding of your target audience, current customer lifetime value (LTV), and your growth goals for the next quarter."
+      q: "What do I need to prepare?",
+      a: "Just your business goals, target audience details, and any existing brand assets. We guide you through everything else."
     },
     {
-      q: "Can we do this if we're not local?",
-      a: "Absolutely. We work with businesses globally. All our communication and updates are handled seamlessly via Zoom, Slack, and our dedicated client portal."
+      q: "Do you work with businesses outside our city?",
+      a: "Yes! We work with service businesses nationwide. All communication is seamless via video call, email, and instant updates."
     }
   ];
 
   return (
-    <>
-    <style>{`
-      @keyframes grid-scroll {
-        0% { transform: translateY(0); }
-        100% { transform: translateY(100px); }
-      }
-      .animated-grid-bg {
-        animation: grid-scroll 20s linear infinite;
-      }
-    `}</style>
-    <div className="relative w-full min-h-screen bg-[#0D0D0D] overflow-hidden flex-1">
+    <div className="relative w-full min-h-screen bg-[#FBFBFB] text-[#0D0D0D] overflow-hidden flex-1 border-t border-gray-200/80">
       <Helmet>
-        <title>Contact Us | Open Brands</title>
-        <meta name="description" content="Get in touch with Open Brands to schedule a strategy call and learn how our Waitlist System™ can scale your B2B service business." />
+        <title>Book a Call & Contact Us | Open Brands</title>
+        <meta 
+          name="description" 
+          content="Schedule a strategy call with Open Brands to turn your service website into a client-generating engine." 
+        />
       </Helmet>
-      
-      {/* Animated Structural Grid Overlay */}
-      <div className="absolute inset-[-100px] pointer-events-none opacity-[0.03] z-0 animated-grid-bg" style={{
-          backgroundSize: '100px 100px',
-          backgroundImage: 'linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)',
-      }} />
 
-      {/* Subtle ambient light - significantly reduced green */}
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#BFF549]/3 rounded-full blur-[150px] pointer-events-none" />
-
-
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-20 pt-12 pb-24 md:pt-20 md:pb-32">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12 relative z-20 border-l border-r border-gray-200/80 pt-24 md:pt-32 pb-24 md:pb-32">
+        
+        {/* Header Section matching Homepage Theme */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-16 md:mb-24"
+          className="text-center flex flex-col items-center mb-16 md:mb-24 max-w-4xl mx-auto"
         >
-          <span className="text-xs md:text-sm font-bold tracking-[0.2em] text-gray-500 uppercase mb-4 block">
-            Start The Journey
-          </span>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tighter mb-6">
-            Let's Talk
-          </h1>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            Ready to stop guessing and start scaling? Choose how you'd like to reach us below.
+          <SectionLabel label="©2026 Open Brands" align="center" />
+
+          <SplitTextReveal className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#0D0D0D] tracking-tight leading-[1.05] mb-6 text-balance">
+            Let's Build Your Growth Engine
+          </SplitTextReveal>
+
+          <p className="text-base sm:text-xl text-gray-600 font-medium leading-relaxed max-w-2xl text-balance">
+            Ready to stop guessing and start getting booked clients? Choose how you'd like to reach us below.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 mb-24">
-          {/* Left Column: Quick Book & Contact Info */}
-          <div className="flex flex-col gap-12">
+        {/* 2-Column Grid Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start mb-24">
+          
+          {/* Left Column: Quick Call Booking & Direct Contact Details */}
+          <div className="lg:col-span-6 flex flex-col gap-8">
             
+            {/* Primary Calendar Booking Card */}
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+              className="bg-white border border-gray-200/90 rounded-3xl p-8 sm:p-10 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden"
             >
-              <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                <CalendarDays className="w-6 h-6 text-[#BFF549]" />
-                The fastest way to get started:
-              </h2>
-              <div className="bg-[#161616] border border-white/[0.08] rounded-3xl p-8 relative overflow-hidden group hover:border-[#BFF549]/40 transition-all duration-500 shadow-lg hover:shadow-[0_0_30px_rgba(191,245,73,0.1)]">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#BFF549]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="flex flex-col items-center justify-center text-center py-8 relative z-10">
-                  <div className="w-16 h-16 rounded-2xl bg-white/[0.03] flex items-center justify-center border border-white/[0.08] text-[#BFF549] mb-6 group-hover:scale-110 transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
-                    <CalendarDays className="w-8 h-8" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-white mb-2">Book your free strategy session</h3>
-                  <p className="text-gray-400 mb-8 max-w-md">Pick a time that works for you. We'll take it from there.</p>
-                  
-                  <motion.a 
-                    href="https://calendly.com/openbrand-marketing/30min" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                    className="relative group/btn inline-flex items-center justify-center gap-2 bg-[#BFF549] text-[#0D0D0D] px-8 py-4 rounded-xl font-bold hover:bg-[#a9db3f] transition-colors"
-                  >
-                    Open Calendar
-                    <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-                  </motion.a>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-2xl bg-[#0D0D0D] text-[#BFF549] flex items-center justify-center shrink-0">
+                  <CalendarDays className="w-5 h-5" />
                 </div>
+                <span className="text-xs font-bold uppercase tracking-wider text-gray-500">
+                  Fastest Response
+                </span>
               </div>
+
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#0D0D0D] tracking-tight mb-3">
+                Book a Free Strategy Session
+              </h2>
+
+              <p className="text-gray-600 font-medium leading-relaxed mb-8">
+                Pick a 30-minute time slot that works best for you. We'll analyze your current site and map out a step-by-step conversion plan.
+              </p>
+
+              <div className="space-y-3 mb-8">
+                {[
+                  "No pressure or pushy sales pitch",
+                  "Actionable insights tailored to your market",
+                  "Clear project timeline and estimate"
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 text-sm font-semibold text-[#0D0D0D]">
+                    <CheckCircle2 className="w-4 h-4 text-[#70c910] shrink-0" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+
+              <a 
+                href="https://calendly.com/openbrand-marketing/30min" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="inline-block w-full sm:w-auto"
+              >
+                <button className="group flex items-center justify-center gap-3 w-full sm:w-auto rounded-full bg-[#BFF549] px-8 py-4 text-base font-bold text-[#0D0D0D] transition-all hover:bg-[#d4ff6e] hover:shadow-[0_0_30px_rgba(191,245,73,0.35)] pointer-events-auto">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#0D0D0D]" />
+                  <span>Open Calendar</span>
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </button>
+              </a>
             </motion.div>
 
+            {/* Direct Contact Info Card */}
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+              className="bg-white border border-gray-200/90 rounded-3xl p-8 sm:p-10 shadow-sm flex flex-col gap-6"
             >
-              <h2 className="text-2xl font-bold text-white mb-6">Direct Contact</h2>
-              <div className="bg-[#161616] border border-white/[0.08] rounded-2xl p-6 flex flex-col gap-6">
-                <a href="mailto:twijjukyeanan00@gmail.com" className="flex items-center gap-4 text-gray-400 hover:text-white transition-colors group">
-                  <div className="w-12 h-12 rounded-full bg-white/[0.03] border border-white/[0.08] flex items-center justify-center group-hover:border-[#BFF549]/40 group-hover:bg-[#BFF549]/10 transition-colors">
-                    <Mail className="w-5 h-5 text-[#BFF549]" />
+              <h3 className="text-xl font-bold text-[#0D0D0D] tracking-tight">
+                Direct Contact
+              </h3>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+                <a 
+                  href="mailto:twijjukyeanan00@gmail.com" 
+                  className="flex items-center gap-4 group p-3 rounded-2xl bg-gray-50 border border-gray-200/70 hover:bg-gray-100/80 transition-colors"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-[#0D0D0D] group-hover:text-[#70c910] shrink-0 transition-colors">
+                    <Mail className="w-5 h-5" />
                   </div>
-                  <div>
-                    <div className="text-sm text-gray-500 font-medium">Email</div>
-                    <div className="text-lg">twijjukyeanan00@gmail.com</div>
-                  </div>
-                </a>
-                <a href="tel:+256754593472" className="flex items-center gap-4 text-gray-400 hover:text-white transition-colors group">
-                  <div className="w-12 h-12 rounded-full bg-white/[0.03] border border-white/[0.08] flex items-center justify-center group-hover:border-[#BFF549]/40 group-hover:bg-[#BFF549]/10 transition-colors">
-                    <Phone className="w-5 h-5 text-[#BFF549]" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-500 font-medium">Phone</div>
-                    <div className="text-lg">+256 754 593 472</div>
+                  <div className="overflow-hidden">
+                    <div className="text-xs text-gray-500 font-bold uppercase tracking-wider">Email Us</div>
+                    <div className="text-sm font-bold text-[#0D0D0D] truncate">twijjukyeanan00@gmail.com</div>
                   </div>
                 </a>
-                <div className="pt-4 border-t border-white/[0.08] flex items-center gap-4">
-                  <a href="#" aria-label="Visit our website" className="w-10 h-10 rounded-full bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-gray-400 hover:text-[#0D0D0D] hover:bg-[#BFF549] hover:border-[#BFF549] transition-all">
-                    <Globe className="w-5 h-5" aria-hidden="true" />
-                  </a>
-                  <a href="#" aria-label="Message us" className="w-10 h-10 rounded-full bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-gray-400 hover:text-[#0D0D0D] hover:bg-[#BFF549] hover:border-[#BFF549] transition-all">
-                    <MessageCircle className="w-5 h-5" aria-hidden="true" />
-                  </a>
-                </div>
+
+                <a 
+                  href="tel:+256754593472" 
+                  className="flex items-center gap-4 group p-3 rounded-2xl bg-gray-50 border border-gray-200/70 hover:bg-gray-100/80 transition-colors"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-[#0D0D0D] group-hover:text-[#70c910] shrink-0 transition-colors">
+                    <Phone className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-500 font-bold uppercase tracking-wider">Call Us</div>
+                    <div className="text-sm font-bold text-[#0D0D0D]">+256 754 593 472</div>
+                  </div>
+                </a>
               </div>
             </motion.div>
 
           </div>
 
-          {/* Right Column: Contact Form */}
+          {/* Right Column: Contact Message Form */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+            className="lg:col-span-6 bg-white border border-gray-200/90 rounded-3xl p-8 sm:p-10 shadow-sm"
           >
-            <h2 className="text-2xl font-bold text-white mb-6">Or send us a message</h2>
-            <div className="bg-[#161616] border border-white/[0.06] rounded-[24px] p-8 relative overflow-hidden group shadow-2xl">
-              <form 
-                action="https://formsubmit.co/twijjukyeanan00@gmail.com" 
-                method="POST" 
-                className="flex flex-col gap-5 relative z-10"
-              >
-                {/* Anti-spam honeypot */}
-                <input type="text" name="_honey" style={{ display: 'none' }} />
-                {/* Disable Captcha */}
-                <input type="hidden" name="_captcha" value="false" />
-                {/* Success redirection */}
-                <input type="hidden" name="_next" value={window.location.href} />
-                
-                <div>
-                  <label htmlFor="name" className="block text-[11px] font-bold font-mono uppercase tracking-[0.1em] text-gray-500 mb-2">Name</label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    autoComplete="name"
-                    className="w-full bg-[#0A0A0A] border border-white/[0.08] rounded-xl px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-[#BFF549]/50 focus:border-[#BFF549] transition-all shadow-inner"
-                    placeholder="John Doe"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-[11px] font-bold font-mono uppercase tracking-[0.1em] text-gray-500 mb-2">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    autoComplete="email"
-                    className="w-full bg-[#0A0A0A] border border-white/[0.08] rounded-xl px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-[#BFF549]/50 focus:border-[#BFF549] transition-all shadow-inner"
-                    placeholder="john@company.com"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="company" className="block text-[11px] font-bold font-mono uppercase tracking-[0.1em] text-gray-500 mb-2">Company</label>
-                  <input
-                    type="text"
-                    id="company"
-                    name="company"
-                    autoComplete="organization"
-                    className="w-full bg-[#0A0A0A] border border-white/[0.08] rounded-xl px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-[#BFF549]/50 focus:border-[#BFF549] transition-all shadow-inner"
-                    placeholder="Company Inc."
-                  />
-                </div>
-                <div>
-                  <label htmlFor="message" className="block text-[11px] font-bold font-mono uppercase tracking-[0.1em] text-gray-500 mb-2">Message</label>
-                  <textarea 
-                    id="message" 
-                    name="message"
-                    required
-                    rows={4}
-                    className="w-full bg-[#0A0A0A] border border-white/[0.08] rounded-xl px-4 py-3.5 text-white placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-[#BFF549]/50 focus:border-[#BFF549] transition-all shadow-inner resize-none"
-                    placeholder="Tell us about your current lead generation..."
-                  ></textarea>
-                </div>
-                
-                <motion.button 
-                  type="submit" 
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  className="w-full relative group/btn flex items-center justify-center gap-2 bg-[#1A1A1A] border border-white/[0.1] text-white px-8 py-4 rounded-xl font-bold hover:bg-[#BFF549] hover:text-[#0D0D0D] hover:border-[#BFF549] transition-colors mt-2"
-                >
-                  Send Message
-                  <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-                </motion.button>
-                
-                <div className="flex items-center justify-center gap-2 mt-2 text-[11px] font-mono text-gray-500 font-medium tracking-wider uppercase">
-                  <Clock className="w-3.5 h-3.5" />
-                  We'll respond within 24 hours
-                </div>
-              </form>
+            <div className="mb-8">
+              <span className="text-xs font-bold uppercase tracking-wider text-gray-500 block mb-2">
+                Send a Message
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#0D0D0D] tracking-tight">
+                Tell us about your project
+              </h2>
             </div>
+
+            <form 
+              action="https://formsubmit.co/twijjukyeanan00@gmail.com" 
+              method="POST" 
+              className="space-y-5"
+            >
+              {/* Anti-spam honeypot */}
+              <input type="text" name="_honey" style={{ display: 'none' }} />
+              {/* Disable Captcha */}
+              <input type="hidden" name="_captcha" value="false" />
+              {/* Success redirection */}
+              <input type="hidden" name="_next" value={window.location.href} />
+
+              <div>
+                <label htmlFor="name" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+                  Your Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  autoComplete="name"
+                  className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-[#0D0D0D] font-medium placeholder-gray-400 focus:outline-none focus:border-[#0D0D0D] focus:bg-white transition-colors"
+                  placeholder="e.g. Sarah Jenkins"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  autoComplete="email"
+                  className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-[#0D0D0D] font-medium placeholder-gray-400 focus:outline-none focus:border-[#0D0D0D] focus:bg-white transition-colors"
+                  placeholder="sarah@company.com"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="company" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+                  Company / Industry
+                </label>
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  autoComplete="organization"
+                  className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-[#0D0D0D] font-medium placeholder-gray-400 focus:outline-none focus:border-[#0D0D0D] focus:bg-white transition-colors"
+                  placeholder="e.g. Apex Property Group"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="message" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+                  How can we help?
+                </label>
+                <textarea 
+                  id="message" 
+                  name="message"
+                  required
+                  rows={4}
+                  className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-[#0D0D0D] font-medium placeholder-gray-400 focus:outline-none focus:border-[#0D0D0D] focus:bg-white transition-colors resize-none"
+                  placeholder="Tell us about your business goals and what you'd like to achieve..."
+                ></textarea>
+              </div>
+
+              <button 
+                type="submit" 
+                className="w-full group flex items-center justify-center gap-3 rounded-full bg-[#0D0D0D] px-8 py-4 text-base font-bold text-white transition-all hover:bg-gray-800 shadow-md cursor-pointer pt-4"
+              >
+                <span>Send Message</span>
+                <div className="w-7 h-7 rounded-full bg-[#BFF549] text-[#0D0D0D] flex items-center justify-center transition-transform group-hover:translate-x-1">
+                  <ArrowRight className="w-4 h-4" />
+                </div>
+              </button>
+
+              <div className="flex items-center justify-center gap-2 pt-2 text-xs font-semibold text-gray-500">
+                <Clock className="w-4 h-4 text-gray-400" />
+                <span>We typically respond within 24 hours</span>
+              </div>
+            </form>
           </motion.div>
+
         </div>
 
-        {/* FAQ Section */}
+        {/* FAQs Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="border-t border-white/[0.08] pt-24"
+          className="border-t border-gray-200/80 pt-20"
         >
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-4">
-              Common Questions
+            <SectionLabel label="Got Questions?" align="center" />
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#0D0D0D] tracking-tight mb-4">
+              Common Questions Before Booking
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              Before we talk, here are a few things people usually ask.
-            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
             {faqs.map((faq, idx) => (
-              <motion.div 
+              <div 
                 key={idx} 
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="bg-[#161616] border border-white/[0.08] rounded-2xl p-6 hover:border-[#BFF549]/40 hover:-translate-y-1 transition-all duration-300"
+                className="bg-white border border-gray-200/90 rounded-2xl p-6 sm:p-8 shadow-xs hover:shadow-md transition-all duration-300"
               >
-                <h3 className="text-lg font-bold text-white mb-3">{faq.q}</h3>
-                <p className="text-gray-400 leading-relaxed">{faq.a}</p>
-              </motion.div>
+                <h3 className="text-lg font-bold text-[#0D0D0D] mb-3">{faq.q}</h3>
+                <p className="text-gray-600 font-medium leading-relaxed text-sm sm:text-base">{faq.a}</p>
+              </div>
             ))}
           </div>
         </motion.div>
 
       </div>
     </div>
-    </>
   );
 }

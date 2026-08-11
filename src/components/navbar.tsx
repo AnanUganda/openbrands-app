@@ -13,7 +13,6 @@ export function Navbar() {
   const prevScrollY = React.useRef(0);
 
   const navLinks = [
-    { to: '/about', label: 'Our Story' },
     { to: '/portfolio', label: 'Work' },
     { to: '/blog', label: 'Blog' },
   ];

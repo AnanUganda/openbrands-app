@@ -34,7 +34,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/about" element={<About />} />
+              <Route path="/about" element={<Navigate to="/" replace />} />
               <Route path="/portfolio" element={<Portfolio />} />
               <Route path="/portfolio/:slug" element={<PortfolioDetail />} />
               {/* Legacy URLs kept alive so old links and search results don't 404 */}
