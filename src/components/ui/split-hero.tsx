@@ -1,176 +1,46 @@
 "use client";
 
 import React from 'react';
-import Spline from '@splinetool/react-spline';
-import { motion } from 'motion/react';
-import { ArrowRight, Star } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'motion/react';
+import { Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Particles } from '@/components/ui/particles';
 
-function HeroSplineBackground() {
-  return (
-    <div style={{
-      position: 'relative',
-      width: '100%',
-      height: '100vh',
-      pointerEvents: 'auto',
-      overflow: 'hidden',
-    }}>
-      {/* 
-        We use scale and translateX to push the 3D scene to the right 
-        and make it fill the right side of the screen better.
-      */}
-      <div className="absolute inset-0 z-0" style={{ transform: 'translateX(0%) scale(1.15)' }}>
-        <Spline
-          style={{
-            width: '100%',
-            height: '100vh',
-            pointerEvents: 'auto',
-          }}
-          scene="https://prod.spline.design/dJqTIQ-tE3ULUPMi/scene.splinecode" 
-        />
-      </div>
-      
-      {/* Gradient masks to blend the 3D scene smoothly into the dark background */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100vh',
-          background: `
-            linear-gradient(to right, rgba(13, 13, 13, 1) 0%, rgba(13, 13, 13, 0.7) 40%, transparent 70%),
-            linear-gradient(to bottom, transparent 60%, rgba(13, 13, 13, 1) 95%)
-          `,
-          pointerEvents: 'none',
-          zIndex: 1,
-        }}
-      />
-      {/* Subtle theme glow */}
-      <div className="absolute top-1/3 left-1/4 w-[600px] h-[600px] bg-[#BFF549]/5 rounded-full blur-[150px] pointer-events-none z-0" />
-    </div>
-  );
-}
-
-
-
-function HeroContent() {
-  return (
-    <div className="text-white px-4 md:px-8 lg:px-12 max-w-[1400px] mx-auto w-full flex flex-col justify-center h-full pt-20 relative z-10">
-      
-      {/* Structural vertical grid lines (subtle) */}
-      <div className="absolute inset-0 z-[-1] pointer-events-none flex justify-between px-4 md:px-8 lg:px-12 max-w-[1400px] mx-auto opacity-20">
-        <div className="w-[1px] h-full bg-white/[0.08]" />
-        <div className="w-[1px] h-full bg-white/[0.08]" />
-        <div className="w-[1px] h-full bg-white/[0.08]" />
-        <div className="w-[1px] h-full bg-white/[0.08]" />
-      </div>
-
-      <div className="w-full lg:max-w-3xl flex flex-col justify-center pointer-events-auto mt-10">
-        
-        {/* Top tagline */}
-        <motion.div
-          className="mb-6"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-        >
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-sm border-l-2 border-[#BFF549] bg-white/[0.03] text-xs font-bold tracking-widest uppercase text-gray-300 shadow-sm backdrop-blur-md">
-            DRIVEN BY RESULTS
-          </div>
-        </motion.div>
-
-        <motion.h1 
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-[5rem] font-bold text-white tracking-tighter leading-[1.05] mb-6 text-balance drop-shadow-lg"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          Turn Your Website Into a Client-Generating{' '}
-          <span className="text-[#BFF549] drop-shadow-md">System.</span>
-        </motion.h1>
-        
-        <motion.p 
-          className="text-gray-300 text-base sm:text-lg md:text-xl leading-relaxed mb-10 text-balance w-full max-w-2xl drop-shadow-md font-normal"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-        >
-          We help service-based businesses build simple, conversion-focused websites that turn visitors into booked calls using clear messaging, SEO structure, and proven funnel systems.
-        </motion.p>
-
-        <motion.div 
-          className="flex flex-col sm:flex-row items-start sm:items-center gap-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-        >
-          <Link to="/contact">
-            <button className="group flex items-center justify-center gap-2 rounded-full border border-transparent bg-[#BFF549] px-7 py-4 text-base font-bold text-[#0D0D0D] transition-all hover:bg-[#d4ff6e] hover:shadow-[0_0_30px_rgba(191,245,73,0.2)] whitespace-nowrap pointer-events-auto">
-              Book a Free Strategy Call
-              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </button>
-          </Link>
-          
-          <div className="flex items-center gap-3">
-            <div className="flex -space-x-2.5">
-              {["bg-[#BFF549]/30", "bg-[#BFF549]/20", "bg-[#BFF549]/10"].map((bg, i) => (
-                <div key={i} className={`w-9 h-9 rounded-full ${bg} border-2 border-[#0D0D0D] flex items-center justify-center text-xs font-bold text-gray-300`}>
-                  {String.fromCharCode(65 + i)}
-                </div>
-              ))}
-            </div>
-            <div className="flex flex-col">
-              <div className="flex text-[#BFF549]">
-                {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-              </div>
-              <span className="text-xs text-gray-400 font-medium mt-0.5 drop-shadow-sm">Trusted by service businesses</span>
-            </div>
-          </div>
-        </motion.div>
-
-      </div>
-    </div>
-  );
-}
-
-function LogoMarquee() {
+function LogoRow() {
   const logos = [
     "/software/Antigravity.png",
     "/software/Framer.png",
     "/software/GA.png",
     "/software/Meta.png",
+    "/software/hubspot.png",
     "/software/chimp.png",
     "/software/convertkit.png",
     "/software/google ads.png",
-    "/software/hubspot.png",
     "/software/zappie.png",
   ];
 
   return (
-    <div className="w-full bg-[#0D0D0D] border-y border-white/[0.06] py-10 overflow-hidden relative z-20">
-      {/* Grid line overlay for the marquee section */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{
-          backgroundSize: '40px 40px',
-          backgroundImage: 'linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)',
-      }} />
-      
-      <div className="max-w-7xl mx-auto px-6 mb-6">
-        <p className="text-center text-xs font-bold tracking-widest text-gray-500 uppercase">Our Tech Stack</p>
+    <div className="flex flex-col gap-3 w-full max-w-md lg:max-w-xl overflow-hidden">
+      <div className="text-sm md:text-base font-bold text-[#0D0D0D]">
+        Backed by Leading <span className="text-gray-500 font-medium">Startups & Enterprises</span>
       </div>
 
-      {/* Gradient mask for fade in/out effect */}
+      {/* Horizontal Continuous Ticker Animation */}
       <div 
-        className="flex w-[300%] sm:w-[200%] md:w-full"
+        className="flex overflow-hidden relative w-full py-1"
         style={{
-          maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
-          WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
+          maskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
+          WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)'
         }}
       >
-        <div className="flex w-full animate-logo-marquee items-center justify-around gap-8 md:gap-16 px-4 md:px-8">
+        <div className="flex w-max animate-logo-marquee items-center gap-8 md:gap-10 shrink-0">
           {[...logos, ...logos, ...logos].map((logo, idx) => (
             <div key={idx} className="flex items-center justify-center shrink-0">
-              <img src={logo} alt="Tech Stack Logo" className="h-8 md:h-12 object-contain opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" />
+              <img 
+                src={logo} 
+                alt="Partner logo" 
+                className="h-8 md:h-10 object-contain opacity-80 hover:opacity-100 transition-opacity grayscale hover:grayscale-0" 
+              />
             </div>
           ))}
         </div>
@@ -179,28 +49,156 @@ function LogoMarquee() {
   );
 }
 
+const easeCubic = [0.215, 0.61, 0.355, 1];
+
 export default function SplitHero() {
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+  const heroContainerRef = React.useRef<HTMLDivElement>(null);
+
+  // Scroll-driven growth for video card
+  const { scrollYProgress } = useScroll({
+    target: heroContainerRef,
+    offset: ["start start", "end start"]
+  });
+
+  const videoScale = useTransform(scrollYProgress, [0, 0.6], [0.96, 1.02]);
+  const videoRadius = useTransform(scrollYProgress, [0, 0.6], ["1.75rem", "2.5rem"]);
+
+  React.useEffect(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+
+    videoElement.muted = true;
+    videoElement.defaultMuted = true;
+    videoElement.playsInline = true;
+
+    const playVideo = () => {
+      if (videoElement.paused) {
+        videoElement.play().catch(() => {});
+      }
+    };
+
+    playVideo();
+
+    window.addEventListener("touchstart", playVideo, { once: true });
+    window.addEventListener("scroll", playVideo, { once: true });
+    window.addEventListener("click", playVideo, { once: true });
+
+    return () => {
+      window.removeEventListener("touchstart", playVideo);
+      window.removeEventListener("scroll", playVideo);
+      window.removeEventListener("click", playVideo);
+    };
+  }, []);
+
   return (
-    <div className="relative bg-[#0D0D0D]">
+    <div ref={heroContainerRef} className="relative bg-[#FBFBFB] text-[#0D0D0D] pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden">
+      {/* Interactive Canvas Particles Background */}
+      <Particles className="absolute inset-0 z-0" quantity={200} color="#000000" staticity={40} ease={50} />
       
-      <div className="relative min-h-screen overflow-hidden">
-        {/* Fullscreen Spline Background */}
-        <div className="absolute inset-0 z-0 pointer-events-auto">
-          <HeroSplineBackground />
-        </div>
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12 relative z-10 border-l border-r border-gray-200/80">
+        
+        {/* Eyebrow: Fades up with 100ms delay */}
+        <motion.div 
+          className="flex items-center gap-2 mb-4"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1, ease: easeCubic }}
+        >
+          <div className="w-4 h-4 rounded-full bg-black flex items-center justify-center text-[8px] text-white font-bold">
+            ★
+          </div>
+          <span className="text-xs font-semibold tracking-wide text-gray-500 uppercase">
+            ©2026 Open Brands
+          </span>
+        </motion.div>
 
-        {/* Hero Content Overlay */}
-        <div style={{
-          position: 'absolute', top: 0, left: 0, width: '100%', height: '100vh',
-          display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 10, pointerEvents: 'none'
-        }}>
-          <HeroContent />
-        </div>
+        {/* Main Headline: Fades up and moves upward 20px */}
+        <motion.h1 
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.75rem] font-bold text-[#0D0D0D] tracking-tight leading-[1.04] mb-4 max-w-5xl text-balance"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2, ease: easeCubic }}
+        >
+          Your Website Should Be <span className="text-gray-400 font-semibold">Booking Jobs.</span> Not Just Sitting There.
+        </motion.h1>
+
+        {/* Supporting Subtitle: Fades in shortly after */}
+        <motion.p 
+          className="text-gray-600 text-base sm:text-lg md:text-xl font-medium leading-relaxed mb-6 max-w-3xl text-balance"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.35, ease: easeCubic }}
+        >
+          We build lead-generation websites for service businesses
+        </motion.p>
+
+        {/* CTA Buttons & Logo Ticker: Appears with a stagger */}
+        <motion.div 
+          className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 mb-8"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.45, ease: easeCubic }}
+        >
+          <Link to="/contact">
+            <button className="group flex items-center gap-3 rounded-full bg-[#BFF549] px-8 py-4 text-base font-bold text-[#0D0D0D] transition-all hover:bg-[#d4ff6e] hover:shadow-[0_0_30px_rgba(191,245,73,0.3)] pointer-events-auto">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#0D0D0D]" />
+              Book a Strategy Call
+            </button>
+          </Link>
+
+          <LogoRow />
+        </motion.div>
+
+        {/* Video Card: Entrance scale 1.05 to 1 + Scroll-driven growth & 650px height */}
+        <motion.div 
+          style={{
+            scale: videoScale,
+            borderRadius: videoRadius,
+          }}
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.55, ease: easeCubic }}
+          className="relative w-full overflow-hidden bg-black shadow-2xl border border-gray-200/80 aspect-[16/9] md:aspect-[21/9] min-h-[450px] md:min-h-[650px]"
+        >
+          {/* Video Background */}
+          <video
+            ref={videoRef}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            src="/portfolio/video.mov"
+            onLoadedMetadata={(e) => {
+              e.currentTarget.play().catch(() => {});
+            }}
+            onCanPlay={(e) => {
+              e.currentTarget.play().catch(() => {});
+            }}
+            className="w-full h-full object-cover"
+          />
+
+          {/* Top-Left Overlay inside Video: Avatars + 5 Stars */}
+          <div className="absolute top-6 left-6 md:top-8 md:left-8 z-20 flex items-center gap-3 bg-black/50 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/10 text-white">
+            <div className="flex -space-x-2">
+              <img src="/portfolio/anan.jpeg" alt="Client" className="w-8 h-8 rounded-full border-2 border-black object-cover" />
+              <div className="w-8 h-8 rounded-full bg-[#BFF549] border-2 border-black flex items-center justify-center text-xs font-bold text-[#0D0D0D]">A</div>
+              <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm border-2 border-black flex items-center justify-center text-xs font-bold text-white">B</div>
+            </div>
+            <div className="flex flex-col">
+              <div className="flex text-[#BFF549]">
+                {[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-current" />)}
+              </div>
+              <span className="text-xs text-white font-semibold">Trusted by local businesses</span>
+            </div>
+          </div>
+
+          {/* Subtle gradient overlay at bottom of video container */}
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
+        </motion.div>
+
       </div>
-
-      {/* Marquee right below the fold */}
-      <LogoMarquee />
-      
     </div>
   );
 }

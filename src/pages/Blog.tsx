@@ -1,9 +1,20 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { sanityClient, urlFor } from "@/lib/sanity";
+import { fetchWithCache, urlFor } from "@/lib/sanity";
 import { motion, AnimatePresence } from "motion/react";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+
+export const BLOG_QUERY = `*[_type == "post" && defined(slug.current)] | order(publishedAt desc) {
+  _id,
+  title,
+  slug,
+  publishedAt,
+  excerpt,
+  mainImage,
+  authorName,
+  categories
+}`;
 
 export function Blog() {
   const [posts, setPosts] = useState<any[]>([]); // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -14,18 +25,7 @@ export function Blog() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const data = await sanityClient.fetch(
-          `*[_type == "post" && defined(slug.current)] | order(publishedAt desc) {
-            _id,
-            title,
-            slug,
-            publishedAt,
-            excerpt,
-            mainImage,
-            "authorName": author->name,
-            "categories": categories[]->title
-          }`
-        );
+        const data = await fetchWithCache(BLOG_QUERY);
         setPosts(data);
       } catch (err) {
         console.error("Error fetching posts:", err);
@@ -36,21 +36,22 @@ export function Blog() {
     fetchPosts();
   }, []);
 
+  // Categories are plain strings on the post. Guard against anything else so a
+  // half-migrated or hand-edited document can't take the whole page down.
+  const postCategories = (post: any): string[] => // eslint-disable-line @typescript-eslint/no-explicit-any
+    Array.isArray(post?.categories) ? post.categories.filter((c: unknown) => typeof c === "string") : [];
+
   // Dynamically extract unique categories from posts
   const categories = React.useMemo(() => {
     const list = new Set<string>();
-    posts.forEach((post) => {
-      if (post.categories) {
-        post.categories.forEach((cat: string) => list.add(cat));
-      }
-    });
+    posts.forEach((post) => postCategories(post).forEach((cat) => list.add(cat)));
     return ["View all", ...Array.from(list)];
   }, [posts]);
 
   // Filter posts based on active category
   const filteredPosts = posts.filter((post) => {
     if (activeCategory === "View all") return true;
-    return post.categories && post.categories.includes(activeCategory);
+    return postCategories(post).includes(activeCategory);
   });
 
   const scroll = (direction: 'left' | 'right') => {

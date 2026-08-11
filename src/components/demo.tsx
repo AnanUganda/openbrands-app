@@ -1,72 +1,19 @@
-"use client";
+import { Particles } from "@/components/ui/particles"
 
-import { Calendar, Code, FileText, User, Clock } from "lucide-react";
-import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline";
-
-const timelineData = [
-  {
-    id: 1,
-    title: "Planning",
-    date: "Jan 2024",
-    content: "Project planning and requirements gathering phase.",
-    category: "Planning",
-    icon: Calendar,
-    relatedIds: [2],
-    status: "completed" as const,
-    energy: 100,
-  },
-  {
-    id: 2,
-    title: "Design",
-    date: "Feb 2024",
-    content: "UI/UX design and system architecture.",
-    category: "Design",
-    icon: FileText,
-    relatedIds: [1, 3],
-    status: "completed" as const,
-    energy: 90,
-  },
-  {
-    id: 3,
-    title: "Development",
-    date: "Mar 2024",
-    content: "Core features implementation and testing.",
-    category: "Development",
-    icon: Code,
-    relatedIds: [2, 4],
-    status: "in-progress" as const,
-    energy: 60,
-  },
-  {
-    id: 4,
-    title: "Testing",
-    date: "Apr 2024",
-    content: "User testing and bug fixes.",
-    category: "Testing",
-    icon: User,
-    relatedIds: [3, 5],
-    status: "pending" as const,
-    energy: 30,
-  },
-  {
-    id: 5,
-    title: "Release",
-    date: "May 2024",
-    content: "Final deployment and release.",
-    category: "Release",
-    icon: Clock,
-    relatedIds: [4],
-    status: "pending" as const,
-    energy: 10,
-  },
-];
-
-export function RadialOrbitalTimelineDemo() {
+const Demo = () => {
   return (
-    <div className="w-full flex justify-center items-center">
-      <RadialOrbitalTimeline timelineData={timelineData} />
+    <div className="relative h-screen w-full overflow-hidden">
+      {/* Full-screen particle background */}
+      <div className="absolute inset-0 z-0">
+        <Particles quantity={300} className="h-full w-full" color="#000000" />
+      </div>
+
+      {/* Centered text on top */}
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-10  text-3xl font-semibold tracking-tight">
+        HextaUI
+      </div>
     </div>
   );
-}
+};
 
-export default RadialOrbitalTimelineDemo;
+export { Demo }

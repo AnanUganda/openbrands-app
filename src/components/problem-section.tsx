@@ -1,80 +1,107 @@
 import { motion } from "motion/react";
-import { Quote } from "lucide-react";
-import { SectionLabel } from "./ui/section-label";
+import { Link } from "react-router-dom";
 
-const painPoints = [
-  "I built my website, but it doesn't bring clients",
-  "I paid a designer, but nothing changed in my business",
-  "People visit my site, but don't contact me",
-  "My website looks fine, but it doesn't convert",
-  "I have no idea why I'm not getting traffic",
-  "My competitors seem to be getting all the clients online",
+const pitfalls = [
+  "I built my website, but it doesn't bring clients.",
+  "People visit my site, but they don't contact me.",
+  "I paid a designer, but nothing changed.",
+  "My competitors are getting all the work online.",
 ];
 
 export function ProblemSection() {
   return (
-    <section className="relative w-full py-24 md:py-32 bg-[#0D0D0D] overflow-hidden z-10">
-      
-      {/* Background structural grid (optional full width) */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{
-          backgroundSize: '100px 100px',
-          backgroundImage: 'linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)',
-      }} />
+    <section className="relative w-full py-20 lg:py-28 bg-[#FBFBFB] text-[#0D0D0D] overflow-hidden z-10 border-t border-gray-200/80">
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-20">
+      <div className="max-w-[1400px] w-full mx-auto px-4 md:px-8 lg:px-12 relative z-20 border-l border-r border-gray-200/80">
+
+        {/* Top Header matching reference layout */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-16 md:mb-20 flex flex-col items-center"
+          className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-8 mb-16"
         >
-          <SectionLabel label="The Harsh Reality" />
-          
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight max-w-[800px] mx-auto text-balance">
-            Most Service Websites Fail to Bring in Clients
-          </h2>
+          <div className="flex flex-col items-start max-w-3xl">
+            {/* Eyebrow */}
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-4 h-4 rounded-full bg-black flex items-center justify-center text-[8px] text-white font-bold">
+                ★
+              </div>
+              <span className="text-xs font-semibold tracking-wide text-gray-500 uppercase">
+                The Reality
+              </span>
+            </div>
+
+            {/* Consistent H2 Heading */}
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0D0D0D] tracking-tight leading-[1.1] text-balance">
+              Your Website Isn't Broken. It Was Never Built to Sell. <span className="text-gray-400 font-semibold">We fix that.</span>
+            </h2>
+          </div>
+
+          {/* Subtitle Right Column */}
+          <p className="text-gray-600 text-base sm:text-lg font-medium max-w-md leading-relaxed">
+            You paid for a website. It loads fast, it looks clean, your logo's in the corner — and it does almost nothing. That's not bad luck. It's what happens when a site is designed to look like a business instead of run like one.          </p>
         </motion.div>
 
-        {/* 3×2 Grid of Styled Boxes */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-20">
-          {painPoints.map((pain, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: idx * 0.08, ease: "easeOut" }}
-              className="group relative p-8 md:p-10 bg-[#0D0D0D] border border-white/[0.1] hover:border-[#BFF549]/40 transition-all duration-300"
-            >
-              {/* Corner nodes */}
-              <div className="absolute top-[-1px] left-[-1px] w-2 h-2 bg-[#BFF549] z-10 transition-transform duration-300 group-hover:scale-125" />
-              <div className="absolute top-[-1px] right-[-1px] w-2 h-2 bg-[#BFF549] z-10 transition-transform duration-300 group-hover:scale-125" />
-              <div className="absolute bottom-[-1px] left-[-1px] w-2 h-2 bg-[#BFF549] z-10 transition-transform duration-300 group-hover:scale-125" />
-              <div className="absolute bottom-[-1px] right-[-1px] w-2 h-2 bg-[#BFF549] z-10 transition-transform duration-300 group-hover:scale-125" />
+        {/* Main Content Layout matching reference screenshot */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
 
-              {/* Dotted grid background */}
-              <div 
-                className="absolute inset-0 pointer-events-none opacity-[0.04] transition-opacity duration-300 group-hover:opacity-[0.08]" 
-                style={{
-                  backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
-                  backgroundSize: '16px 16px'
-                }}
+          {/* Left Column: Large Image Showcase */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="lg:col-span-6 relative w-full"
+          >
+            <div className="relative w-full rounded-3xl md:rounded-[2.5rem] overflow-hidden bg-gray-100 border border-gray-200/90 shadow-2xl h-[420px] sm:h-[500px] lg:h-[600px]">
+              <img
+                src="/portfolio/Landscaping website.png"
+                alt="Landscaping Website Showcase"
+                className="w-full h-full object-cover object-top hover:scale-[1.02] transition-transform duration-500"
               />
-              
-              <div className="relative z-10 flex flex-col items-start h-full">
-                <div className="text-[#BFF549] mb-4 sm:mb-6">
-                  <Quote className="w-5 h-5 opacity-80" />
-                </div>
-                <p className="text-white text-xl sm:text-2xl font-bold leading-[1.15] tracking-tight group-hover:text-gray-100 transition-colors mt-auto">
-                  "{pain}"
-                </p>
-              </div>
-            </motion.div>
-          ))}
+            </div>
+          </motion.div>
+
+          {/* Right Column: Stacked Pitfalls List + Divider Lines + Primary CTA */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+            className="lg:col-span-6 flex flex-col justify-center"
+          >
+            {/* Stacked Divider Items */}
+            <div className="divide-y divide-gray-200/80 border-t border-b border-gray-200/80 w-full mb-8">
+              {pitfalls.map((pitfall, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.1 + idx * 0.08 }}
+                  className="py-5 md:py-6 flex items-start gap-4 group cursor-default transition-colors hover:bg-gray-50/80 px-2 rounded-xl"
+                >
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#0D0D0D] mt-2.5 shrink-0 group-hover:bg-[#BFF549] transition-colors" />
+                  <p className="text-base sm:text-lg md:text-xl font-bold text-[#0D0D0D] leading-snug">
+                    "{pitfall}"
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Primary CTA Button */}
+            <Link to="/contact" className="w-fit">
+              <button className="group flex items-center gap-3 rounded-full bg-[#BFF549] px-8 py-4 text-base font-bold text-[#0D0D0D] transition-all hover:bg-[#d4ff6e] hover:shadow-[0_0_30px_rgba(191,245,73,0.3)] pointer-events-auto">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#0D0D0D]" />
+                <span>Book a Strategy Call</span>
+              </button>
+            </Link>
+
+          </motion.div>
+
         </div>
-
-
       </div>
     </section>
   );

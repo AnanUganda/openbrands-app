@@ -1,8 +1,7 @@
 import blockContent from './blockContent'
-import category from './category'
 import post from './post'
-import author from './author'
-import template from './template'
-import project from './project'
+import portfolio from './portfolio'
 
-export const schemaTypes = [post, author, category, blockContent, template, project]
+// Two content collections: Blog (post) and Portfolio.
+// blockContent is a shared rich-text object, not a collection.
+export const schemaTypes = [post, portfolio, blockContent]

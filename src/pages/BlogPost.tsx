@@ -26,8 +26,9 @@ export function BlogPost() {
             publishedAt,
             body,
             mainImage,
-            "authorName": author->name,
-            "authorImage": author->image
+            authorName,
+            authorRole,
+            authorImage
           }`,
           { slug }
         );
@@ -175,7 +176,7 @@ export function BlogPost() {
                 
                 {/* Author Details */}
                 <h3 className="text-xl font-extrabold text-[#1A1A1A] mb-1">{post.authorName || "Open Brands Expert"}</h3>
-                <p className="text-xs font-bold tracking-wider uppercase text-cyan-500 mb-6">Growth Strategist</p>
+                <p className="text-xs font-bold tracking-wider uppercase text-cyan-500 mb-6">{post.authorRole || "Growth Strategist"}</p>
                 
                 {/* Line Separator */}
                 <div className="w-12 h-[2px] bg-cyan-100 mb-6" />

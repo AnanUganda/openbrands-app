@@ -2,11 +2,13 @@ import React from "react";
 
 export function SectionLabel({ label, align = 'center' }: { label: string, align?: 'center' | 'left' }) {
   return (
-    <div className={`flex ${align === 'center' ? 'justify-center' : 'justify-start'} mb-6`}>
-      <div className="inline-flex items-center gap-3 pl-0 pr-4 py-1.5 rounded-r-md bg-[#161616] border border-white/[0.04]">
-        <div className="w-1 h-5 bg-[#BFF549] rounded-full" />
-        <span className="text-white text-[10px] font-bold uppercase tracking-[0.2em]">{label}</span>
+    <div className={`flex items-center gap-2 mb-4 ${align === 'center' ? 'justify-center' : 'justify-start'}`}>
+      <div className="w-4 h-4 rounded-full bg-black flex items-center justify-center text-[8px] text-white font-bold shrink-0">
+        ★
       </div>
+      <span className="text-xs font-semibold tracking-wide text-gray-500 uppercase">
+        {label}
+      </span>
     </div>
   );
 }
