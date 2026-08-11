@@ -3,6 +3,7 @@ import { Layout, Target, Search, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { SectionLabel } from "./ui/section-label";
+import { SplitTextReveal } from "./ui/split-text-reveal";
 
 const services = [
   {
@@ -48,10 +49,9 @@ export function ServicesSection() {
             <SectionLabel label="Our Services" align="left" />
 
             {/* Title */}
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0D0D0D] tracking-tight leading-[1.1] text-balance">
-              How we make it happen <br className="hidden sm:inline" />
-              <span className="text-gray-400 font-semibold">together with purpose</span>
-            </h2>
+            <SplitTextReveal className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0D0D0D] tracking-tight leading-[1.1] text-balance">
+              How we make it happen together with purpose
+            </SplitTextReveal>
           </div>
 
           {/* Right Subtitle */}

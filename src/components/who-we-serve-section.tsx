@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Home, Scale, HeartPulse, UserCircle, TrendingUp, Wrench, ArrowRight, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SectionLabel } from "./ui/section-label";
+import { SplitTextReveal } from "./ui/split-text-reveal";
 
 interface SectorItem {
   id: string;
@@ -100,9 +101,9 @@ export function WhoWeServeSection() {
           <div>
             <SectionLabel label="Who We Serve" align="left" />
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0D0D0D] tracking-tight leading-[1.1]">
+            <SplitTextReveal className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0D0D0D] tracking-tight leading-[1.1]">
               Engineered for Service Businesses
-            </h2>
+            </SplitTextReveal>
           </div>
 
           <Link to="/contact" className="shrink-0">
