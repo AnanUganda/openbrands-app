@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
+import { SectionLabel } from "./ui/section-label";
 
 const pitfalls = [
   "I built my website, but it doesn't bring clients.",
@@ -24,14 +25,7 @@ export function ProblemSection() {
         >
           <div className="flex flex-col items-start max-w-3xl">
             {/* Eyebrow */}
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-4 h-4 rounded-full bg-black flex items-center justify-center text-[8px] text-white font-bold">
-                ★
-              </div>
-              <span className="text-xs font-semibold tracking-wide text-gray-500 uppercase">
-                The Reality
-              </span>
-            </div>
+            <SectionLabel label="The Reality" align="left" />
 
             {/* Consistent H2 Heading */}
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0D0D0D] tracking-tight leading-[1.1] text-balance">

@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from 'motion/react';
 import { Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Particles } from '@/components/ui/particles';
+import { SectionLabel } from '@/components/ui/section-label';
 
 function LogoRow() {
   const logos = [
@@ -100,17 +101,11 @@ export default function SplitHero() {
         
         {/* Eyebrow: Fades up with 100ms delay */}
         <motion.div 
-          className="flex items-center gap-2 mb-4"
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1, ease: easeCubic }}
         >
-          <div className="w-4 h-4 rounded-full bg-black flex items-center justify-center text-[8px] text-white font-bold">
-            ★
-          </div>
-          <span className="text-xs font-semibold tracking-wide text-gray-500 uppercase">
-            ©2026 Open Brands
-          </span>
+          <SectionLabel label="©2026 Open Brands" align="left" />
         </motion.div>
 
         {/* Main Headline: Fades up and moves upward 20px */}

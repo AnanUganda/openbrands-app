@@ -99,9 +99,13 @@ export const ImageAutoSlider = () => {
 
         {/* Title Section placed above the showcase */}
         <div className="max-w-[1400px] w-full px-4 md:px-8 lg:px-12 text-center pt-24 md:pt-32 pb-12 shrink-0 relative z-30">
-          <SectionLabel label="Our Portfolio" />
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tighter drop-shadow-lg">Modern Service Websites, Built to Convert</h2>
-          <p className="text-lg md:text-xl text-gray-400 mt-4 font-medium">Selected projects focused on trust, conversion, and long-term scalability.</p>
+          <SectionLabel label="Our Portfolio" dark={true} />
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight drop-shadow-lg max-w-3xl mx-auto text-balance">
+            Modern Service Websites, Built to Convert
+          </h2>
+          <p className="text-base sm:text-lg text-gray-400 mt-4 font-medium max-w-xl mx-auto text-balance">
+            Selected projects focused on trust, conversion, and long-term scalability.
+          </p>
         </div>
 
         {/* Scrolling images container */}
