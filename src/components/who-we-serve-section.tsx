@@ -78,8 +78,8 @@ const sectors: SectorItem[] = [
   },
 ];
 
-// Framer-inspired smooth cubic bezier curve
-const framerEase = [0.16, 1, 0.3, 1];
+// GSAP Power3.out / Power2.out signature smooth cubic-bezier easing curve [0.22, 1, 0.36, 1]
+const gsapEase = [0.22, 1, 0.36, 1];
 
 export function WhoWeServeSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -94,7 +94,7 @@ export function WhoWeServeSection() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7, ease: framerEase }}
+          transition={{ duration: 0.7, ease: gsapEase }}
           className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-12 lg:mb-16"
         >
           <div>
@@ -113,7 +113,7 @@ export function WhoWeServeSection() {
           </Link>
         </motion.div>
 
-        {/* Framer-Inspired Accordion List */}
+        {/* GSAP Timeline-inspired Accordion List */}
         <div className="divide-y divide-gray-200/90 border-t border-b border-gray-200/90 w-full">
           {sectors.map((sector, idx) => {
             const isOpen = openIndex === idx;
@@ -130,7 +130,7 @@ export function WhoWeServeSection() {
                 {/* Collapsed Header Bar */}
                 <div className="flex items-center justify-between gap-4 w-full py-2">
                   <div className="flex items-center gap-4 sm:gap-6">
-                    {/* Service Icon Container: Maintains grey-ish background, icon lights up green when open/hovered */}
+                    {/* Service Icon Container */}
                     <div
                       className={`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gray-100/90 border border-gray-200/90 flex items-center justify-center shrink-0 transition-all duration-300 ${
                         isOpen ? "scale-105 shadow-xs" : "group-hover:scale-105"
@@ -157,7 +157,7 @@ export function WhoWeServeSection() {
                     </h3>
                   </div>
 
-                  {/* Clean Chevron Indicator (Text Pill Removed) */}
+                  {/* Clean Chevron Indicator */}
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 bg-gray-100/90 border border-gray-200/90 ${
                       isOpen ? "rotate-180 text-[#0D0D0D]" : "text-gray-400 group-hover:text-[#0D0D0D]"
@@ -167,30 +167,30 @@ export function WhoWeServeSection() {
                   </div>
                 </div>
 
-                {/* Framer Smooth Downward Expanding Dark Card */}
+                {/* GSAP Sequenced Downward Expanding Dark Card */}
                 <AnimatePresence initial={false}>
                   {isOpen && (
                     <motion.div
                       key={`content-${sector.id}`}
-                      initial={{ opacity: 0, height: 0, y: -12 }}
+                      initial={{ opacity: 0, height: 0, y: -10 }}
                       animate={{
                         opacity: 1,
                         height: "auto",
                         y: 0,
                         transition: {
-                          height: { duration: 0.45, ease: framerEase },
-                          opacity: { duration: 0.35, delay: 0.08 },
-                          y: { duration: 0.45, ease: framerEase },
+                          height: { duration: 0.5, ease: gsapEase },
+                          opacity: { duration: 0.35, ease: gsapEase },
+                          y: { duration: 0.5, ease: gsapEase },
                         },
                       }}
                       exit={{
                         opacity: 0,
                         height: 0,
-                        y: -12,
+                        y: -10,
                         transition: {
-                          height: { duration: 0.35, ease: framerEase },
+                          height: { duration: 0.35, ease: gsapEase },
                           opacity: { duration: 0.2 },
-                          y: { duration: 0.35, ease: framerEase },
+                          y: { duration: 0.35, ease: gsapEase },
                         },
                       }}
                       className="overflow-hidden"
@@ -198,22 +198,39 @@ export function WhoWeServeSection() {
                       <div className="mt-4 bg-[#0D0D0D] text-white p-6 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl shadow-2xl border border-white/10 mb-2">
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                           
-                          {/* Left Column: Overview & Main Call To Action */}
+                          {/* Left Column: Sequenced Timeline Fade-Ins */}
                           <div className="lg:col-span-6 flex flex-col justify-between">
                             <div>
-                              <div className="flex items-center gap-2 mb-4">
+                              {/* Overview Badge */}
+                              <motion.div 
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.4, delay: 0.08, ease: gsapEase }}
+                                className="flex items-center gap-2 mb-4"
+                              >
                                 <span className="w-2 h-2 rounded-full bg-[#BFF549] animate-pulse" />
                                 <span className="text-xs font-bold uppercase tracking-wider text-gray-400">
                                   Overview
                                 </span>
-                              </div>
+                              </motion.div>
 
-                              <p className="text-gray-300 text-base sm:text-lg md:text-xl font-normal leading-relaxed text-balance mb-6">
+                              {/* Overview Text */}
+                              <motion.p 
+                                initial={{ opacity: 0, y: 12 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.45, delay: 0.14, ease: gsapEase }}
+                                className="text-gray-300 text-base sm:text-lg md:text-xl font-normal leading-relaxed text-balance mb-6"
+                              >
                                 {sector.overview}
-                              </p>
+                              </motion.p>
 
                               {/* Tag Pills */}
-                              <div className="flex flex-wrap gap-2 mb-8">
+                              <motion.div 
+                                initial={{ opacity: 0, y: 12 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.45, delay: 0.22, ease: gsapEase }}
+                                className="flex flex-wrap gap-2 mb-8"
+                              >
                                 {sector.tags.map((tag, tagIdx) => (
                                   <span
                                     key={tagIdx}
@@ -222,21 +239,32 @@ export function WhoWeServeSection() {
                                     {tag}
                                   </span>
                                 ))}
-                              </div>
+                              </motion.div>
                             </div>
 
-                            {/* Main Call To Action Button inside dark card */}
-                            <Link to={sector.ctaLink} className="w-fit">
-                              <button className="group flex items-center gap-3 rounded-full bg-[#BFF549] px-7 py-3.5 text-sm sm:text-base font-bold text-[#0D0D0D] transition-all hover:bg-[#d4ff6e] hover:shadow-[0_0_25px_rgba(191,245,73,0.35)] pointer-events-auto">
-                                <div className="w-2.5 h-2.5 rounded-full bg-[#0D0D0D]" />
-                                <span>{sector.ctaText}</span>
-                                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                              </button>
-                            </Link>
+                            {/* Main CTA Button */}
+                            <motion.div
+                              initial={{ opacity: 0, y: 12 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.45, delay: 0.28, ease: gsapEase }}
+                            >
+                              <Link to={sector.ctaLink} className="w-fit">
+                                <button className="group flex items-center gap-3 rounded-full bg-[#BFF549] px-7 py-3.5 text-sm sm:text-base font-bold text-[#0D0D0D] transition-all hover:bg-[#d4ff6e] hover:shadow-[0_0_25px_rgba(191,245,73,0.35)] pointer-events-auto">
+                                  <div className="w-2.5 h-2.5 rounded-full bg-[#0D0D0D]" />
+                                  <span>{sector.ctaText}</span>
+                                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                                </button>
+                              </Link>
+                            </motion.div>
                           </div>
 
-                          {/* Right Column: High-Quality Framed Preview Image */}
-                          <div className="lg:col-span-6">
+                          {/* Right Column: Image Preview Reveal */}
+                          <motion.div 
+                            initial={{ opacity: 0, scale: 0.96, y: 15 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.16, ease: gsapEase }}
+                            className="lg:col-span-6"
+                          >
                             <div className="relative overflow-hidden rounded-xl sm:rounded-2xl border border-white/15 aspect-[16/10] bg-gray-900 shadow-2xl group/img">
                               <img
                                 src={sector.image}
@@ -244,7 +272,7 @@ export function WhoWeServeSection() {
                                 className="w-full h-full object-cover object-top hover:scale-[1.03] transition-transform duration-700 ease-out"
                               />
                             </div>
-                          </div>
+                          </motion.div>
 
                         </div>
                       </div>
