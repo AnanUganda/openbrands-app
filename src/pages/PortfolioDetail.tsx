@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { ArrowLeft, ExternalLink, MessageCircle, CheckCircle2, TrendingUp } from "lucide-react";
 import { PortableText } from "@portabletext/react";
 import { sanityClient, urlFor } from "@/lib/sanity";
+import { SplitTextReveal } from "@/components/ui/split-text-reveal";
 
 interface PortfolioItem {
   _id: string;
@@ -147,9 +148,9 @@ export function PortfolioDetail() {
           />
         ) : (
           <img
-            src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80"
+            src={(item as any).localImage || "/Website Mockups Projects/Oakline/Oakline Landscaping_.png"}
             alt={item.title}
-            className="w-full h-full object-cover opacity-60"
+            className="w-full h-full object-cover opacity-80"
             fetchPriority="high"
           />
         )}
@@ -182,9 +183,13 @@ export function PortfolioDetail() {
               </span>
             )}
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight drop-shadow-md leading-tight">
+          <SplitTextReveal
+            as="h1"
+            variant="hero"
+            className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight drop-shadow-md leading-tight"
+          >
             {item.title}
-          </h1>
+          </SplitTextReveal>
         </div>
       </div>
 

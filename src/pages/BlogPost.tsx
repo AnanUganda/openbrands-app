@@ -5,6 +5,7 @@ import { sanityClient, urlFor } from "@/lib/sanity";
 import { PortableText } from "@portabletext/react";
 import { motion, useScroll, useSpring } from "motion/react";
 import { ArrowLeft, Calendar, User } from "lucide-react";
+import { SplitTextReveal } from "@/components/ui/split-text-reveal";
 
 export function BlogPost() {
   const { slug } = useParams();
@@ -115,9 +116,13 @@ export function BlogPost() {
             <ArrowLeft className="w-4 h-4" /> Back to Insights
           </Link>
           
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-[#1A1A1A] tracking-tighter leading-[1.15] mb-8 text-balance">
+          <SplitTextReveal
+            as="h1"
+            variant="hero"
+            className="text-4xl sm:text-5xl md:text-6xl font-black text-[#1A1A1A] tracking-tighter leading-[1.15] mb-8 text-balance"
+          >
             {post.title}
-          </h1>
+          </SplitTextReveal>
           
           <div className="flex justify-center items-center gap-6 text-xs sm:text-sm font-bold tracking-wider text-gray-400 uppercase">
             <div className="flex items-center gap-1.5">

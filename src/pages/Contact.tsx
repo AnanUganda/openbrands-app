@@ -46,7 +46,11 @@ export function Contact() {
         >
           <SectionLabel label="©2026 Open Brands" align="center" />
 
-          <SplitTextReveal className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#0D0D0D] tracking-tight leading-[1.05] mb-6 text-balance">
+          <SplitTextReveal
+            as="h1"
+            variant="hero"
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#0D0D0D] tracking-tight leading-[1.05] mb-6 text-balance"
+          >
             Let's Build Your Growth Engine
           </SplitTextReveal>
 

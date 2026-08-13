@@ -1,32 +1,21 @@
 import { SectionLabel } from './section-label';
 
 export const ImageAutoSlider = () => {
-  // Images for the infinite scroll - using the local portfolio folder
+  // Images for the infinite scroll - featuring authentic Website Mockups Projects only
   const images = [
-    "/portfolio/Dreamweaver%20display%202.png",
-    "/portfolio/lifecall%20display%202.png",
-    "/portfolio/pot%20dis%201.png",
-    "/portfolio/Pro%20coach.png",
-    "/portfolio/procoach%201.png",
-    "/portfolio/reiff%203.png",
-    "/portfolio/Shed%20in%20a%20natural%20environment%201.png",
-    "/portfolio/Sowers%20Harvest-1.png",
-    "/portfolio/Sowers%20Harvest-2.png",
-    "/portfolio/Sowers%20Harvest.png",
-    "/portfolio/The%20coach%203.png",
-    "/portfolio/Torify%20Case%202.png",
-    "/portfolio/Torify%20display%203.png",
-    "/portfolio/Torify%20website.png",
-    "/portfolio/Urban%20Sheds.png",
-    "/portfolio/urban-mock.png",
-    "/portfolio/URban.png",
-    "/portfolio/willowhill%20D.png"
+    "/Website Mockups Projects/Oakline/Oakline Landscaping_.png",
+    "/Website Mockups Projects/Urban Sheds /Urban Sheds Mock Up.png",
+    "/Website Mockups Projects/Sowers Harvest Cafe/410133250_f4a94722-b23c-45c9-bcb8-1ceb81466408.png",
+    "/Website Mockups Projects/Torify/Torify website.png",
+    "/Website Mockups Projects/Reiff Design Build /410133250_f4a94722-b23c-45c9-bcb8-1ceb81466408.png",
+    "/Website Mockups Projects/Extend Cafes/Extend Cafes Mockup_.png",
+    "/Website Mockups Projects/Echo Kenya/Eco Kenya.png",
   ];
 
-  // Distribute into 3 columns
-  const col1 = [...images.slice(0, 6)];
-  const col2 = [...images.slice(6, 12)];
-  const col3 = [...images.slice(12, 18)];
+  // Distribute into 3 columns seamlessly
+  const col1 = [images[0], images[1], images[2]];
+  const col2 = [images[3], images[4], images[5]];
+  const col3 = [images[6], images[0], images[3]];
 
   // Triplicate the columns to ensure seamless infinite scroll (since translate is -33.33%)
   const dup1 = [...col1, ...col1, ...col1];

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "motion/react";
 import { fetchWithCache, urlFor } from "@/lib/sanity";
 import { SectionLabel } from "@/components/ui/section-label";
+import { SplitTextReveal } from "@/components/ui/split-text-reveal";
 
 export const PORTFOLIO_QUERY = `*[_type == "portfolio" && defined(slug.current)] | order(featured desc, publishedAt desc) {
   _id,
@@ -43,7 +44,7 @@ const defaultPortfolio: PortfolioItem[] = [
     category: "Landscaping & Property",
     tagline: "High-converting web experience generating 3.4x more booking consultations.",
     metrics: "+240% Bookings",
-    localImage: "/portfolio/Landscaping website.png",
+    localImage: "/Website Mockups Projects/Oakline/Oakline Landscaping_.png",
   },
   {
     _id: "p2",
@@ -53,7 +54,7 @@ const defaultPortfolio: PortfolioItem[] = [
     category: "Home Structures",
     tagline: "Modern configurator funnel and SEO framework driving qualified national leads.",
     metrics: "$1.2M Pipeline",
-    localImage: "/portfolio/Urban Sheds.png",
+    localImage: "/Website Mockups Projects/Urban Sheds /Urban Sheds Mock Up.png",
   },
   {
     _id: "p3",
@@ -63,7 +64,7 @@ const defaultPortfolio: PortfolioItem[] = [
     category: "Contracting Services",
     tagline: "Frictionless quote calculator site turning search traffic into booked jobs.",
     metrics: "+180% Estimates",
-    localImage: "/portfolio/Sowers Harvest.png",
+    localImage: "/Website Mockups Projects/Sowers Harvest Cafe/410133250_f4a94722-b23c-45c9-bcb8-1ceb81466408.png",
   },
   {
     _id: "p4",
@@ -73,27 +74,37 @@ const defaultPortfolio: PortfolioItem[] = [
     category: "Financial Services",
     tagline: "Credible, high-trust portal built for high-net-worth client acquisition.",
     metrics: "$4.5M AUM Growth",
-    localImage: "/portfolio/Torify website.png",
+    localImage: "/Website Mockups Projects/Torify/Torify website.png",
   },
   {
     _id: "p5",
-    title: "Apex Legal & Trial Practice Client Acquisition",
-    slug: { current: "apex-legal" },
-    clientName: "Apex Legal Group",
-    category: "Legal & Law Firms",
-    tagline: "Authoritative brand platform designed to convert high-value corporate retainers.",
-    metrics: "4.9★ Client Rating",
-    localImage: "/portfolio/legal_showcase.png",
+    title: "Reiff Design Build Architectural Platform",
+    slug: { current: "reiff-design-build" },
+    clientName: "Reiff Design Build",
+    category: "Architecture & Construction",
+    tagline: "Authoritative design-build showcase platform engineered to win premium contracts.",
+    metrics: "4.9★ Rating",
+    localImage: "/Website Mockups Projects/Reiff Design Build /410133250_f4a94722-b23c-45c9-bcb8-1ceb81466408.png",
   },
   {
     _id: "p6",
-    title: "LifeCall Wellness & Patient Booking Portal",
-    slug: { current: "lifecall-wellness" },
-    clientName: "LifeCall Health",
-    category: "Healthcare & Wellness",
-    tagline: "Calm, intuitive web portal streamlined for instant patient booking.",
-    metrics: "+310% Online Booking",
-    localImage: "/portfolio/lifecall display 2.png",
+    title: "Extend Cafes Digital Hospitality Platform",
+    slug: { current: "extend-cafes" },
+    clientName: "Extend Cafes",
+    category: "Hospitality & Dining",
+    tagline: "Sleek web ordering portal driving customer engagement and repeat visits.",
+    metrics: "+310% Online Orders",
+    localImage: "/Website Mockups Projects/Extend Cafes/Extend Cafes Mockup_.png",
+  },
+  {
+    _id: "p7",
+    title: "Echo Kenya Wildlife & Expedition Experience",
+    slug: { current: "echo-kenya" },
+    clientName: "Echo Kenya",
+    category: "Travel & Tourism",
+    tagline: "Immersive safari and tour booking platform capturing international traveler leads.",
+    metrics: "+195% Inquiries",
+    localImage: "/Website Mockups Projects/Echo Kenya/Eco Kenya.png",
   },
 ];
 
@@ -121,7 +132,7 @@ function ParallaxPortfolioCard({
 
   const imageUrl = item.mainImage
     ? urlFor(item.mainImage).width(1000).height(750).url()
-    : item.localImage || "/portfolio/Landscaping website.png";
+    : item.localImage || "/Website Mockups Projects/Oakline/Oakline Landscaping_.png";
 
   return (
     <motion.div
@@ -223,10 +234,14 @@ export function Portfolio() {
           <SectionLabel label="©2026 Open Brands" align="center" />
 
           {/* Headline */}
-          <h1 className="text-4xl sm:text-6xl lg:text-[4.75rem] font-bold text-[#0D0D0D] tracking-tight leading-[1.04] mb-6 text-balance">
+          <SplitTextReveal
+            as="h1"
+            variant="hero"
+            className="text-4xl sm:text-6xl lg:text-[4.75rem] font-bold text-[#0D0D0D] tracking-tight leading-[1.04] mb-6 text-balance"
+          >
             Selected work <br className="hidden sm:inline" />
             <span className="text-gray-400 font-semibold">that drives results</span>
-          </h1>
+          </SplitTextReveal>
 
           {/* Subtitle */}
           <p className="text-base sm:text-xl text-gray-600 font-medium leading-relaxed mb-8 max-w-2xl text-balance">

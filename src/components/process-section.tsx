@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform, useMotionValueEvent } from "motion/rea
 import { useRef, useState } from "react";
 import { Search, PenTool, Rocket, ArrowRight, Check } from "lucide-react";
 import { SectionLabel } from "./ui/section-label";
+import { SplitTextReveal } from "./ui/split-text-reveal";
 import { Link } from "react-router-dom";
 
 /**
@@ -82,9 +83,9 @@ export function ProcessSection() {
             className="text-center mb-12 sm:mb-16 md:mb-20"
           >
             <SectionLabel label="Our Process" />
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0D0D0D] tracking-tight leading-[1.1] mb-4">
+            <SplitTextReveal className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0D0D0D] tracking-tight leading-[1.1] mb-4">
               How We Build Your Growth Engine
-            </h2>
+            </SplitTextReveal>
             <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
               Scroll down to watch our step-by-step process unfold:
             </p>

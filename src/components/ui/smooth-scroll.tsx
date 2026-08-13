@@ -1,6 +1,10 @@
-import { useEffect, ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import Lenis from "lenis";
 import { useLocation } from "react-router-dom";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface SmoothScrollProps {
   children: ReactNode;
@@ -29,17 +33,21 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
       infinite: false,
     });
 
-    let animationFrameId: number;
+    // Lenis animates scroll on its own loop, so ScrollTrigger has to be told
+    // when position changes — otherwise triggers fire against a stale scroll
+    // value and reveals go off early or late.
+    const onScroll = () => ScrollTrigger.update();
+    lenis.on("scroll", onScroll);
 
-    function raf(time: number) {
-      lenis.raf(time);
-      animationFrameId = requestAnimationFrame(raf);
-    }
-
-    animationFrameId = requestAnimationFrame(raf);
+    // Drive Lenis from GSAP's ticker instead of a second requestAnimationFrame
+    // loop, so scroll and tweens advance on the same frame.
+    const raf = (time: number) => lenis.raf(time * 1000);
+    gsap.ticker.add(raf);
+    gsap.ticker.lagSmoothing(0);
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      gsap.ticker.remove(raf);
+      lenis.off("scroll", onScroll);
       lenis.destroy();
     };
   }, []);
@@ -47,6 +55,10 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
   // Scroll to top cleanly on route change
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Section heights differ per route; recalculate trigger positions once the
+    // new page has painted, or reveals below the fold never fire.
+    const id = requestAnimationFrame(() => ScrollTrigger.refresh());
+    return () => cancelAnimationFrame(id);
   }, [pathname]);
 
   return <>{children}</>;

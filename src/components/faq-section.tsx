@@ -3,6 +3,7 @@ import { Plus, Minus, MessageCircleQuestion } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { SectionLabel } from "./ui/section-label";
+import { SplitTextReveal } from "./ui/split-text-reveal";
 
 const faqs = [
   {
@@ -45,9 +46,9 @@ export function FaqSection() {
              className="text-center mb-16"
           >
             <SectionLabel label="Got Questions?" align="center" />
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0D0D0D] tracking-tight leading-[1.1] mb-4">
+            <SplitTextReveal className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0D0D0D] tracking-tight leading-[1.1] mb-4">
               Frequently Asked Questions
-            </h2>
+            </SplitTextReveal>
           </motion.div>
 
           <div className="space-y-4">

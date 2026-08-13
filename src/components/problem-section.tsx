@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 import { SectionLabel } from "./ui/section-label";
+import { SplitTextReveal } from "./ui/split-text-reveal";
 
 const pitfalls = [
   "I built my website, but it doesn't bring clients.",
@@ -28,9 +29,9 @@ export function ProblemSection() {
             <SectionLabel label="The Reality" align="left" />
 
             {/* Consistent H2 Heading */}
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0D0D0D] tracking-tight leading-[1.1] text-balance">
+            <SplitTextReveal className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0D0D0D] tracking-tight leading-[1.1] text-balance">
               Your Website Isn't Broken. It Was Never Built to Sell. <span className="text-gray-400 font-semibold">We fix that.</span>
-            </h2>
+            </SplitTextReveal>
           </div>
 
           {/* Subtitle Right Column */}
@@ -66,8 +67,14 @@ export function ProblemSection() {
             transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
             className="lg:col-span-6 flex flex-col justify-center"
           >
+            {/* Small eyebrow text above bullet points */}
+            <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#0D0D0D]/70 mb-3 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#0D0D0D]" />
+              Does this sound like you?
+            </p>
+
             {/* Stacked Divider Items */}
-            <div className="divide-y divide-gray-200/80 border-t border-b border-gray-200/80 w-full mb-8">
+            <div className="divide-y divide-gray-200/80 border-t border-b border-gray-200/80 w-full mb-6">
               {pitfalls.map((pitfall, idx) => (
                 <motion.div
                   key={idx}
@@ -84,6 +91,11 @@ export function ProblemSection() {
                 </motion.div>
               ))}
             </div>
+
+            {/* Empathy note before CTA */}
+            <p className="text-base sm:text-lg font-medium text-gray-700 leading-relaxed mb-6">
+              You are not alone — and we would like to fix that.
+            </p>
 
             {/* Primary CTA Button */}
             <Link to="/contact" className="w-fit">

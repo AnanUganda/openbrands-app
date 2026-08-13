@@ -322,7 +322,7 @@ export function FeaturesSection() {
         description:
           "Digital experiences that signal credibility and turn visitors into serious property inquiries.",
         buttonText: "See Showcase",
-        imageSrc: "/portfolio/URban.png",
+        imageSrc: "/Website Mockups Projects/Urban Sheds /Urban Sheds Mock Up.png",
         imageAlt: "Urban Sheds Websites Portfolio Showcase",
       },
     },

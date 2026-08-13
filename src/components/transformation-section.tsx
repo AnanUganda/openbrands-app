@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { Search, Shield, MousePointerClick, ArrowRight } from "lucide-react";
 import { SectionLabel } from "./ui/section-label";
+import { SplitTextReveal } from "./ui/split-text-reveal";
 import { Link } from "react-router-dom";
 
 const cards = [
@@ -41,9 +42,9 @@ export function TransformationSection() {
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
               <SectionLabel label="The Transformation" align="left" />
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0D0D0D] tracking-tight leading-[1.1] mb-6">
+              <SplitTextReveal className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0D0D0D] tracking-tight leading-[1.1] mb-6">
                 Turn Your Website Into a Client-Generating Machine
-              </h2>
+              </SplitTextReveal>
               <p className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed max-w-md">
                 We help service businesses build a powerful online presence that does 3 things:
               </p>

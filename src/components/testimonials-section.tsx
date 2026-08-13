@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { SectionLabel } from "./ui/section-label";
 import { StaggerTestimonials } from "./ui/stagger-testimonials";
+import { SplitTextReveal } from "./ui/split-text-reveal";
 
 export function TestimonialsSection() {
   return (
@@ -20,9 +21,9 @@ export function TestimonialsSection() {
           className="text-center mb-6 flex flex-col items-center"
         >
           <SectionLabel label="IN THEIR WORDS" align="center" />
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0D0D0D] tracking-tight leading-[1.1] mt-2">
+          <SplitTextReveal className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0D0D0D] tracking-tight leading-[1.1] mt-2">
             What Happens After Launch
-          </h2>
+          </SplitTextReveal>
         </motion.div>
 
         {/* Staggered Testimonials Polygon Slider */}

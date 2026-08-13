@@ -20,7 +20,7 @@ const capabilities: CapabilityItem[] = [
     title: "Product Design and UX",
     overview:
       "Defines how a brand should present itself, communicate clearly, and grow across websites, digital products, marketing materials, and social platforms. We build structured identity systems that ensure visual consistency as the brand expands.",
-    image: "/portfolio/Landscaping website.png",
+    image: "/Website Mockups Projects/Oakline/Oakline Landscaping_.png",
     ctaText: "Project Inquiry",
     ctaLink: "/contact",
   },
@@ -29,7 +29,7 @@ const capabilities: CapabilityItem[] = [
     title: "Digital Product Experience Design",
     overview:
       "Crafting intuitive web interfaces and frictionless lead funnels engineered specifically for service providers. Every user journey is optimized to turn high-intent site visitors into booked client consultations.",
-    image: "/portfolio/Torify website.png",
+    image: "/Website Mockups Projects/Torify/Torify website.png",
     ctaText: "Project Inquiry",
     ctaLink: "/contact",
   },
@@ -38,7 +38,7 @@ const capabilities: CapabilityItem[] = [
     title: "Brand Identity System Design",
     overview:
       "Comprehensive visual identity frameworks including typography, color palettes, custom UI design systems, and strategic brand positioning designed to elevate your company above local competitors.",
-    image: "/portfolio/urban-mock.png",
+    image: "/Website Mockups Projects/Urban Sheds /Urban Sheds Mock Up.png",
     ctaText: "Project Inquiry",
     ctaLink: "/contact",
   },
@@ -47,7 +47,7 @@ const capabilities: CapabilityItem[] = [
     title: "Conversion Engine & Lead Automation",
     overview:
       "Integrating automated CRM routing, instant notification triggers, and calendar booking flows so your sales team never misses a qualified lead opportunity.",
-    image: "/portfolio/real_estate_showcase.png",
+    image: "/Website Mockups Projects/Reiff Design Build /410133250_f4a94722-b23c-45c9-bcb8-1ceb81466408.png",
     ctaText: "Project Inquiry",
     ctaLink: "/contact",
   },
@@ -56,7 +56,7 @@ const capabilities: CapabilityItem[] = [
     title: "Local Search & SEO Architecture",
     overview:
       "Building lightning-fast, search-optimized web architectures that rank at the top of local map packs and organic search results for high-value service queries.",
-    image: "/portfolio/coaching_showcase.png",
+    image: "/Website Mockups Projects/Extend Cafes/Extend Cafes Mockup_.png",
     ctaText: "Project Inquiry",
     ctaLink: "/contact",
   },

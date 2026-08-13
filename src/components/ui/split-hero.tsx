@@ -6,6 +6,7 @@ import { Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Particles } from '@/components/ui/particles';
 import { SectionLabel } from '@/components/ui/section-label';
+import { SplitTextReveal } from '@/components/ui/split-text-reveal';
 
 function LogoRow() {
   const logos = [
@@ -108,15 +109,15 @@ export default function SplitHero() {
           <SectionLabel label="©2026 Open Brands" align="left" />
         </motion.div>
 
-        {/* Main Headline: Fades up and moves upward 20px */}
-        <motion.h1 
+        {/* Main Headline: bold word-by-word reveal, keeping the grey span intact */}
+        <SplitTextReveal
+          as="h1"
+          variant="hero"
+          delay={0.2}
           className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.75rem] font-bold text-[#0D0D0D] tracking-tight leading-[1.04] mb-4 max-w-5xl text-balance"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2, ease: easeCubic }}
         >
           Your Website Should Be <span className="text-gray-400 font-semibold">Booking Jobs.</span> Not Just Sitting There.
-        </motion.h1>
+        </SplitTextReveal>
 
         {/* Supporting Subtitle: Fades in shortly after */}
         <motion.p 

@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Sanity dataset exports (large, contain full content + assets)
+backup-*.tar.gz
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { fetchWithCache, urlFor } from "@/lib/sanity";
 import { motion, AnimatePresence } from "motion/react";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { SplitTextReveal } from "@/components/ui/split-text-reveal";
 
 export const BLOG_QUERY = `*[_type == "post" && defined(slug.current)] | order(publishedAt desc) {
   _id,
@@ -87,9 +88,13 @@ export function Blog() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="max-w-4xl mb-12 sm:mb-16"
         >
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-8 tracking-tighter text-white leading-tight drop-shadow-lg">
+          <SplitTextReveal
+            as="h1"
+            variant="hero"
+            className="text-5xl sm:text-6xl md:text-7xl font-bold mb-8 tracking-tighter text-white leading-tight drop-shadow-lg"
+          >
             Activity & Updates
-          </h1>
+          </SplitTextReveal>
           
           {/* Growth description accompanied by leading divider line */}
           <div className="flex items-start gap-4 sm:gap-6 max-w-2xl mt-4">
