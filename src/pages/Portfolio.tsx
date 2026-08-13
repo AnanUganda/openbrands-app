@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { Helmet } from 'react-helmet-async';
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "motion/react";
+import { ArrowUpRight } from "lucide-react";
 import { fetchWithCache, urlFor } from "@/lib/sanity";
 import { SectionLabel } from "@/components/ui/section-label";
 import { SplitTextReveal } from "@/components/ui/split-text-reveal";
@@ -45,6 +46,7 @@ const defaultPortfolio: PortfolioItem[] = [
     tagline: "High-converting web experience generating 3.4x more booking consultations.",
     metrics: "+240% Bookings",
     localImage: "/Website Mockups Projects/Oakline/Oakline Landscaping_.png",
+    liveUrl: "https://oaklinelandscaping.com",
   },
   {
     _id: "p2",
@@ -55,6 +57,7 @@ const defaultPortfolio: PortfolioItem[] = [
     tagline: "Modern configurator funnel and SEO framework driving qualified national leads.",
     metrics: "$1.2M Pipeline",
     localImage: "/Website Mockups Projects/Urban Sheds /Urban Sheds Mock Up.png",
+    liveUrl: "https://urbansheds.com",
   },
   {
     _id: "p3",
@@ -65,6 +68,7 @@ const defaultPortfolio: PortfolioItem[] = [
     tagline: "Frictionless quote calculator site turning search traffic into booked jobs.",
     metrics: "+180% Estimates",
     localImage: "/Website Mockups Projects/Sowers Harvest Cafe/410133250_f4a94722-b23c-45c9-bcb8-1ceb81466408.png",
+    liveUrl: "https://sowersharvest.com",
   },
   {
     _id: "p4",
@@ -75,6 +79,7 @@ const defaultPortfolio: PortfolioItem[] = [
     tagline: "Credible, high-trust portal built for high-net-worth client acquisition.",
     metrics: "$4.5M AUM Growth",
     localImage: "/Website Mockups Projects/Torify/Torify website.png",
+    liveUrl: "https://torify.com",
   },
   {
     _id: "p5",
@@ -85,6 +90,7 @@ const defaultPortfolio: PortfolioItem[] = [
     tagline: "Authoritative design-build showcase platform engineered to win premium contracts.",
     metrics: "4.9★ Rating",
     localImage: "/Website Mockups Projects/Reiff Design Build /410133250_f4a94722-b23c-45c9-bcb8-1ceb81466408.png",
+    liveUrl: "https://reiffdesignbuild.com",
   },
   {
     _id: "p6",
@@ -95,6 +101,7 @@ const defaultPortfolio: PortfolioItem[] = [
     tagline: "Sleek web ordering portal driving customer engagement and repeat visits.",
     metrics: "+310% Online Orders",
     localImage: "/Website Mockups Projects/Extend Cafes/Extend Cafes Mockup_.png",
+    liveUrl: "https://extendcafes.com",
   },
   {
     _id: "p7",
@@ -105,6 +112,7 @@ const defaultPortfolio: PortfolioItem[] = [
     tagline: "Immersive safari and tour booking platform capturing international traveler leads.",
     metrics: "+195% Inquiries",
     localImage: "/Website Mockups Projects/Echo Kenya/Eco Kenya.png",
+    liveUrl: "https://echokenya.com",
   },
 ];
 
@@ -127,7 +135,7 @@ function ParallaxPortfolioCard({
   const y = useTransform(scrollYProgress, [0, 1], [-30, 30]);
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1.05, 1, 1.05]);
 
-  const detailUrl = `/portfolio/${item.slug.current}`;
+  const liveLink = item.liveUrl || "#";
   const numStr = (index + 1).toString().padStart(2, "0");
 
   const imageUrl = item.mainImage
@@ -143,9 +151,11 @@ function ParallaxPortfolioCard({
       transition={{ duration: 0.8, ease: [0.215, 0.61, 0.355, 1] }}
       className="group flex flex-col mb-12 sm:mb-16 lg:mb-20"
     >
-      {/* Image Container with Parallax Effect */}
-      <Link
-        to={detailUrl}
+      {/* Image Container with Parallax Effect linking directly to live website */}
+      <a
+        href={liveLink}
+        target="_blank"
+        rel="noopener noreferrer"
         className="relative w-full rounded-3xl lg:rounded-[2.5rem] overflow-hidden bg-gray-100 border border-gray-200/90 shadow-lg aspect-[4/3] block mb-5"
       >
         <motion.div style={{ y, scale }} className="w-full h-full">
@@ -162,24 +172,37 @@ function ParallaxPortfolioCard({
             {item.category}
           </div>
         )}
-      </Link>
+      </a>
 
-      {/* Info Row below Image matching reference screenshot */}
+      {/* Info Row below Image */}
       <div className="flex items-start gap-3">
         <div className="flex items-center gap-1.5 text-xs font-bold text-[#0D0D0D] shrink-0 mt-1">
           <div className="w-2 h-2 rounded-full bg-[#0D0D0D]" />
           <span>{numStr}</span>
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col items-start">
           <h3 className="text-xl sm:text-2xl font-bold text-[#0D0D0D] leading-snug tracking-tight group-hover:text-gray-600 transition-colors">
-            <Link to={detailUrl}>{item.title}</Link>
+            <a href={liveLink} target="_blank" rel="noopener noreferrer">
+              {item.title}
+            </a>
           </h3>
           {item.tagline && (
-            <p className="text-sm sm:text-base text-gray-500 font-medium leading-relaxed mt-1">
+            <p className="text-sm sm:text-base text-gray-500 font-medium leading-relaxed mt-1 mb-3">
               {item.tagline}
             </p>
           )}
+
+          {/* Live website Visit text button placed below text content */}
+          <a
+            href={liveLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-[#0D0D0D] hover:text-gray-600 transition-colors mt-2 group/btn"
+          >
+            <span className="underline underline-offset-4 decoration-[#BFF549] decoration-2">Visit Website</span>
+            <ArrowUpRight className="w-4 h-4 transition-transform group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5" />
+          </a>
         </div>
       </div>
     </motion.div>
