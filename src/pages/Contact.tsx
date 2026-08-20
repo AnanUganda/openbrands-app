@@ -1,11 +1,75 @@
-import React from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion } from "motion/react";
-import { Mail, Phone, Globe, MessageCircle, ArrowRight, Clock, CalendarDays, CheckCircle2 } from "lucide-react";
+import { Mail, Phone, ArrowRight, Clock, CalendarDays, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 import { SectionLabel } from "@/components/ui/section-label";
 import { SplitTextReveal } from "@/components/ui/split-text-reveal";
+import { getUtmParams, trackLeadGenerated } from "@/lib/analytics";
 
 export function Contact() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    company: "",
+    website: "",
+    message: "",
+    fax: "", // Anti-spam honeypot
+  });
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      setError("Please fill in all required fields (Name, Email, and Message).");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const payload = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        business: formData.company.trim(),
+        website: formData.website.trim(),
+        message: formData.message.trim(),
+        fax: formData.fax.trim(),
+        source: "contact_form",
+        utm: getUtmParams(),
+        referrer: typeof document !== "undefined" ? document.referrer : "",
+      };
+
+      const res = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        throw new Error(data.error || "Unable to send your message. Please try again.");
+      }
+
+      // Track lead conversion in Google Analytics
+      trackLeadGenerated("contact_form");
+
+      setSubmitted(true);
+    } catch (err: any) {
+      setError(err?.message || "An unexpected error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const faqs = [
     {
       q: "What happens on the strategy call?",
@@ -108,7 +172,7 @@ export function Contact() {
                 rel="noopener noreferrer" 
                 className="inline-block w-full sm:w-auto"
               >
-                <button className="group flex items-center justify-center gap-3 w-full sm:w-auto rounded-full bg-[#BFF549] px-8 py-4 text-base font-bold text-[#0D0D0D] transition-all hover:bg-[#d4ff6e] hover:shadow-[0_0_30px_rgba(191,245,73,0.35)] pointer-events-auto">
+                <button className="group flex items-center justify-center gap-3 w-full sm:w-auto rounded-full bg-[#BFF549] px-8 py-4 text-base font-bold text-[#0D0D0D] transition-all hover:bg-[#d4ff6e] hover:shadow-[0_0_30px_rgba(191,245,73,0.35)] pointer-events-auto cursor-pointer">
                   <div className="w-2.5 h-2.5 rounded-full bg-[#0D0D0D]" />
                   <span>Open Calendar</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -174,91 +238,161 @@ export function Contact() {
               </h2>
             </div>
 
-            <form 
-              action="https://formsubmit.co/twijjukyeanan00@gmail.com" 
-              method="POST" 
-              className="space-y-5"
-            >
-              {/* Anti-spam honeypot */}
-              <input type="text" name="_honey" style={{ display: 'none' }} />
-              {/* Disable Captcha */}
-              <input type="hidden" name="_captcha" value="false" />
-              {/* Success redirection */}
-              <input type="hidden" name="_next" value={window.location.href} />
-
-              <div>
-                <label htmlFor="name" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
-                  Your Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  autoComplete="name"
-                  className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-[#0D0D0D] font-medium placeholder-gray-400 focus:outline-none focus:border-[#0D0D0D] focus:bg-white transition-colors"
-                  placeholder="e.g. Sarah Jenkins"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  autoComplete="email"
-                  className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-[#0D0D0D] font-medium placeholder-gray-400 focus:outline-none focus:border-[#0D0D0D] focus:bg-white transition-colors"
-                  placeholder="sarah@company.com"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="company" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
-                  Company / Industry
-                </label>
-                <input
-                  type="text"
-                  id="company"
-                  name="company"
-                  autoComplete="organization"
-                  className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-[#0D0D0D] font-medium placeholder-gray-400 focus:outline-none focus:border-[#0D0D0D] focus:bg-white transition-colors"
-                  placeholder="e.g. Apex Property Group"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
-                  How can we help?
-                </label>
-                <textarea 
-                  id="message" 
-                  name="message"
-                  required
-                  rows={4}
-                  className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-[#0D0D0D] font-medium placeholder-gray-400 focus:outline-none focus:border-[#0D0D0D] focus:bg-white transition-colors resize-none"
-                  placeholder="Tell us about your business goals and what you'd like to achieve..."
-                ></textarea>
-              </div>
-
-              <button 
-                type="submit" 
-                className="w-full group flex items-center justify-center gap-3 rounded-full bg-[#0D0D0D] px-8 py-4 text-base font-bold text-white transition-all hover:bg-gray-800 shadow-md cursor-pointer pt-4"
+            {submitted ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="py-12 flex flex-col items-center text-center gap-4"
               >
-                <span>Send Message</span>
-                <div className="w-7 h-7 rounded-full bg-[#BFF549] text-[#0D0D0D] flex items-center justify-center transition-transform group-hover:translate-x-1">
-                  <ArrowRight className="w-4 h-4" />
+                <div className="w-16 h-16 rounded-full bg-[#BFF549]/30 border border-[#BFF549] text-[#0D0D0D] flex items-center justify-center">
+                  <CheckCircle2 className="w-8 h-8 text-[#70c910]" />
                 </div>
-              </button>
+                <h3 className="text-2xl font-bold text-[#0D0D0D]">Message Sent Successfully!</h3>
+                <p className="text-gray-600 font-medium max-w-md leading-relaxed">
+                  Thank you for reaching out. We have received your inquiry and will review your project details. Expect a reply within <strong>one working day</strong>.
+                </p>
+                <button
+                  onClick={() => {
+                    setSubmitted(false);
+                    setFormData({ name: "", email: "", company: "", website: "", message: "", fax: "" });
+                  }}
+                  className="mt-4 text-sm font-bold text-[#0D0D0D] underline underline-offset-4 hover:opacity-80"
+                >
+                  Send another message
+                </button>
+              </motion.div>
+            ) : (
+              <>
+                {error && (
+                  <div className="mb-6 p-4 rounded-2xl bg-red-50 border border-red-200 flex items-start gap-3 text-red-700 text-sm font-medium">
+                    <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                    <span>{error}</span>
+                  </div>
+                )}
 
-              <div className="flex items-center justify-center gap-2 pt-2 text-xs font-semibold text-gray-500">
-                <Clock className="w-4 h-4 text-gray-400" />
-                <span>We typically respond within 24 hours</span>
-              </div>
-            </form>
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  {/* Anti-spam honeypot */}
+                  <input
+                    type="text"
+                    name="fax"
+                    value={formData.fax}
+                    onChange={handleChange}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    style={{ position: "absolute", left: "-9999px", opacity: 0, pointerEvents: "none" }}
+                  />
+
+                  <div>
+                    <label htmlFor="name" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+                      Your Name <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      required
+                      value={formData.name}
+                      onChange={handleChange}
+                      autoComplete="name"
+                      className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-[#0D0D0D] font-medium placeholder-gray-400 focus:outline-none focus:border-[#0D0D0D] focus:bg-white transition-colors"
+                      placeholder="e.g. Sarah Jenkins"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+                      Email Address <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                      autoComplete="email"
+                      className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-[#0D0D0D] font-medium placeholder-gray-400 focus:outline-none focus:border-[#0D0D0D] focus:bg-white transition-colors"
+                      placeholder="sarah@company.com"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="company" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+                        Company / Industry
+                      </label>
+                      <input
+                        type="text"
+                        id="company"
+                        name="company"
+                        value={formData.company}
+                        onChange={handleChange}
+                        autoComplete="organization"
+                        className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-[#0D0D0D] font-medium placeholder-gray-400 focus:outline-none focus:border-[#0D0D0D] focus:bg-white transition-colors"
+                        placeholder="e.g. Apex Property Group"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="website" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+                        Website URL
+                      </label>
+                      <input
+                        type="text"
+                        id="website"
+                        name="website"
+                        value={formData.website}
+                        onChange={handleChange}
+                        className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-[#0D0D0D] font-medium placeholder-gray-400 focus:outline-none focus:border-[#0D0D0D] focus:bg-white transition-colors"
+                        placeholder="e.g. apexproperty.com"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="message" className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+                      How can we help? <span className="text-red-500">*</span>
+                    </label>
+                    <textarea 
+                      id="message" 
+                      name="message"
+                      required
+                      rows={4}
+                      value={formData.message}
+                      onChange={handleChange}
+                      className="w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-[#0D0D0D] font-medium placeholder-gray-400 focus:outline-none focus:border-[#0D0D0D] focus:bg-white transition-colors resize-none"
+                      placeholder="Tell us about your business goals and what you'd like to achieve..."
+                    ></textarea>
+                  </div>
+
+                  <button 
+                    type="submit" 
+                    disabled={loading}
+                    className="w-full group flex items-center justify-center gap-3 rounded-full bg-[#0D0D0D] px-8 py-4 text-base font-bold text-white transition-all hover:bg-gray-800 shadow-md cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed pt-4"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span>Sending Message...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Send Message</span>
+                        <div className="w-7 h-7 rounded-full bg-[#BFF549] text-[#0D0D0D] flex items-center justify-center transition-transform group-hover:translate-x-1">
+                          <ArrowRight className="w-4 h-4" />
+                        </div>
+                      </>
+                    )}
+                  </button>
+
+                  <div className="flex items-center justify-center gap-2 pt-2 text-xs font-semibold text-gray-500">
+                    <Clock className="w-4 h-4 text-gray-400" />
+                    <span>We typically respond within 24 hours</span>
+                  </div>
+                </form>
+              </>
+            )}
           </motion.div>
 
         </div>
