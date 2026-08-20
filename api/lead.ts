@@ -94,6 +94,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Combined notes for CRM records
     const fullNotes = [
       trimmedMessage ? `Message: ${trimmedMessage}` : null,
+      trimmedBusiness ? `Company: ${trimmedBusiness}` : null,
+      trimmedWebsite ? `Website: ${trimmedWebsite}` : null,
+      trimmedPhone ? `Phone: ${trimmedPhone}` : null,
       budget ? `Budget: ${budget}` : null,
       services.length ? `Services: ${services.join(", ")}` : null,
       source ? `Source: ${source}` : null,
@@ -101,7 +104,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       referrer ? `Referrer: ${referrer}` : null,
     ].filter(Boolean).join("\n\n");
 
-    // Parallel execution promises
     const tasks: Promise<any>[] = [];
 
     // -------------------------------------------------------------
@@ -137,86 +139,136 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           body: zohoFormData.toString(),
         });
 
-        if (!zohoRes.ok) {
-          console.error("Zoho Web-to-Lead response status:", zohoRes.status);
-        }
+        console.log("Zoho Web-to-Lead status:", zohoRes.status);
       } catch (zohoErr) {
-        console.error("Zoho Sync Error (non-blocking):", zohoErr);
+        console.error("Zoho Sync Error:", zohoErr);
       }
     })();
     tasks.push(zohoTask);
 
     // -------------------------------------------------------------
-    // TASK 2: Notion CRM Sync
+    // TASK 2: Notion CRM Sync (Schema-Aware & Resilient)
     // -------------------------------------------------------------
     if (NOTION_TOKEN && NOTION_LEADS_DB_ID) {
       const notionTask = (async () => {
         try {
-          const notionProperties: Record<string, any> = {
-            Name: {
-              title: [
-                {
-                  text: {
-                    content: trimmedBusiness ? `${trimmedName} (${trimmedBusiness})` : trimmedName,
-                  },
-                },
-              ],
-            },
-            Email: {
-              email: trimmedEmail,
-            },
-            Stage: {
-              select: {
-                name: "1 · New Inquiry",
-              },
-            },
-            "Next Action Date": {
-              date: {
-                start: todayDate,
-              },
-            },
-          };
+          // Format Database ID (strip dashes if any format issues)
+          const cleanDbId = NOTION_LEADS_DB_ID.replace(/-/g, "");
 
-          if (trimmedPhone) {
-            notionProperties["Phone"] = { phone_number: trimmedPhone };
-          }
-          if (trimmedWebsite) {
-            const validUrl = trimmedWebsite.startsWith("http") ? trimmedWebsite : `https://${trimmedWebsite}`;
-            notionProperties["Website"] = { url: validUrl };
-          }
-          if (trimmedBusiness) {
-            notionProperties["Company"] = {
-              rich_text: [{ text: { content: trimmedBusiness } }],
-            };
-          }
-          if (fullNotes) {
-            notionProperties["Notes"] = {
-              rich_text: [{ text: { content: fullNotes.slice(0, 2000) } }],
-            };
+          // 1. Fetch database schema to see exact column names and types
+          let dbSchema: any = null;
+          try {
+            const dbRes = await fetch(`https://api.notion.com/v1/databases/${cleanDbId}`, {
+              headers: {
+                Authorization: `Bearer ${NOTION_TOKEN.trim()}`,
+                "Notion-Version": "2022-06-28",
+              },
+            });
+            if (dbRes.ok) {
+              dbSchema = await dbRes.json();
+            } else {
+              const errText = await dbRes.text();
+              console.error("Notion DB Schema fetch error:", dbRes.status, errText);
+            }
+          } catch (schemaErr) {
+            console.warn("Could not pre-fetch Notion schema:", schemaErr);
           }
 
-          const notionRes = await fetch("https://api.notion.com/v1/pages", {
+          const properties: Record<string, any> = {};
+
+          if (dbSchema && dbSchema.properties) {
+            const cols = dbSchema.properties;
+
+            // Map title column (whatever column is type "title")
+            const titlePropKey = Object.keys(cols).find((k) => cols[k].type === "title") || "Name";
+            properties[titlePropKey] = {
+              title: [{ text: { content: trimmedBusiness ? `${trimmedName} (${trimmedBusiness})` : trimmedName } }],
+            };
+
+            // Map Email
+            const emailKey = Object.keys(cols).find((k) => cols[k].type === "email" || k.toLowerCase() === "email");
+            if (emailKey) {
+              properties[emailKey] = { email: trimmedEmail };
+            }
+
+            // Map Stage / Status
+            const stageKey = Object.keys(cols).find((k) => k.toLowerCase().includes("stage") || k.toLowerCase().includes("status"));
+            if (stageKey) {
+              const colDef = cols[stageKey];
+              if (colDef.type === "select") {
+                const opt = colDef.select?.options?.find((o: any) => o.name.includes("New") || o.name.includes("Inquiry")) || colDef.select?.options?.[0];
+                if (opt) properties[stageKey] = { select: { name: opt.name } };
+              } else if (colDef.type === "status") {
+                const opt = colDef.status?.options?.find((o: any) => o.name.includes("New") || o.name.includes("Inquiry")) || colDef.status?.options?.[0];
+                if (opt) properties[stageKey] = { status: { name: opt.name } };
+              }
+            }
+
+            // Map Next Action Date
+            const dateKey = Object.keys(cols).find((k) => cols[k].type === "date");
+            if (dateKey) {
+              properties[dateKey] = { date: { start: todayDate } };
+            }
+
+            // Map Phone
+            const phoneKey = Object.keys(cols).find((k) => cols[k].type === "phone_number" || k.toLowerCase() === "phone");
+            if (phoneKey && trimmedPhone) {
+              properties[phoneKey] = { phone_number: trimmedPhone };
+            }
+
+            // Map Website
+            const websiteKey = Object.keys(cols).find((k) => cols[k].type === "url" || k.toLowerCase() === "website");
+            if (websiteKey && trimmedWebsite) {
+              const validUrl = trimmedWebsite.startsWith("http") ? trimmedWebsite : `https://${trimmedWebsite}`;
+              properties[websiteKey] = { url: validUrl };
+            }
+
+            // Map Company
+            const companyKey = Object.keys(cols).find((k) => k.toLowerCase() === "company" || k.toLowerCase() === "business");
+            if (companyKey && trimmedBusiness && cols[companyKey].type === "rich_text") {
+              properties[companyKey] = { rich_text: [{ text: { content: trimmedBusiness } }] };
+            }
+
+            // Map Notes
+            const notesKey = Object.keys(cols).find((k) => k.toLowerCase() === "notes" || k.toLowerCase() === "description" || k.toLowerCase() === "message");
+            if (notesKey && cols[notesKey].type === "rich_text") {
+              properties[notesKey] = { rich_text: [{ text: { content: fullNotes.slice(0, 2000) } }] };
+            }
+          } else {
+            // Default property structure
+            properties["Name"] = {
+              title: [{ text: { content: trimmedBusiness ? `${trimmedName} (${trimmedBusiness})` : trimmedName } }],
+            };
+            properties["Email"] = { email: trimmedEmail };
+          }
+
+          // Create Notion page
+          const notionCreateRes = await fetch("https://api.notion.com/v1/pages", {
             method: "POST",
             headers: {
-              Authorization: `Bearer ${NOTION_TOKEN}`,
+              Authorization: `Bearer ${NOTION_TOKEN.trim()}`,
               "Content-Type": "application/json",
               "Notion-Version": "2022-06-28",
             },
             body: JSON.stringify({
-              parent: { database_id: NOTION_LEADS_DB_ID },
-              properties: notionProperties,
+              parent: { database_id: cleanDbId },
+              properties,
             }),
           });
 
-          if (!notionRes.ok) {
-            const notionErrorText = await notionRes.text();
-            console.error("Notion API Error:", notionRes.status, notionErrorText);
+          if (!notionCreateRes.ok) {
+            const notionErrText = await notionCreateRes.text();
+            console.error("Notion Page Create Error:", notionCreateRes.status, notionErrText);
+          } else {
+            console.log("Notion lead created successfully!");
           }
         } catch (notionErr) {
-          console.error("Notion Sync Error (non-blocking):", notionErr);
+          console.error("Notion Execution Error:", notionErr);
         }
       })();
       tasks.push(notionTask);
+    } else {
+      console.warn("Notion Token or DB ID missing in process.env");
     }
 
     // -------------------------------------------------------------
@@ -240,12 +292,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           await fetch("https://api.resend.com/emails", {
             method: "POST",
             headers: {
-              Authorization: `Bearer ${RESEND_API_KEY}`,
+              Authorization: `Bearer ${RESEND_API_KEY.trim()}`,
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              from: LEAD_FROM_EMAIL,
+              from: LEAD_FROM_EMAIL.trim(),
               to: [trimmedEmail],
+              reply_to: LEAD_NOTIFY_EMAIL.trim(),
               subject: `Thank you for contacting Open Brands`,
               html: autoReplyHtml,
             }),
@@ -271,24 +324,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           await fetch("https://api.resend.com/emails", {
             method: "POST",
             headers: {
-              Authorization: `Bearer ${RESEND_API_KEY}`,
+              Authorization: `Bearer ${RESEND_API_KEY.trim()}`,
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              from: LEAD_FROM_EMAIL,
-              to: [LEAD_NOTIFY_EMAIL],
+              from: LEAD_FROM_EMAIL.trim(),
+              to: [LEAD_NOTIFY_EMAIL.trim()],
+              reply_to: trimmedEmail,
               subject: `[New Lead] ${trimmedName} — Open Brands`,
               html: adminHtml,
             }),
           });
         } catch (resendErr) {
-          console.error("Resend Sync Error (non-blocking):", resendErr);
+          console.error("Resend Sync Error:", resendErr);
         }
       })();
       tasks.push(emailTask);
+    } else {
+      console.warn("Resend API Key missing in process.env");
     }
 
-    // Await all parallel tasks using allSettled to ensure complete resilience
+    // Await all parallel tasks
     await Promise.allSettled(tasks);
 
     return res.status(200).json({ ok: true, message: "Lead submitted successfully" });
