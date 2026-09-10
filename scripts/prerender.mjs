@@ -11,10 +11,12 @@ const rootDir = path.resolve(__dirname, '..');
 const distDir = path.join(rootDir, 'dist');
 const tempSrcDir = path.join(rootDir, '.prerender-src');
 
+const SITE_ORIGIN = 'https://www.openbrands.studio';
+
 const SANITY_QUERY_URL =
   'https://j94msrpk.apicdn.sanity.io/v2024-05-11/data/query/production?query=' +
   encodeURIComponent(
-    '*[_type in ["post","portfolio"] && defined(slug.current)]{_type, "slug": slug.current}'
+    '*[_type in ["post","portfolio"] && defined(slug.current)]{_type, "slug": slug.current, _updatedAt}'
   );
 
 const STATIC_ROUTES = ['/', '/contact', '/portfolio', '/blog', '/hiring'];
@@ -31,6 +33,7 @@ const FALLBACK_PORTFOLIO_SLUGS = [
 
 async function getRoutes() {
   const routes = new Set(STATIC_ROUTES);
+  const routeMeta = new Map();
 
   for (let attempt = 1; attempt <= 3; attempt++) {
     try {
@@ -40,9 +43,17 @@ async function getRoutes() {
         if (Array.isArray(data.result) && data.result.length > 0) {
           for (const item of data.result) {
             if (item._type === 'post' && item.slug) {
-              routes.add(`/blog/${item.slug}`);
+              const route = `/blog/${item.slug}`;
+              routes.add(route);
+              if (item._updatedAt) {
+                routeMeta.set(route, { updatedAt: item._updatedAt });
+              }
             } else if (item._type === 'portfolio' && item.slug) {
-              routes.add(`/portfolio/${item.slug}`);
+              const route = `/portfolio/${item.slug}`;
+              routes.add(route);
+              if (item._updatedAt) {
+                routeMeta.set(route, { updatedAt: item._updatedAt });
+              }
             }
           }
           break;
@@ -68,7 +79,7 @@ async function getRoutes() {
   // Ensure /about is excluded (it redirects to /)
   routes.delete('/about');
 
-  return Array.from(routes);
+  return { routes: Array.from(routes), routeMeta };
 }
 
 async function startServer(serveDir) {
@@ -87,6 +98,32 @@ async function startServer(serveDir) {
   return { server, port };
 }
 
+function generateSitemap(routes, routeMeta) {
+  const sitemapEntries = routes.map((route) => {
+    const loc = route === '/' ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${route}`;
+    const meta = routeMeta.get(route);
+    if (meta?.updatedAt) {
+      const formattedDate = meta.updatedAt.includes('T')
+        ? meta.updatedAt.split('T')[0]
+        : meta.updatedAt;
+      return `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${formattedDate}</lastmod>\n  </url>`;
+    }
+    return `  <url>\n    <loc>${loc}</loc>\n  </url>`;
+  });
+
+  const sitemapXml = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    sitemapEntries.join('\n'),
+    '</urlset>',
+    '',
+  ].join('\n');
+
+  const sitemapPath = path.join(distDir, 'sitemap.xml');
+  fs.writeFileSync(sitemapPath, sitemapXml, 'utf-8');
+  console.log(`\n📄 Generated dist/sitemap.xml with ${routes.length} URLs`);
+}
+
 async function prerender() {
   console.log('🚀 Starting route prerendering with Headless Chromium...\n');
 
@@ -100,7 +137,7 @@ async function prerender() {
   }
   fs.cpSync(distDir, tempSrcDir, { recursive: true });
 
-  const routes = await getRoutes();
+  const { routes, routeMeta } = await getRoutes();
   console.log(`Discovered ${routes.length} routes to prerender:\n${routes.map((r) => `  • ${r}`).join('\n')}\n`);
 
   const { server, port } = await startServer(tempSrcDir);
@@ -157,72 +194,139 @@ async function prerender() {
       // Allow animations and Helmet DOM updates to settle
       await new Promise((r) => setTimeout(r, 600));
 
-      // Deduplicate <head> tags: keep only the correct occurrence of each tag (react-helmet-async / React 19)
-      await page.evaluate(() => {
-        const head = document.head;
-        const TEMPLATE_TITLE = 'Open Brands | Results-Driven B2B Marketing Agency';
+      const canonicalUrl = route === '/' ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${route}`;
 
-        // 1. <title>: Resolve title from hoisted React element props if array children, then deduplicate
-        const titleEls = Array.from(head.querySelectorAll('title'));
-        for (const titleEl of titleEls) {
-          const keys = Object.keys(titleEl);
-          const reactPropsKey = keys.find((k) => k.startsWith('__reactProps$'));
-          if (reactPropsKey && titleEl[reactPropsKey]?.children) {
-            const rawChildren = titleEl[reactPropsKey].children;
-            const resolvedTitle = Array.isArray(rawChildren) ? rawChildren.join('') : String(rawChildren);
-            if (resolvedTitle.trim()) {
-              titleEl.textContent = resolvedTitle.trim();
+      // Deduplicate <head> tags and inject/update canonical and OpenGraph/Twitter meta tags
+      await page.evaluate(
+        ({ canonicalUrl, siteOrigin }) => {
+          const head = document.head;
+          const TEMPLATE_TITLE = 'Open Brands | Results-Driven B2B Marketing Agency';
+
+          // 1. <title>: Resolve title from hoisted React element props if array children, then deduplicate
+          const titleEls = Array.from(head.querySelectorAll('title'));
+          for (const titleEl of titleEls) {
+            const keys = Object.keys(titleEl);
+            const reactPropsKey = keys.find((k) => k.startsWith('__reactProps$'));
+            if (reactPropsKey && titleEl[reactPropsKey]?.children) {
+              const rawChildren = titleEl[reactPropsKey].children;
+              const resolvedTitle = Array.isArray(rawChildren) ? rawChildren.join('') : String(rawChildren);
+              if (resolvedTitle.trim()) {
+                titleEl.textContent = resolvedTitle.trim();
+              }
             }
           }
-        }
 
-        titleEls.filter((el) => el.textContent.trim() === '').forEach((el) => el.remove());
+          titleEls.filter((el) => el.textContent.trim() === '').forEach((el) => el.remove());
 
-        const remainingTitleEls = Array.from(head.querySelectorAll('title'));
-        if (remainingTitleEls.length > 1) {
-          const pageTitleEl =
-            remainingTitleEls.find((el) => el.textContent.trim() !== TEMPLATE_TITLE) || remainingTitleEls[0];
-          remainingTitleEls.forEach((el) => {
-            if (el !== pageTitleEl) el.remove();
+          const remainingTitleEls = Array.from(head.querySelectorAll('title'));
+          if (remainingTitleEls.length > 1) {
+            const pageTitleEl =
+              remainingTitleEls.find((el) => el.textContent.trim() !== TEMPLATE_TITLE) || remainingTitleEls[0];
+            remainingTitleEls.forEach((el) => {
+              if (el !== pageTitleEl) el.remove();
+            });
+          }
+
+          // 2. <meta name="description"> and <meta name="title">: keep only the LAST one
+          for (const name of ['description', 'title']) {
+            const metaEls = Array.from(head.querySelectorAll(`meta[name="${name}"]`));
+            if (metaEls.length > 1) {
+              metaEls.slice(0, -1).forEach((el) => el.remove());
+            }
+          }
+
+          // 3. Every <meta property="og:*">: keep only the LAST one per property
+          const ogProps = new Set();
+          head.querySelectorAll('meta[property^="og:"]').forEach((el) => {
+            const prop = el.getAttribute('property');
+            if (prop) ogProps.add(prop);
           });
-        }
-
-        // 2. <meta name="description"> and <meta name="title">: keep only the LAST one
-        for (const name of ['description', 'title']) {
-          const metaEls = Array.from(head.querySelectorAll(`meta[name="${name}"]`));
-          if (metaEls.length > 1) {
-            metaEls.slice(0, -1).forEach((el) => el.remove());
+          for (const prop of ogProps) {
+            const metaEls = Array.from(head.querySelectorAll(`meta[property="${prop}"]`));
+            if (metaEls.length > 1) {
+              metaEls.slice(0, -1).forEach((el) => el.remove());
+            }
           }
-        }
 
-        // 3. Every <meta property="og:*">: keep only the LAST one per property
-        const ogProps = new Set();
-        head.querySelectorAll('meta[property^="og:"]').forEach((el) => {
-          const prop = el.getAttribute('property');
-          if (prop) ogProps.add(prop);
-        });
-        for (const prop of ogProps) {
-          const metaEls = Array.from(head.querySelectorAll(`meta[property="${prop}"]`));
-          if (metaEls.length > 1) {
-            metaEls.slice(0, -1).forEach((el) => el.remove());
+          // 4. Every <meta name="twitter:*"> and <meta property="twitter:*">: keep only the LAST one
+          const twProps = new Set();
+          head.querySelectorAll('meta[name^="twitter:"], meta[property^="twitter:"]').forEach((el) => {
+            const key = el.getAttribute('name') || el.getAttribute('property');
+            if (key) twProps.add(key);
+          });
+          for (const key of twProps) {
+            const metaEls = Array.from(
+              head.querySelectorAll(`meta[name="${key}"], meta[property="${key}"]`)
+            );
+            if (metaEls.length > 1) {
+              metaEls.slice(0, -1).forEach((el) => el.remove());
+            }
           }
-        }
 
-        // 4. Every <meta name="twitter:*"> and <meta property="twitter:*">: keep only the LAST one
-        const twProps = new Set();
-        head.querySelectorAll('meta[name^="twitter:"], meta[property^="twitter:"]').forEach((el) => {
-          const key = el.getAttribute('name') || el.getAttribute('property');
-          if (key) twProps.add(key);
-        });
-        for (const key of twProps) {
-          const metaEls = Array.from(
-            head.querySelectorAll(`meta[name="${key}"], meta[property="${key}"]`)
-          );
-          if (metaEls.length > 1) {
-            metaEls.slice(0, -1).forEach((el) => el.remove());
+          // Read the page's final <title> text and <meta name="description"> content
+          const finalTitleEl = head.querySelector('title');
+          const finalTitle = (finalTitleEl?.textContent || document.title || '').trim();
+
+          const finalDescEl = head.querySelector('meta[name="description"]');
+          const finalDesc = finalDescEl?.getAttribute('content') || '';
+
+          // Helper to set or create a meta tag
+          function setMetaTag(selector, attrName, attrValue, contentValue) {
+            const existingEls = Array.from(head.querySelectorAll(selector));
+            let targetEl = existingEls[existingEls.length - 1];
+            if (!targetEl) {
+              targetEl = document.createElement('meta');
+              targetEl.setAttribute(attrName, attrValue);
+              head.appendChild(targetEl);
+            }
+            targetEl.setAttribute('content', contentValue);
+            // Remove any other duplicates
+            if (existingEls.length > 1) {
+              existingEls.slice(0, -1).forEach((el) => el.remove());
+            }
           }
-        }
-      });
+
+          // Canonical link: <link rel="canonical" href="...">
+          const canonicalEls = Array.from(head.querySelectorAll('link[rel="canonical"]'));
+          let canonicalEl = canonicalEls[0];
+          if (!canonicalEl) {
+            canonicalEl = document.createElement('link');
+            canonicalEl.setAttribute('rel', 'canonical');
+            head.appendChild(canonicalEl);
+          }
+          canonicalEl.setAttribute('href', canonicalUrl);
+          if (canonicalEls.length > 1) {
+            canonicalEls.slice(1).forEach((el) => el.remove());
+          }
+
+          // og:url
+          setMetaTag('meta[property="og:url"]', 'property', 'og:url', canonicalUrl);
+
+          // og:title and twitter:title
+          if (finalTitle) {
+            setMetaTag('meta[property="og:title"]', 'property', 'og:title', finalTitle);
+            setMetaTag('meta[name="twitter:title"]', 'name', 'twitter:title', finalTitle);
+            // Clean up any legacy meta[property="twitter:title"]
+            head.querySelectorAll('meta[property="twitter:title"]').forEach((el) => el.remove());
+          }
+
+          // og:description and twitter:description
+          if (finalDesc) {
+            setMetaTag('meta[property="og:description"]', 'property', 'og:description', finalDesc);
+            setMetaTag('meta[name="twitter:description"]', 'name', 'twitter:description', finalDesc);
+            // Clean up any legacy meta[property="twitter:description"]
+            head.querySelectorAll('meta[property="twitter:description"]').forEach((el) => el.remove());
+          }
+
+          // og:image and twitter:image
+          // TODO: Replace favicon.png with a real 1200x630 social share image once created.
+          const placeholderImage = `${siteOrigin}/favicon.png`;
+          setMetaTag('meta[property="og:image"]', 'property', 'og:image', placeholderImage);
+          setMetaTag('meta[name="twitter:image"]', 'name', 'twitter:image', placeholderImage);
+          head.querySelectorAll('meta[property="twitter:image"]').forEach((el) => el.remove());
+        },
+        { canonicalUrl, siteOrigin: SITE_ORIGIN }
+      );
 
       const capturedTitle = await page.evaluate(() => {
         const titleEl = document.head.querySelector('title');
@@ -266,6 +370,9 @@ async function prerender() {
         }
       }
     }
+
+    // Generate sitemap.xml in dist/
+    generateSitemap(routes, routeMeta);
   } finally {
     if (browser) await browser.close();
     if (server) server.close();
