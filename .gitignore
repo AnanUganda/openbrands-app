@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+.prerender-src
 
 # Sanity dataset exports (large, contain full content + assets)
 backup-*.tar.gz

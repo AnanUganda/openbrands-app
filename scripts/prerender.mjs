@@ -9,11 +9,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const distDir = path.join(rootDir, 'dist');
+const tempSrcDir = path.join(rootDir, '.prerender-src');
 
 const SANITY_QUERY_URL =
   'https://j94msrpk.apicdn.sanity.io/v2024-05-11/data/query/production?query=' +
   encodeURIComponent(
-    '*[_type in ["post","portfolio"] && defined(slug.current)]{_type, "slug": slug.current, title}'
+    '*[_type in ["post","portfolio"] && defined(slug.current)]{_type, "slug": slug.current}'
   );
 
 const STATIC_ROUTES = ['/', '/contact', '/portfolio', '/blog', '/hiring'];
@@ -30,7 +31,6 @@ const FALLBACK_PORTFOLIO_SLUGS = [
 
 async function getRoutes() {
   const routes = new Set(STATIC_ROUTES);
-  const titlesByRoute = new Map();
 
   for (let attempt = 1; attempt <= 3; attempt++) {
     try {
@@ -40,17 +40,9 @@ async function getRoutes() {
         if (Array.isArray(data.result) && data.result.length > 0) {
           for (const item of data.result) {
             if (item._type === 'post' && item.slug) {
-              const route = `/blog/${item.slug}`;
-              routes.add(route);
-              if (item.title) {
-                titlesByRoute.set(route, `${item.title.replace(/\n/g, ' ').trim()} | Open Brands`);
-              }
+              routes.add(`/blog/${item.slug}`);
             } else if (item._type === 'portfolio' && item.slug) {
-              const route = `/portfolio/${item.slug}`;
-              routes.add(route);
-              if (item.title) {
-                titlesByRoute.set(route, `${item.title.replace(/\n/g, ' ').trim()} | Open Brands Portfolio`);
-              }
+              routes.add(`/portfolio/${item.slug}`);
             }
           }
           break;
@@ -76,11 +68,11 @@ async function getRoutes() {
   // Ensure /about is excluded (it redirects to /)
   routes.delete('/about');
 
-  return { routes: Array.from(routes), titlesByRoute };
+  return Array.from(routes);
 }
 
-async function startServer() {
-  const handler = sirv(distDir, { single: true, dev: true });
+async function startServer(serveDir) {
+  const handler = sirv(serveDir, { single: true, dev: true });
   const server = http.createServer((req, res) => handler(req, res));
 
   await new Promise((resolve, reject) => {
@@ -102,10 +94,16 @@ async function prerender() {
     throw new Error('dist/ directory not found. Please run vite build first.');
   }
 
-  const { routes, titlesByRoute } = await getRoutes();
+  // Copy dist/ to clean immutable temp directory for serving during the crawl
+  if (fs.existsSync(tempSrcDir)) {
+    fs.rmSync(tempSrcDir, { recursive: true, force: true });
+  }
+  fs.cpSync(distDir, tempSrcDir, { recursive: true });
+
+  const routes = await getRoutes();
   console.log(`Discovered ${routes.length} routes to prerender:\n${routes.map((r) => `  • ${r}`).join('\n')}\n`);
 
-  const { server, port } = await startServer();
+  const { server, port } = await startServer(tempSrcDir);
   const baseUrl = `http://localhost:${port}`;
 
   let browser;
@@ -159,37 +157,77 @@ async function prerender() {
       // Allow animations and Helmet DOM updates to settle
       await new Promise((r) => setTimeout(r, 600));
 
-      // Resolve proper page title (handling react-helmet-async React 19 array child behavior if needed)
-      const expectedTitle = titlesByRoute.get(route);
-      await page.evaluate((expected) => {
-        const titleEls = Array.from(document.querySelectorAll('head > title'));
-        let activeTitle = document.title;
+      // Deduplicate <head> tags: keep only the correct occurrence of each tag (react-helmet-async / React 19)
+      await page.evaluate(() => {
+        const head = document.head;
+        const TEMPLATE_TITLE = 'Open Brands | Results-Driven B2B Marketing Agency';
 
-        // If react-helmet-async inserted an empty title or title is missing, fix it
-        if (!activeTitle || activeTitle.trim() === '') {
-          if (expected) {
-            document.title = expected;
-            activeTitle = expected;
-          }
-        }
-
-        // Clean up redundant duplicate or empty title tags from index.html template
-        if (titleEls.length > 1) {
-          let kept = false;
-          for (const el of titleEls) {
-            if (!kept && el.textContent.trim() === activeTitle.trim() && activeTitle.trim() !== '') {
-              kept = true;
-            } else if (!kept && el.textContent.trim() !== '') {
-              el.textContent = activeTitle;
-              kept = true;
-            } else {
-              el.remove();
+        // 1. <title>: Resolve title from hoisted React element props if array children, then deduplicate
+        const titleEls = Array.from(head.querySelectorAll('title'));
+        for (const titleEl of titleEls) {
+          const keys = Object.keys(titleEl);
+          const reactPropsKey = keys.find((k) => k.startsWith('__reactProps$'));
+          if (reactPropsKey && titleEl[reactPropsKey]?.children) {
+            const rawChildren = titleEl[reactPropsKey].children;
+            const resolvedTitle = Array.isArray(rawChildren) ? rawChildren.join('') : String(rawChildren);
+            if (resolvedTitle.trim()) {
+              titleEl.textContent = resolvedTitle.trim();
             }
           }
         }
-      }, expectedTitle);
 
-      const capturedTitle = await page.evaluate(() => document.title);
+        titleEls.filter((el) => el.textContent.trim() === '').forEach((el) => el.remove());
+
+        const remainingTitleEls = Array.from(head.querySelectorAll('title'));
+        if (remainingTitleEls.length > 1) {
+          const pageTitleEl =
+            remainingTitleEls.find((el) => el.textContent.trim() !== TEMPLATE_TITLE) || remainingTitleEls[0];
+          remainingTitleEls.forEach((el) => {
+            if (el !== pageTitleEl) el.remove();
+          });
+        }
+
+        // 2. <meta name="description"> and <meta name="title">: keep only the LAST one
+        for (const name of ['description', 'title']) {
+          const metaEls = Array.from(head.querySelectorAll(`meta[name="${name}"]`));
+          if (metaEls.length > 1) {
+            metaEls.slice(0, -1).forEach((el) => el.remove());
+          }
+        }
+
+        // 3. Every <meta property="og:*">: keep only the LAST one per property
+        const ogProps = new Set();
+        head.querySelectorAll('meta[property^="og:"]').forEach((el) => {
+          const prop = el.getAttribute('property');
+          if (prop) ogProps.add(prop);
+        });
+        for (const prop of ogProps) {
+          const metaEls = Array.from(head.querySelectorAll(`meta[property="${prop}"]`));
+          if (metaEls.length > 1) {
+            metaEls.slice(0, -1).forEach((el) => el.remove());
+          }
+        }
+
+        // 4. Every <meta name="twitter:*"> and <meta property="twitter:*">: keep only the LAST one
+        const twProps = new Set();
+        head.querySelectorAll('meta[name^="twitter:"], meta[property^="twitter:"]').forEach((el) => {
+          const key = el.getAttribute('name') || el.getAttribute('property');
+          if (key) twProps.add(key);
+        });
+        for (const key of twProps) {
+          const metaEls = Array.from(
+            head.querySelectorAll(`meta[name="${key}"], meta[property="${key}"]`)
+          );
+          if (metaEls.length > 1) {
+            metaEls.slice(0, -1).forEach((el) => el.remove());
+          }
+        }
+      });
+
+      const capturedTitle = await page.evaluate(() => {
+        const titleEl = document.head.querySelector('title');
+        return (titleEl?.textContent || document.title || '').trim();
+      });
       const visibleTextLength = await page.evaluate(() => (document.body.innerText || '').trim().length);
       const html = await page.evaluate(() => '<!doctype html>\n' + document.documentElement.outerHTML);
 
@@ -211,22 +249,33 @@ async function prerender() {
           `    Visible text: ${visibleTextLength.toLocaleString()} chars`
       );
 
-      if (route === '/') {
+      if (!capturedTitle) {
+        console.error(`❌ Error: Route ${route} rendered an empty <title>`);
+        hasFailure = true;
+      } else if (route === '/') {
         homeTitle = capturedTitle;
       } else {
         // Validation checks
-        if (capturedTitle === homeTitle && !route.startsWith('/portfolio/') && !route.startsWith('/blog/')) {
-          console.warn(`⚠️ Warning: Route ${route} has title identical to homepage ("${homeTitle}")`);
+        if (capturedTitle === homeTitle) {
+          console.error(`❌ Error: Route ${route} has title identical to homepage ("${homeTitle}")`);
+          hasFailure = true;
         }
-        if (visibleTextLength < 250) {
-          console.error(`❌ Error: Route ${route} has under 250 chars of visible text (${visibleTextLength} chars)`);
+        if (visibleTextLength < 1000) {
+          console.error(`❌ Error: Route ${route} has under 1,000 chars of visible text (${visibleTextLength} chars)`);
           hasFailure = true;
         }
       }
     }
   } finally {
     if (browser) await browser.close();
-    server.close();
+    if (server) server.close();
+    if (fs.existsSync(tempSrcDir)) {
+      try {
+        fs.rmSync(tempSrcDir, { recursive: true, force: true });
+      } catch (err) {
+        console.warn('⚠️ Warning: Failed to clean up .prerender-src:', err.message);
+      }
+    }
   }
 
   if (hasFailure) {
