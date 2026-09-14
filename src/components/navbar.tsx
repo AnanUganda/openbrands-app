@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
 import { ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { ButtonWithIcon } from '@/components/ui/button-with-icon';
 
 export function Navbar() {
   const [open, setOpen] = React.useState(false);
@@ -14,6 +15,7 @@ export function Navbar() {
 
   const navLinks = [
     { to: '/portfolio', label: 'Work' },
+    { to: '/about', label: 'About' },
     { to: '/blog', label: 'Blog' },
   ];
 
@@ -77,9 +79,9 @@ export function Navbar() {
             className="flex items-center group shrink-0"
           >
             <img
-              src="/portfolio/logo.png"
+              src="/open-brands-logo.png"
               alt="Open Brands"
-              className="h-10 w-auto object-contain group-hover:opacity-90 transition-opacity brightness-0"
+              className="h-9 sm:h-10 md:h-11 w-auto object-contain group-hover:opacity-90 transition-opacity"
             />
           </Link>
 
@@ -99,13 +101,9 @@ export function Navbar() {
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-3">
-            <Link
-              to="/contact"
-              className="inline-flex items-center justify-center gap-2 h-9 px-5 rounded-full border border-gray-300 hover:border-gray-900 bg-white text-xs font-semibold text-[#0D0D0D] hover:bg-gray-50 transition-all shadow-sm"
-            >
-              <div className="w-2 h-2 rounded-full bg-black" />
+            <ButtonWithIcon to="/contact" variant="lime" size="sm">
               Book a Strategy Call
-            </Link>
+            </ButtonWithIcon>
           </div>
 
           {/* Mobile menu toggle */}
@@ -195,16 +193,15 @@ export function Navbar() {
                   transition={{ duration: 0.3, delay: 0.2 }}
                   className="pt-6 mt-4 border-t border-gray-200/80 flex flex-col gap-3"
                 >
-                  <Link
+                  <ButtonWithIcon
                     to="/contact"
+                    variant="lime"
+                    size="lg"
+                    className="w-full justify-center"
                     onClick={() => setOpen(false)}
-                    className="w-full inline-flex items-center justify-center gap-3 h-14 rounded-full bg-[#0D0D0D] text-white text-base font-bold hover:bg-gray-900 transition-all shadow-lg group"
                   >
-                    <span>Book a Strategy Call</span>
-                    <div className="w-7 h-7 rounded-full bg-[#BFF549] text-[#0D0D0D] flex items-center justify-center group-hover:scale-105 transition-transform">
-                      <ArrowRight className="w-4 h-4" />
-                    </div>
-                  </Link>
+                    Book a Strategy Call
+                  </ButtonWithIcon>
                 </motion.div>
               </motion.div>
             </motion.div>

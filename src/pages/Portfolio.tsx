@@ -6,6 +6,7 @@ import { ArrowUpRight } from "lucide-react";
 import { fetchWithCache, urlFor } from "@/lib/sanity";
 import { SectionLabel } from "@/components/ui/section-label";
 import { SplitTextReveal } from "@/components/ui/split-text-reveal";
+import { ButtonWithIcon } from "@/components/ui/button-with-icon";
 
 export const PORTFOLIO_QUERY = `*[_type == "portfolio" && defined(slug.current)] | order(featured desc, publishedAt desc) {
   _id,
@@ -272,12 +273,9 @@ export function Portfolio() {
           </p>
 
           {/* Primary CTA Button */}
-          <Link to="/contact">
-            <button className="group flex items-center gap-3 rounded-full bg-[#0D0D0D] px-8 py-3.5 text-base font-bold text-white transition-all hover:bg-gray-800 hover:shadow-xl pointer-events-auto">
-              <div className="w-2.5 h-2.5 rounded-full bg-[#BFF549]" />
-              <span>Book a Call</span>
-            </button>
-          </Link>
+          <ButtonWithIcon to="/contact" variant="lime" size="lg">
+            Book a Call
+          </ButtonWithIcon>
         </motion.div>
 
         {/* Staggered 2-Column Parallax Grid Layout */}

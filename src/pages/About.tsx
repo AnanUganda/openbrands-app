@@ -1,202 +1,188 @@
 import React from "react";
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from "react-helmet-async";
 import { motion } from "motion/react";
-import { ArrowRight, Target, Users, ShieldCheck, HeartHandshake, Eye, Handshake } from "lucide-react";
+import { ButtonWithIcon } from "@/components/ui/button-with-icon";
 
 export function About() {
   return (
-    <div className="relative w-full min-h-screen bg-[#0D0D0D] overflow-hidden flex-1 pb-24 text-white">
+    <div className="relative w-full min-h-screen bg-[#FBFBFB] text-[#0D0D0D] flex-1 border-t border-gray-200/80">
       <Helmet>
-        <title>Our Story | Open Brands</title>
-        <meta name="description" content="Discover why Open Brands was founded and learn about our mission to help B2B service businesses scale with predictability and integrity." />
+        <title>About me | Twijjukye Anan • Open Brands</title>
+        <meta
+          name="description"
+          content="About Twijjukye Anan, founder and lead designer at Open Brands. Building high-converting, considered websites for service businesses."
+        />
+        <link rel="canonical" href="https://www.openbrands.studio/about" />
       </Helmet>
-      
-      {/* Background structural grid */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.02] z-0" style={{
-          backgroundSize: '100px 100px',
-          backgroundImage: 'linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)',
-      }} />
 
-      <div className="max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12 relative z-20 pt-16 md:pt-24">
+      {/* Texture Background with 70% opacity */}
+      <div
+        className="absolute inset-0 pointer-events-none z-0 opacity-70"
+        style={{
+          backgroundImage: "url('/texture.jpg')",
+          backgroundRepeat: "repeat",
+          backgroundSize: "800px auto",
+        }}
+      />
+
+      {/* Visible Glassmorphic Blur at Viewport Bottom */}
+      <div
+        className="fixed bottom-0 left-0 right-0 h-24 sm:h-28 pointer-events-none z-30 backdrop-blur-xl bg-white/20"
+        style={{
+          maskImage: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 45%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 45%, transparent 100%)",
+        }}
+      />
+
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12 relative z-20 border-l border-r border-gray-200/80 pt-20 md:pt-28 pb-32 md:pb-44">
         
-        {/* HERO SECTION */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="mb-16 md:mb-24 text-center flex flex-col items-center"
-        >
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-sm border-l-2 border-[#BFF549] bg-white/[0.03] text-xs font-bold tracking-widest uppercase text-gray-300 shadow-sm backdrop-blur-md mb-6">
-            THE REAL STORY
-          </div>
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5rem] font-bold text-white tracking-tighter leading-[1.05] mb-6 text-balance drop-shadow-lg">
-            Why I Started Open Brands <br className="hidden md:block" />
-            <span className="text-gray-500">
-              (And Why It's Different)
-            </span>
+        {/* Hero Section: Plain and clean 'About me' with extra padding */}
+        <div className="text-center flex flex-col items-center pt-4 pb-16 md:pb-24 max-w-2xl mx-auto">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#0D0D0D] tracking-tight">
+            About me
           </h1>
-          <p className="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto font-medium leading-relaxed text-balance">
-            A skill nobody else was using properly. A promise to do things differently.
-          </p>
-        </motion.div>
-
-        {/* SECTION 1: THE ORIGIN */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start mb-32 border-y border-white/[0.08] py-16">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            className="md:col-span-7 space-y-6 text-gray-300 leading-relaxed text-lg"
-          >
-            <p>
-              I spent years watching incredible entrepreneurs struggle with marketing. They weren't bad at business—they just needed leads.
-            </p>
-            <p>
-              But every time they'd hire an agency, the same thing happened: Big promises. Vague timelines. Reports filled with vanity metrics that meant absolutely nothing to the bottom line. Slowly, trust would break down. I watched them get burned, then skeptical, then desperate.
-            </p>
-            <p>
-              And I realized something: <strong className="text-white">I could generate qualified leads better than almost anyone I knew.</strong> But I wasn't using that skill where it actually mattered—helping the people who needed it most.
-            </p>
-            <p>
-              So I started Open Brands. Not to brag about how great I am, but to actually help busy entrepreneurs who needed a partner they could finally trust.
-            </p>
-          </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-            className="md:col-span-5 aspect-[4/5] bg-[#161616] border border-white/[0.08] p-2 overflow-hidden relative shadow-sm"
-          >
-             <img src="/anan.jpeg" alt="Twijjukye Anan" className="w-full h-full object-cover object-top grayscale opacity-80 hover:opacity-100 hover:grayscale-0 transition-all duration-700" />
-             <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D] via-[#0D0D0D]/40 to-transparent pointer-events-none"></div>
-             <div className="absolute inset-x-0 bottom-0 p-8 z-10">
-                 <p className="text-white font-medium text-lg md:text-xl italic mb-3">"Marketing isn't magic. It's math, human psychology, and relentless execution."</p>
-                 <p className="text-[#BFF549] font-bold tracking-widest uppercase text-xs">— Twijjukye Anan</p>
-             </div>
-          </motion.div>
         </div>
 
-        {/* BUSINESS AS MISSION */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="bg-[#161616] border border-white/[0.08] p-8 md:p-16 mb-32 relative overflow-hidden group hover:border-[#BFF549]/30 transition-colors duration-500"
-        >
-          {/* Subtle grid pattern in card */}
-          <div className="absolute inset-0 pointer-events-none opacity-[0.03] transition-opacity duration-300 group-hover:opacity-[0.06]" style={{
-            backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
-            backgroundSize: '16px 16px'
-          }} />
-
-          <div className="relative z-10">
-            <h2 className="text-4xl font-bold text-white mb-8 flex items-center gap-4 tracking-tight">
-              <HeartHandshake className="w-10 h-10 text-[#BFF549]" />
-              Business as Mission
+        {/* 50/50 Layout: Left Content Scrolls / Right Sticky Image */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          
+          {/* LEFT COLUMN: Exactly the provided text, clean and unembellished */}
+          <div className="order-2 lg:order-1 flex flex-col space-y-10 text-gray-700 text-base sm:text-[18px] leading-[1.8] font-normal pb-16">
+            
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#0D0D0D] leading-tight tracking-tight">
+              I came for the design. I stayed for what happened after launch.
             </h2>
-            <div className="space-y-6 text-gray-300 text-xl leading-relaxed">
+
+            <p>
+              Five years ago I started building websites because I liked making things beautiful. That's the honest version — I was curious about design, about type and layout and the difference between a page that feels considered and one that feels assembled.
+            </p>
+
+            <p>
+              What kept me here was something I didn't expect.
+            </p>
+
+            <p>
+              I started paying attention to what happened after a site went live. A business that had been explaining itself badly for years suddenly had words that landed. Enquiries that used to take three emails took one form. Owners who'd quietly avoided mentioning their website started sending people to it. The design was the part I enjoyed. What it did for the business was the part that mattered.
+            </p>
+
+            <p>
+              About twenty projects later, that's still what I'm after.
+            </p>
+
+            <div className="pt-4 space-y-5">
+              <h3 className="text-2xl sm:text-3xl font-bold text-[#0D0D0D] tracking-tight">
+                What I actually do
+              </h3>
+
               <p>
-                At Open Brands, we don't just view business as a way to make money. We view <strong className="text-white">Business as Mission</strong>.
+                I build websites for service businesses — the kind where someone has to trust you before they'll call you. Contractors, cafés, clinics, consultants, firms selling something considered rather than impulsive.
               </p>
+
               <p>
-                This means we believe entrepreneurship is a high calling. It's an opportunity to serve others with absolute integrity, solve real problems, and bless the communities we operate in. When we help your business grow, you're able to hire more people, provide for families, and impact the world positively.
+                That work is less about decoration than people assume. Most of it is figuring out what a business is genuinely good at, saying it in language a stranger understands, and then building something that guides that stranger toward getting in touch. The visual craft matters — but it's in service of the thing, not the point of it.
               </p>
-              <p className="text-[#BFF549] font-medium border-l-2 border-[#BFF549] pl-6 italic">
-                "Every strategy we deploy, every promise we make, and every client relationship we build is rooted in this truth: We are here to serve you genuinely, not just transact with you."
+            </div>
+
+            <div className="pt-4 space-y-5">
+              <h3 className="text-2xl sm:text-3xl font-bold text-[#0D0D0D] tracking-tight">
+                How I work
+              </h3>
+
+              <p>
+                One project at a time, with the owner, not a committee. You'll talk to me throughout — I'm the one designing it and I'm the one building it.
               </p>
+
+              <p>
+                I ask a lot of questions at the start. What your best clients have in common, which objection comes up on every call, what you wish people understood before they reached out. Most of what makes a site work gets decided in that conversation, long before anything is designed.
+              </p>
+
+              <p>
+                And I'd rather tell you a page isn't working than ship something we both quietly know is weak.
+              </p>
+            </div>
+
+            <div className="pt-4 space-y-5">
+              <h3 className="text-2xl sm:text-3xl font-bold text-[#0D0D0D] tracking-tight">
+                Where I am
+              </h3>
+
+              <p>
+                I'm based in Kampala, Uganda, and I work with clients here and abroad — recent projects have been for businesses across the United States. Everything runs over video calls, shared previews and regular written updates, which in practice means you see the work as it develops instead of waiting for a reveal.
+              </p>
+            </div>
+
+            <div className="pt-4 space-y-5">
+              <h3 className="text-2xl sm:text-3xl font-bold text-[#0D0D0D] tracking-tight">
+                The part I don't take for granted
+              </h3>
+
+              <p>
+                People hand me something they've built their livelihood on and trust me to represent it. That still doesn't feel routine. It's the reason I'd rather take on fewer projects and finish each one properly than run a queue.
+              </p>
+
+              <p className="font-medium text-[#0D0D0D] pt-2">
+                If that's the kind of working relationship you're after, I'd like to hear what you're building
+              </p>
+
+              <div className="pt-4">
+                <ButtonWithIcon to="/contact" variant="lime" size="lg">
+                  Let's Collaborate
+                </ButtonWithIcon>
+              </div>
+            </div>
+
+          </div>
+
+          {/* RIGHT COLUMN: 50% width, Sticky to the upper viewport with padding */}
+          <div className="order-1 lg:order-2 lg:sticky lg:top-24 lg:self-start w-full h-fit">
+            <div className="bg-white border border-gray-200/90 rounded-3xl p-4 sm:p-5 shadow-sm flex flex-col">
+              
+              {/* Profile Image Frame */}
+              <div className="relative aspect-[4/5] sm:aspect-[3/4] max-h-[500px] w-full rounded-2xl overflow-hidden bg-gray-100 border border-gray-200/60 shadow-inner">
+                <img
+                  src="/anan.jpeg"
+                  alt="Twijjukye Anan - Founder & Lead Designer at Open Brands"
+                  className="w-full h-full object-cover object-top"
+                  loading="eager"
+                />
+              </div>
+
+              {/* Founder Details & Call to Action */}
+              <div className="pt-5 pb-1 px-1 flex flex-col">
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <h3 className="text-2xl font-bold text-[#0D0D0D] tracking-tight">
+                    Twijjukye Anan
+                  </h3>
+                  <span className="text-xs font-bold text-[#70c910] bg-[#BFF549]/15 px-2.5 py-1 rounded-full uppercase tracking-wider">
+                    Founder
+                  </span>
+                </div>
+
+                <p className="text-sm font-semibold text-gray-500 mb-5">
+                  Web Designer, Strategist & Developer
+                </p>
+
+                {/* Direct Call to Action */}
+                <div className="pt-1">
+                  <ButtonWithIcon
+                    to="/contact"
+                    variant="lime"
+                    size="lg"
+                    className="w-full justify-center"
+                  >
+                    Book a Strategy Call
+                  </ButtonWithIcon>
+                </div>
+              </div>
+
             </div>
           </div>
-        </motion.div>
 
-        {/* THE CORE DIFFERENCE */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="mb-32"
-        >
-            <div className="text-center mb-16 flex flex-col items-center">
-              <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-sm border-l-2 border-[#BFF549] bg-white/[0.03] text-xs font-bold tracking-widest uppercase text-gray-300 shadow-sm backdrop-blur-md mb-6">
-                THE CORE DIFFERENCE
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight max-w-[800px] text-balance">The Biggest Lie in the Agency Industry</h2>
-              <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
-                Most agencies treat clients like transactions. Once you sign, communication drops and results become secondary. I'm fixing that. Here is what actually makes me different:
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {[
-                    { 
-                      icon: Target, 
-                      title: "I Say No To Bad Fits", 
-                      desc: "If you're not a fit for what we do, I'll tell you honestly—even if it costs me money. Bringing you on when I can't help you is worse than saying no." 
-                    },
-                    { 
-                      icon: Eye, 
-                      title: "I Show You Everything", 
-                      desc: "No black box. No 'trust us.' You see weekly reports, the raw data, and understand exactly why something is or isn't working." 
-                    },
-                    { 
-                      icon: Users, 
-                      title: "Obsessed With YOUR Success", 
-                      desc: "If getting you leads means changing strategy or investing more than I planned, I do it. My profit comes from your growth, not from billing you extra." 
-                    },
-                    { 
-                      icon: Handshake, 
-                      title: "Long-Term Relationships", 
-                      desc: "My goal isn't a quick transaction. It's to become the trusted marketing partner you call with questions and work with for years." 
-                    }
-                ].map((val, i) => (
-                     <div key={i} className="group relative bg-[#0D0D0D] border border-white/[0.08] hover:border-[#BFF549]/40 p-10 transition-all duration-300 overflow-hidden">
-                        {/* Corner nodes */}
-                        <div className="absolute top-[-1px] left-[-1px] w-1.5 h-1.5 bg-[#BFF549] z-10 transition-transform duration-300 group-hover:scale-125" />
-                        <div className="absolute top-[-1px] right-[-1px] w-1.5 h-1.5 bg-[#BFF549] z-10 transition-transform duration-300 group-hover:scale-125" />
-                        <div className="absolute bottom-[-1px] left-[-1px] w-1.5 h-1.5 bg-[#BFF549] z-10 transition-transform duration-300 group-hover:scale-125" />
-                        <div className="absolute bottom-[-1px] right-[-1px] w-1.5 h-1.5 bg-[#BFF549] z-10 transition-transform duration-300 group-hover:scale-125" />
-
-                        <div className="w-12 h-12 bg-white/[0.03] flex items-center justify-center text-[#BFF549] mb-8 border border-white/[0.08] group-hover:bg-[#BFF549]/10 group-hover:border-[#BFF549]/30 transition-all">
-                            <val.icon className="w-6 h-6" />
-                        </div>
-                        <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-gray-100 transition-colors tracking-tight">{val.title}</h3>
-                        <p className="text-gray-400 leading-relaxed text-lg">{val.desc}</p>
-                     </div>
-                ))}
-            </div>
-        </motion.div>
-
-        {/* THE PROMISE & CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="border-t border-white/[0.08] py-24 text-center"
-        >
-          <ShieldCheck className="w-16 h-16 text-[#BFF549] mx-auto mb-8" />
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">My Personal Promise</h2>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-12 leading-relaxed">
-            When you work with Open Brands, you're working with me. I'm personally responsible for your results. If you've been burned before, you're skeptical. That's smart. So let's just have a conversation. I'll be honest if we're a fit, and you'll walk away with clarity either way.
-          </p>
-          
-          <a 
-            href="https://calendly.com/openbrand-marketing/30min" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-3 bg-[#BFF549] text-[#0D0D0D] px-10 py-5 font-bold text-lg hover:bg-[#d4ff6e] transition-all shadow-[0_0_30px_rgba(191,245,73,0.15)] group"
-          >
-            Schedule a Conversation (Not a Sales Call)
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </a>
-          <p className="mt-8 text-sm text-gray-500 font-medium tracking-wide uppercase">
-            We'll be honest about whether we're a fit. No pitch. No pressure.
-          </p>
-        </motion.div>
+        </div>
 
       </div>
     </div>
   );
 }
+
+export default About;

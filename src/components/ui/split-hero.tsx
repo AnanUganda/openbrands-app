@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { Particles } from '@/components/ui/particles';
 import { SectionLabel } from '@/components/ui/section-label';
 import { SplitTextReveal } from '@/components/ui/split-text-reveal';
+import { ButtonWithIcon } from '@/components/ui/button-with-icon';
 
 function LogoRow() {
   const logos = [
@@ -136,12 +137,9 @@ export default function SplitHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.45, ease: easeCubic }}
         >
-          <Link to="/contact">
-            <button className="group flex items-center gap-3 rounded-full bg-[#BFF549] px-8 py-4 text-base font-bold text-[#0D0D0D] transition-all hover:bg-[#d4ff6e] hover:shadow-[0_0_30px_rgba(191,245,73,0.3)] pointer-events-auto">
-              <div className="w-2.5 h-2.5 rounded-full bg-[#0D0D0D]" />
-              Book a Strategy Call
-            </button>
-          </Link>
+          <ButtonWithIcon to="/contact" variant="lime" size="lg">
+            Book a Strategy Call
+          </ButtonWithIcon>
 
           <LogoRow />
         </motion.div>

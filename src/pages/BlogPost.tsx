@@ -6,6 +6,7 @@ import { PortableText } from "@portabletext/react";
 import { motion, useScroll, useSpring } from "motion/react";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import { SplitTextReveal } from "@/components/ui/split-text-reveal";
+import { FALLBACK_BLOG_POSTS } from "@/data/blogData";
 
 export function BlogPost() {
   const { slug } = useParams();
@@ -33,9 +34,37 @@ export function BlogPost() {
           }`,
           { slug }
         );
-        setPost(data);
+        if (data) {
+          setPost(data);
+        } else {
+          // Check fallback articles
+          const fb = FALLBACK_BLOG_POSTS.find((p) => p.slug.current === slug);
+          if (fb) {
+            setPost({
+              title: fb.title,
+              publishedAt: fb.publishedAt,
+              authorName: fb.authorName,
+              authorRole: "Growth Strategist",
+              fallbackImageUrl: fb.imageUrl,
+              fallbackParagraphs: fb.bodyContent || [fb.excerpt],
+            });
+          } else {
+            setPost(null);
+          }
+        }
       } catch (err) {
         console.error("Error fetching post:", err);
+        const fb = FALLBACK_BLOG_POSTS.find((p) => p.slug.current === slug);
+        if (fb) {
+          setPost({
+            title: fb.title,
+            publishedAt: fb.publishedAt,
+            authorName: fb.authorName,
+            authorRole: "Growth Strategist",
+            fallbackImageUrl: fb.imageUrl,
+            fallbackParagraphs: fb.bodyContent || [fb.excerpt],
+          });
+        }
       } finally {
         setLoading(false);
       }
@@ -139,10 +168,10 @@ export function BlogPost() {
         </div>
 
         {/* Tall featured image with action overlay matching the reference image layout */}
-        {post.mainImage && (
+        {(post.mainImage || post.fallbackImageUrl) && (
           <div className="max-w-5xl mx-auto aspect-[16/10] md:aspect-[16/9] rounded-[2rem] md:rounded-[2.5rem] overflow-hidden border border-gray-200/80 mb-16 sm:mb-20 shadow-xl shadow-gray-200/30 relative group">
             <img 
-              src={urlFor(post.mainImage).width(1600).height(900).url()} 
+              src={post.mainImage ? urlFor(post.mainImage).width(1600).height(900).url() : post.fallbackImageUrl} 
               alt={post.title}
               className="w-full h-full object-cover transition-transform duration-700 ease-out"
             />
@@ -230,6 +259,14 @@ export function BlogPost() {
               <div className="prose prose-lg max-w-none">
                 {post.body ? (
                   <PortableText value={post.body} components={portableTextComponents} />
+                ) : post.fallbackParagraphs ? (
+                  <div className="space-y-6">
+                    {post.fallbackParagraphs.map((p: string, idx: number) => (
+                      <p key={idx} className="text-[17px] sm:text-[18px] text-gray-600 leading-[1.85] font-normal">
+                        {p}
+                      </p>
+                    ))}
+                  </div>
                 ) : (
                   <p className="text-gray-500 italic">This post has no content.</p>
                 )}

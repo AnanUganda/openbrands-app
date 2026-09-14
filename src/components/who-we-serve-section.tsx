@@ -4,6 +4,7 @@ import { Home, Scale, HeartPulse, UserCircle, TrendingUp, Wrench, ArrowRight, Ch
 import { Link } from "react-router-dom";
 import { SectionLabel } from "./ui/section-label";
 import { SplitTextReveal } from "./ui/split-text-reveal";
+import { ButtonWithIcon } from "./ui/button-with-icon";
 
 interface SectorItem {
   id: string;
@@ -106,12 +107,9 @@ export function WhoWeServeSection() {
             </SplitTextReveal>
           </div>
 
-          <Link to="/contact" className="shrink-0">
-            <button className="group flex items-center gap-3 rounded-full bg-[#BFF549] px-7 py-3.5 text-base font-bold text-[#0D0D0D] transition-all hover:bg-[#d4ff6e] hover:shadow-[0_0_30px_rgba(191,245,73,0.3)]">
-              <div className="w-2.5 h-2.5 rounded-full bg-[#0D0D0D]" />
-              <span>Book a Strategy Call</span>
-            </button>
-          </Link>
+          <ButtonWithIcon to="/contact" variant="lime" size="lg">
+            Book a Strategy Call
+          </ButtonWithIcon>
         </motion.div>
 
         {/* GSAP Timeline-inspired Accordion List */}
@@ -243,19 +241,14 @@ export function WhoWeServeSection() {
                               </motion.div>
                             </div>
 
-                            {/* Main CTA Button */}
                             <motion.div
                               initial={{ opacity: 0, y: 12 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ duration: 0.45, delay: 0.28, ease: gsapEase }}
                             >
-                              <Link to={sector.ctaLink} className="w-fit">
-                                <button className="group flex items-center gap-3 rounded-full bg-[#BFF549] px-7 py-3.5 text-sm sm:text-base font-bold text-[#0D0D0D] transition-all hover:bg-[#d4ff6e] hover:shadow-[0_0_25px_rgba(191,245,73,0.35)] pointer-events-auto">
-                                  <div className="w-2.5 h-2.5 rounded-full bg-[#0D0D0D]" />
-                                  <span>{sector.ctaText}</span>
-                                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                                </button>
-                              </Link>
+                              <ButtonWithIcon to={sector.ctaLink} variant="lime" size="default">
+                                {sector.ctaText}
+                              </ButtonWithIcon>
                             </motion.div>
                           </div>
 

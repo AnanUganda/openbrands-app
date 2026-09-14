@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import { SectionLabel } from "./ui/section-label";
 import { SplitTextReveal } from "./ui/split-text-reveal";
+import { ButtonWithIcon } from "./ui/button-with-icon";
 
 const services = [
   {
@@ -111,13 +112,11 @@ export function ServicesSection() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="flex justify-center"
         >
-          <Link to="/contact">
-            <button className="group flex items-center gap-3 rounded-full bg-[#0D0D0D] px-8 py-4 text-base font-bold text-white transition-all hover:bg-gray-800 hover:shadow-xl pointer-events-auto">
-              <span>Explore All Solutions</span>
-              <div className="w-7 h-7 rounded-full bg-[#BFF549] flex items-center justify-center text-[#0D0D0D] transition-transform group-hover:translate-x-1">
-                <ArrowRight className="w-4 h-4" />
-              </div>
-            </button>
+          <Link
+            to="/contact"
+            className="inline-flex items-center justify-center rounded-full border border-gray-300 bg-white/60 px-8 py-3.5 text-base font-semibold text-[#0D0D0D] transition-all hover:bg-white hover:border-[#0D0D0D] shadow-xs cursor-pointer"
+          >
+            Explore All Solutions
           </Link>
         </motion.div>
 

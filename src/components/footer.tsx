@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { ArrowRight, PlayCircle } from "lucide-react";
 import { motion } from "motion/react";
+import { ButtonWithIcon } from "@/components/ui/button-with-icon";
 
 // -------------------------------------------------------------------------
 // 1. THEME-ADAPTIVE INLINE STYLES
@@ -237,129 +238,123 @@ export function Footer() {
     <>
       <style dangerouslySetInnerHTML={{ __html: STYLES }} />
       
-      {/* 
-        The "Curtain Reveal" Wrapper:
-        It sits in standard flow. Because it has clip-path, its contents
-        are ONLY visible within its bounding box. 
-      */}
-      <div
-        className="relative h-screen w-full"
-        style={{ clipPath: "polygon(0% 0, 100% 0%, 100% 100%, 0 100%)" }}
-      >
-        {/* The actual footer stays fixed to the viewport underneath everything */}
-        <footer className="fixed bottom-0 left-0 flex h-screen w-full flex-col justify-between overflow-hidden bg-[#FBFBFB] text-[#0D0D0D] cinematic-footer-wrapper border-t border-gray-200">
-          
-          {/* Ambient Light & Grid Background */}
-          <div className="footer-aurora absolute left-1/2 top-1/2 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] bg-[#BFF549]/15 blur-[120px] pointer-events-none z-0" />
-          <div className="footer-bg-grid absolute inset-0 z-0 pointer-events-none opacity-20" />
+      <footer className="relative w-full flex flex-col justify-between overflow-hidden bg-[#FBFBFB] text-[#0D0D0D] cinematic-footer-wrapper border-t border-gray-200 pt-20 md:pt-28 pb-8 min-h-[680px]">
+        {/* Ambient Light & Grid Background */}
+        <div className="footer-aurora absolute left-1/2 top-1/2 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] bg-[#BFF549]/15 blur-[120px] pointer-events-none z-0" />
+        <div className="footer-bg-grid absolute inset-0 z-0 pointer-events-none opacity-20" />
 
-          {/* Giant background text */}
+        {/* Giant background text */}
+        <motion.div
+          initial={{ y: "8vh", scale: 0.9, opacity: 0 }}
+          whileInView={{ y: "0vh", scale: 1, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          className="footer-giant-bg-text absolute -bottom-[5vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 pointer-events-none select-none tracking-tighter text-gray-200/70"
+        >
+          OPEN BRANDS
+        </motion.div>
+
+        {/* 1. Diagonal Sleek Marquee (Top of footer) */}
+        <div className="w-full overflow-hidden border-y border-gray-200/80 bg-white/80 backdrop-blur-md py-4 z-10 -rotate-1 scale-105 shadow-sm mb-12">
+          <div className="flex w-max animate-footer-scroll-marquee text-xs md:text-sm font-bold tracking-[0.3em] text-gray-600 uppercase">
+            <MarqueeItem />
+            <MarqueeItem />
+            <MarqueeItem />
+            <MarqueeItem />
+          </div>
+        </div>
+
+        {/* 2. Main Center Content */}
+        <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 my-10 w-full max-w-5xl mx-auto text-center">
           <motion.div
-            initial={{ y: "8vh", scale: 0.9, opacity: 0 }}
-            whileInView={{ y: "0vh", scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
-            className="footer-giant-bg-text absolute -bottom-[5vh] left-1/2 -translate-x-1/2 whitespace-nowrap z-0 pointer-events-none select-none tracking-tighter text-gray-200/70"
+            initial={{ y: 40, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex flex-col items-center max-w-4xl mx-auto"
           >
-            OPEN BRANDS
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#0D0D0D] tracking-tight mb-6 text-balance leading-tight">
+              Ready to Turn Your Website Into a Lead Generator?
+            </h2>
+            <p className="text-lg md:text-xl text-gray-600 mb-12 text-balance leading-relaxed max-w-2xl">
+              Your website should be your best salesperson — working 24/7 to bring you clients.<br/>
+              <span className="text-[#0D0D0D] font-bold">If it's not doing that yet, it's time to fix it.</span>
+            </p>
           </motion.div>
 
-          {/* 1. Diagonal Sleek Marquee (Top of footer) */}
-          <div className="absolute top-12 left-0 w-full overflow-hidden border-y border-gray-200/80 bg-white/80 backdrop-blur-md py-4 z-10 -rotate-2 scale-110 shadow-sm">
-            <div className="flex w-max animate-footer-scroll-marquee text-xs md:text-sm font-bold tracking-[0.3em] text-gray-600 uppercase">
-              <MarqueeItem />
-              <MarqueeItem />
-              <MarqueeItem />
-              <MarqueeItem />
+          {/* Interactive Buttons Layout */}
+          <motion.div
+            initial={{ y: 40, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
+            className="flex flex-col items-center gap-6 w-full"
+          >
+            {/* Primary & Secondary CTA Links */}
+            <div className="flex flex-wrap justify-center items-center gap-4 w-full">
+              <ButtonWithIcon to="/contact" variant="lime" size="lg">
+                Book a Free Strategy Call
+              </ButtonWithIcon>
+              
+              <Link
+                to="/portfolio"
+                className="inline-flex items-center justify-center rounded-full border border-gray-300 bg-white/60 px-8 py-4 text-base font-semibold text-[#0D0D0D] transition-all hover:bg-white hover:border-[#0D0D0D] shadow-xs cursor-pointer"
+              >
+                View Our Work
+              </Link>
             </div>
-          </div>
 
-          {/* 2. Main Center Content */}
-          <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 mt-20 w-full max-w-5xl mx-auto text-center">
-            <motion.div
-              initial={{ y: 40, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="flex flex-col items-center max-w-4xl mx-auto"
-            >
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#0D0D0D] tracking-tight mb-6 text-balance leading-tight">
-                Ready to Turn Your Website Into a Lead Generator?
-              </h2>
-              <p className="text-lg md:text-xl text-gray-600 mb-12 text-balance leading-relaxed max-w-2xl">
-                Your website should be your best salesperson — working 24/7 to bring you clients.<br/>
-                <span className="text-[#0D0D0D] font-bold">If it's not doing that yet, it's time to fix it.</span>
-              </p>
-            </motion.div>
+            {/* Secondary Text Links */}
+            <div className="flex flex-wrap justify-center gap-3 md:gap-6 w-full mt-2">
+              <MagneticButton as={Link} to="/about" className="bg-white/80 border border-gray-200 px-6 py-3 rounded-full text-gray-600 font-semibold text-xs md:text-sm hover:text-[#0D0D0D] hover:bg-white shadow-xs">
+                About
+              </MagneticButton>
+              <MagneticButton as={Link} to="/blog" className="bg-white/80 border border-gray-200 px-6 py-3 rounded-full text-gray-600 font-semibold text-xs md:text-sm hover:text-[#0D0D0D] hover:bg-white shadow-xs">
+                Blog
+              </MagneticButton>
+              <MagneticButton as={Link} to="/hiring" className="bg-white/80 border border-gray-200 px-6 py-3 rounded-full text-gray-600 font-semibold text-xs md:text-sm hover:text-[#0D0D0D] hover:bg-white shadow-xs">
+                Hiring
+              </MagneticButton>
+            </div>
+          </motion.div>
+        </div>
 
-            {/* Interactive Magnetic Pills Layout */}
-            <motion.div
-              initial={{ y: 40, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
-              className="flex flex-col items-center gap-6 w-full"
-            >
-              {/* Primary CTA Links */}
-              <div className="flex flex-wrap justify-center gap-4 w-full">
-                <MagneticButton as={Link} to="/contact" className="bg-[#BFF549] text-[#0D0D0D] hover:bg-[#d4ff6e] shadow-md px-8 md:px-10 py-4 md:py-5 rounded-full font-bold text-sm md:text-base flex items-center gap-3 group transition-all">
-                  <span className="text-xl">👉</span>
-                  Book a Free Strategy Call
-                </MagneticButton>
-                
-                <MagneticButton as={Link} to="/portfolio" className="bg-white border border-gray-200 text-[#0D0D0D] hover:bg-gray-100 shadow-sm px-8 md:px-10 py-4 md:py-5 rounded-full font-bold text-sm md:text-base flex items-center gap-3 group transition-all">
-                  <ArrowRight className="w-5 h-5 text-gray-600 group-hover:text-[#0D0D0D] transition-colors" />
-                  View Our Work
-                </MagneticButton>
-              </div>
-
-              {/* Secondary Text Links */}
-              <div className="flex flex-wrap justify-center gap-3 md:gap-6 w-full mt-2">
-                <MagneticButton as={Link} to="/blog" className="bg-white/80 border border-gray-200 px-6 py-3 rounded-full text-gray-600 font-semibold text-xs md:text-sm hover:text-[#0D0D0D] hover:bg-white shadow-xs">
-                  Blog
-                </MagneticButton>
-                <MagneticButton as={Link} to="/hiring" className="bg-white/80 border border-gray-200 px-6 py-3 rounded-full text-gray-600 font-semibold text-xs md:text-sm hover:text-[#0D0D0D] hover:bg-white shadow-xs">
-                  Hiring
-                </MagneticButton>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* 3. Bottom Bar / Credits */}
-          <div className="relative z-20 w-full pb-8 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
-            
-            {/* Copyright */}
-            <div className="text-gray-500 text-[10px] md:text-xs font-semibold tracking-widest uppercase order-2 md:order-1 flex items-center gap-2">
+        {/* 3. Bottom Bar / Credits */}
+        <div className="relative z-20 w-full pt-10 pb-4 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
+          {/* Logo & Copyright */}
+          <div className="flex flex-col sm:flex-row items-center gap-3 md:gap-4 order-2 md:order-1 text-center sm:text-left">
+            <Link to="/" className="inline-block group shrink-0">
               <img
-                src="/portfolio/logo.png"
+                src="/open-brands-logo.png"
                 alt="Open Brands"
-                className="h-6 w-auto object-contain brightness-0 opacity-80"
+                className="h-8 sm:h-9 md:h-10 w-auto object-contain group-hover:opacity-90 transition-opacity"
               />
+            </Link>
+            <span className="text-gray-500 text-[11px] md:text-xs font-semibold tracking-widest uppercase sm:border-l sm:border-gray-200 sm:pl-4">
               © {new Date().getFullYear()} Open Brands. All rights reserved.
-            </div>
-
-            {/* "Made with Love" Badge */}
-            <div className="bg-white border border-gray-200/90 shadow-xs px-6 py-3 rounded-full flex items-center gap-2 order-1 md:order-2 cursor-default">
-              <span className="text-gray-500 text-[10px] md:text-xs font-bold uppercase tracking-widest">Crafted with</span>
-              <span className="animate-footer-heartbeat text-sm md:text-base text-emerald-600">❤</span>
-              <span className="text-gray-500 text-[10px] md:text-xs font-bold uppercase tracking-widest">by</span>
-              <span className="text-[#0D0D0D] font-black text-xs md:text-sm tracking-normal ml-1">Open Brands</span>
-            </div>
-
-            {/* Back to top */}
-            <MagneticButton
-              as="button"
-              onClick={scrollToTop}
-              className="w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-700 hover:text-[#0D0D0D] hover:bg-gray-100 group order-3 transition-all"
-            >
-              <svg className="w-5 h-5 transform group-hover:-translate-y-1.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
-              </svg>
-            </MagneticButton>
-
+            </span>
           </div>
-        </footer>
-      </div>
+
+          {/* "Made with Love" Badge */}
+          <div className="bg-white border border-gray-200/90 shadow-xs px-6 py-3 rounded-full flex items-center gap-2 order-1 md:order-2 cursor-default">
+            <span className="text-gray-500 text-[10px] md:text-xs font-bold uppercase tracking-widest">Crafted with</span>
+            <span className="animate-footer-heartbeat text-sm md:text-base text-emerald-600">❤</span>
+            <span className="text-gray-500 text-[10px] md:text-xs font-bold uppercase tracking-widest">by</span>
+            <span className="text-[#0D0D0D] font-black text-xs md:text-sm tracking-normal ml-1">Open Brands</span>
+          </div>
+
+          {/* Back to top */}
+          <MagneticButton
+            as="button"
+            onClick={scrollToTop}
+            className="w-12 h-12 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center text-gray-700 hover:text-[#0D0D0D] hover:bg-gray-100 group order-3 transition-all"
+          >
+            <svg className="w-5 h-5 transform group-hover:-translate-y-1.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+            </svg>
+          </MagneticButton>
+        </div>
+      </footer>
     </>
   );
 }

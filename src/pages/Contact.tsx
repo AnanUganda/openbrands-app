@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import { Mail, Phone, ArrowRight, Clock, CalendarDays, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 import { SectionLabel } from "@/components/ui/section-label";
 import { SplitTextReveal } from "@/components/ui/split-text-reveal";
+import { ButtonWithIcon } from "@/components/ui/button-with-icon";
 import { getUtmParams, trackLeadGenerated } from "@/lib/analytics";
 
 export function Contact() {
@@ -166,18 +167,16 @@ export function Contact() {
                 ))}
               </div>
 
-              <a 
+              <ButtonWithIcon 
                 href="https://calendly.com/openbrand-marketing/30min" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="inline-block w-full sm:w-auto"
+                variant="lime"
+                size="lg"
+                className="w-full sm:w-fit"
               >
-                <button className="group flex items-center justify-center gap-3 w-full sm:w-auto rounded-full bg-[#BFF549] px-8 py-4 text-base font-bold text-[#0D0D0D] transition-all hover:bg-[#d4ff6e] hover:shadow-[0_0_30px_rgba(191,245,73,0.35)] pointer-events-auto cursor-pointer">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#0D0D0D]" />
-                  <span>Open Calendar</span>
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </button>
-              </a>
+                Open Calendar
+              </ButtonWithIcon>
             </motion.div>
 
             {/* Direct Contact Info Card */}

@@ -4,6 +4,7 @@ import { Search, PenTool, Rocket, ArrowRight, Check } from "lucide-react";
 import { SectionLabel } from "./ui/section-label";
 import { SplitTextReveal } from "./ui/split-text-reveal";
 import { Link } from "react-router-dom";
+import { ButtonWithIcon } from "./ui/button-with-icon";
 
 /**
  * Definition of process timeline steps with activation scroll thresholds
@@ -204,13 +205,9 @@ export function ProcessSection() {
             transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
             className="mt-14 sm:mt-18 md:mt-20 flex justify-center relative z-20"
           >
-            <Link to="/contact">
-              <button className="group flex items-center justify-center gap-3 rounded-full bg-[#BFF549] px-8 py-4 text-base font-bold text-[#0D0D0D] transition-all hover:bg-[#d4ff6e] hover:shadow-[0_0_30px_rgba(191,245,73,0.35)] pointer-events-auto">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#0D0D0D]" />
-                <span>Start Your Project</span>
-                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </button>
-            </Link>
+            <ButtonWithIcon to="/contact" variant="lime" size="lg">
+              Start Your Project
+            </ButtonWithIcon>
           </motion.div>
 
         </div>

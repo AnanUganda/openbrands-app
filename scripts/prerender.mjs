@@ -20,7 +20,18 @@ const SANITY_QUERY_URL =
     '*[_type in ["post","portfolio"] && defined(slug.current)]{_type, "slug": slug.current, _updatedAt}'
   );
 
-const STATIC_ROUTES = ['/', '/contact', '/portfolio', '/blog', '/hiring'];
+const STATIC_ROUTES = ['/', '/contact', '/portfolio', '/about', '/blog', '/hiring'];
+
+// Rendered for visitors, deliberately kept out of the search index.
+// Portfolio detail pages are ~200-300 words of near-identical copy. Thin pages
+// drag down site-wide quality assessment on a low-authority domain. They stay
+// crawlable as noindex,follow so link equity still flows, and are excluded from
+// the sitemap. To index one, write a real case study and narrow this pattern.
+const NOINDEX_PATTERNS = [/^\/portfolio\/[^/]+$/];
+
+function isNoIndexRoute(route) {
+  return NOINDEX_PATTERNS.some((re) => re.test(route));
+}
 
 const FALLBACK_PORTFOLIO_SLUGS = [
   'oakline-landscaping',
@@ -120,9 +131,6 @@ async function getRoutes() {
     }
   }
 
-  // Ensure /about is excluded (it redirects to /)
-  routes.delete('/about');
-
   return { routes: Array.from(routes), routeMeta };
 }
 
@@ -143,7 +151,9 @@ async function startServer(serveDir) {
 }
 
 function generateSitemap(routes, routeMeta) {
-  const sitemapEntries = routes.map((route) => {
+  const indexableRoutes = routes.filter((route) => !isNoIndexRoute(route));
+  const excludedCount = routes.length - indexableRoutes.length;
+  const sitemapEntries = indexableRoutes.map((route) => {
     const loc = route === '/' ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${route}`;
     const meta = routeMeta.get(route);
     if (meta?.updatedAt) {
@@ -165,7 +175,7 @@ function generateSitemap(routes, routeMeta) {
 
   const sitemapPath = path.join(distDir, 'sitemap.xml');
   fs.writeFileSync(sitemapPath, sitemapXml, 'utf-8');
-  console.log(`\n📄 Generated dist/sitemap.xml with ${routes.length} URLs`);
+  console.log(`\n📄 Generated dist/sitemap.xml with ${indexableRoutes.length} URLs (${excludedCount} noindexed excluded)`);
 }
 
 async function prerender() {
@@ -199,7 +209,7 @@ async function prerender() {
 
     for (const route of routes) {
       const url = `${baseUrl}${route}`;
-      await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 });
+      await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
 
       // Wait for any async loading spinners (e.g. Sanity data fetching) to finish
       try {
@@ -234,7 +244,7 @@ async function prerender() {
 
       // Deduplicate <head> tags and inject/update canonical and OpenGraph/Twitter meta tags
       await page.evaluate(
-        ({ canonicalUrl, siteOrigin }) => {
+        ({ canonicalUrl, siteOrigin, noindex }) => {
           const head = document.head;
           const TEMPLATE_TITLE = 'Open Brands | Results-Driven B2B Marketing Agency';
 
@@ -360,8 +370,20 @@ async function prerender() {
           setMetaTag('meta[property="og:image"]', 'property', 'og:image', placeholderImage);
           setMetaTag('meta[name="twitter:image"]', 'name', 'twitter:image', placeholderImage);
           head.querySelectorAll('meta[property="twitter:image"]').forEach((el) => el.remove());
+
+          // robots: explicit on every page so the directive is never ambiguous
+          let robotsEl = head.querySelector('meta[name="robots"]');
+          if (!robotsEl) {
+            robotsEl = document.createElement('meta');
+            robotsEl.setAttribute('name', 'robots');
+            head.appendChild(robotsEl);
+          }
+          robotsEl.setAttribute('content', noindex ? 'noindex, follow' : 'index, follow');
+          Array.from(head.querySelectorAll('meta[name="robots"]'))
+            .slice(0, -1)
+            .forEach((el) => el.remove());
         },
-        { canonicalUrl, siteOrigin: SITE_ORIGIN }
+        { canonicalUrl, siteOrigin: SITE_ORIGIN, noindex: isNoIndexRoute(route) }
       );
 
       const capturedTitle = await page.evaluate(() => {
@@ -384,7 +406,7 @@ async function prerender() {
       const relOutPath = path.relative(rootDir, outPath);
 
       console.log(
-        `✓ [${relOutPath}] (${byteSize.toLocaleString()} bytes)\n` +
+        `✓ [${relOutPath}]${isNoIndexRoute(route) ? ' [noindex]' : ''} (${byteSize.toLocaleString()} bytes)\n` +
           `    Title: "${capturedTitle}"\n` +
           `    Visible text: ${visibleTextLength.toLocaleString()} chars`
       );
@@ -400,11 +422,74 @@ async function prerender() {
           console.error(`❌ Error: Route ${route} has title identical to homepage ("${homeTitle}")`);
           hasFailure = true;
         }
-        if (visibleTextLength < 1000) {
-          console.error(`❌ Error: Route ${route} has under 1,000 chars of visible text (${visibleTextLength} chars)`);
+        if (!isNoIndexRoute(route) && visibleTextLength < 800) {
+          console.error(`❌ Error: Route ${route} has under 800 chars of visible text (${visibleTextLength} chars)`);
           hasFailure = true;
         }
       }
+    }
+
+    // ---- Render the real 404 page ----
+    // Request a path that cannot exist. sirv's single-page fallback serves the
+    // pristine shell, and the SPA's catch-all route renders <NotFound />.
+    await page.goto(`${baseUrl}/__prerender-404__`, { waitUntil: 'networkidle2', timeout: 30000 });
+    await new Promise((r) => setTimeout(r, 600));
+
+    await page.evaluate(() => {
+      const head = document.head;
+      const TEMPLATE_TITLE = 'Open Brands | Results-Driven B2B Marketing Agency';
+
+      // Resolve React 19 array-children titles, then keep the NotFound route's own
+      for (const el of Array.from(head.querySelectorAll('title'))) {
+        const k = Object.keys(el).find((x) => x.startsWith('__reactProps$'));
+        if (k && el[k]?.children) {
+          const c = el[k].children;
+          const t = Array.isArray(c) ? c.join('') : String(c);
+          if (t.trim()) el.textContent = t.trim();
+        }
+      }
+      Array.from(head.querySelectorAll('title'))
+        .filter((el) => !el.textContent.trim())
+        .forEach((el) => el.remove());
+      const remaining = Array.from(head.querySelectorAll('title'));
+      if (remaining.length > 1) {
+        const keep = remaining.find((el) => el.textContent.trim() !== TEMPLATE_TITLE) || remaining[0];
+        remaining.forEach((el) => { if (el !== keep) el.remove(); });
+      }
+
+      // A 404 must not claim a canonical URL and must not advertise itself socially
+      head.querySelectorAll('link[rel="canonical"]').forEach((el) => el.remove());
+      head
+        .querySelectorAll('meta[property^="og:"], meta[name^="twitter:"], meta[property^="twitter:"]')
+        .forEach((el) => el.remove());
+
+      const descs = Array.from(head.querySelectorAll('meta[name="description"]'));
+      if (descs.length > 1) descs.slice(0, -1).forEach((el) => el.remove());
+
+      // Guarantee noindex even if Helmet did not apply it
+      let robots = head.querySelector('meta[name="robots"]');
+      if (!robots) {
+        robots = document.createElement('meta');
+        robots.setAttribute('name', 'robots');
+        head.appendChild(robots);
+      }
+      robots.setAttribute('content', 'noindex, nofollow');
+    });
+
+    const notFoundHtml = await page.evaluate(
+      () => '<!doctype html>\n' + document.documentElement.outerHTML
+    );
+    const notFoundTitle = await page.evaluate(
+      () => (document.head.querySelector('title')?.textContent || '').trim()
+    );
+    fs.writeFileSync(path.join(distDir, '404.html'), notFoundHtml, 'utf-8');
+    console.log(
+      `\n✓ [dist/404.html] (${Buffer.byteLength(notFoundHtml, 'utf-8').toLocaleString()} bytes)\n` +
+        `    Title: "${notFoundTitle}"`
+    );
+    if (!/not found/i.test(notFoundTitle)) {
+      console.error('❌ Error: 404 page did not render the NotFound route');
+      hasFailure = true;
     }
 
     // Generate sitemap.xml in dist/

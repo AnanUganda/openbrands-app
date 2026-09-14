@@ -3,6 +3,7 @@ import { Search, Shield, MousePointerClick, ArrowRight } from "lucide-react";
 import { SectionLabel } from "./ui/section-label";
 import { SplitTextReveal } from "./ui/split-text-reveal";
 import { Link } from "react-router-dom";
+import { ButtonWithIcon } from "./ui/button-with-icon";
 
 const cards = [
   {
@@ -48,12 +49,9 @@ export function TransformationSection() {
               <p className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed max-w-md">
                 We help service businesses build a powerful online presence that does 3 things:
               </p>
-              <Link to="/contact">
-                <button className="bg-[#BFF549] text-[#0D0D0D] px-8 py-4 rounded-full font-bold hover:bg-[#d4ff6e] hover:shadow-lg transition-all w-fit flex items-center gap-2 hover:scale-105 active:scale-95 duration-300">
-                  Schedule Strategy Call
-                  <ArrowRight className="w-5 h-5" />
-                </button>
-              </Link>
+              <ButtonWithIcon to="/contact" variant="lime" size="lg">
+                Schedule Strategy Call
+              </ButtonWithIcon>
             </motion.div>
           </div>
 

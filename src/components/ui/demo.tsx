@@ -1,5 +1,5 @@
-import { BeamsBackground } from "@/components/ui/beams-background";
+import ButtonWithIconDemo from "@/components/ui/button-witn-icon";
 
-export function BeamsBackgroundDemo() {
-    return <BeamsBackground />;
+export default function DemoOne() {
+  return <ButtonWithIconDemo />;
 }

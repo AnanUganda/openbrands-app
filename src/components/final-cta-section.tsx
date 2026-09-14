@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ButtonWithIcon } from "@/components/ui/button-with-icon";
 
 export function FinalCtaSection() {
   return (
@@ -41,12 +42,9 @@ export function FinalCtaSection() {
           className="flex flex-col items-center gap-6"
         >
           {/* Primary CTA */}
-          <Link to="/contact">
-            <button className="group flex items-center justify-center gap-2.5 rounded-full bg-[#BFF549] px-8 py-4 text-base font-bold text-[#0D0D0D] transition-all hover:bg-[#d4ff6e] hover:shadow-[0_0_40px_rgba(191,245,73,0.2)] hover:scale-[1.02] active:scale-[0.98]">
-              👉 Book a Free Strategy Call
-              <ArrowRight className="h-4.5 w-4.5 transition-transform group-hover:translate-x-1" />
-            </button>
-          </Link>
+          <ButtonWithIcon to="/contact" variant="lime" size="lg">
+            Book a Free Strategy Call
+          </ButtonWithIcon>
 
           {/* Secondary Links */}
           <div className="flex items-center gap-6 text-sm">
