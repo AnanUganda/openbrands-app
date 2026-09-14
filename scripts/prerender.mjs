@@ -3,7 +3,8 @@ import path from 'node:path';
 import http from 'node:http';
 import { fileURLToPath } from 'node:url';
 import sirv from 'sirv';
-import puppeteer from 'puppeteer';
+import puppeteerCore from 'puppeteer-core';
+import chromium from '@sparticuz/chromium';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,6 +31,49 @@ const FALLBACK_PORTFOLIO_SLUGS = [
   'extend-cafes',
   'echo-kenya',
 ];
+
+async function launchBrowser() {
+  const isVercelOrLinux = Boolean(
+    process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.platform === 'linux'
+  );
+
+  if (isVercelOrLinux) {
+    console.log('🐧 Launching Chromium via @sparticuz/chromium for Linux / Vercel...');
+    const executablePath = await chromium.executablePath();
+    return await puppeteerCore.launch({
+      args: [
+        ...chromium.args,
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-web-security',
+        '--disable-features=IsolateOrigins,site-per-process',
+      ],
+      defaultViewport: chromium.defaultViewport,
+      executablePath,
+      headless: chromium.headless,
+    });
+  }
+
+  console.log('💻 Launching standard Puppeteer for local build...');
+  try {
+    const puppeteer = (await import('puppeteer')).default;
+    return await puppeteer.launch({
+      headless: true,
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-web-security',
+        '--disable-features=IsolateOrigins,site-per-process',
+      ],
+    });
+  } catch {
+    return await puppeteerCore.launch({
+      headless: true,
+      channel: 'chrome',
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+  }
+}
 
 async function getRoutes() {
   const routes = new Set(STATIC_ROUTES);
@@ -148,15 +192,7 @@ async function prerender() {
   let hasFailure = false;
 
   try {
-    browser = await puppeteer.launch({
-      headless: true,
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-web-security',
-        '--disable-features=IsolateOrigins,site-per-process',
-      ],
-    });
+    browser = await launchBrowser();
 
     const page = await browser.newPage();
     await page.setViewport({ width: 1440, height: 900 });
