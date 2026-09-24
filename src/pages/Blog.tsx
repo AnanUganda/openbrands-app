@@ -1,36 +1,13 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { fetchWithCache, urlFor } from "@/lib/sanity";
+import { fetchWithCache } from "@/lib/sanity";
 import { motion } from "motion/react";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Particles } from "@/components/ui/particles";
 import { SectionLabel } from "@/components/ui/section-label";
-import { FALLBACK_BLOG_POSTS } from "@/data/blogData";
-
-export const BLOG_QUERY = `*[_type == "post" && defined(slug.current)] | order(publishedAt desc) {
-  _id,
-  title,
-  slug,
-  publishedAt,
-  excerpt,
-  mainImage,
-  authorName,
-  "categoryTitles": categories[]->title,
-  categories
-}`;
-
-interface DisplayPost {
-  _id: string;
-  title: string;
-  slug: string;
-  publishedAt: string;
-  excerpt: string;
-  categories: string[];
-  categoryDisplay: string;
-  authorName?: string;
-  imageUrl: string;
-}
+import { PostImage } from "@/components/ui/post-image";
+import { BLOG_QUERY, mapBlogPosts, type DisplayPost } from "@/lib/blogPosts";
 
 export function Blog() {
   const [sanityPosts, setSanityPosts] = useState<any[]>([]); // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -55,62 +32,7 @@ export function Blog() {
     fetchPosts();
   }, []);
 
-  // Merge Sanity posts with fallback posts so the full 8+ card editorial grid is always rich & populated
-  const allPosts = useMemo<DisplayPost[]>(() => {
-    const mappedSanity: DisplayPost[] = sanityPosts.map((post) => {
-      let cats: string[] = [];
-      if (Array.isArray(post.categoryTitles) && post.categoryTitles.length > 0) {
-        cats = post.categoryTitles.filter((c: unknown) => typeof c === "string");
-      } else if (Array.isArray(post.categories)) {
-        cats = post.categories.filter((c: unknown) => typeof c === "string");
-      }
-      if (cats.length === 0) cats = ["B2B Strategy"];
-
-      const slugStr = post.slug?.current || "";
-      const fallbackMatch = FALLBACK_BLOG_POSTS.find((f) => f.slug.current === slugStr);
-
-      let imgUrl = "";
-      if (post.mainImage) {
-        imgUrl = urlFor(post.mainImage).width(1200).height(800).url();
-      } else if (fallbackMatch?.imageUrl) {
-        imgUrl = fallbackMatch.imageUrl;
-      } else {
-        imgUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80";
-      }
-
-      const catDisplay = cats.join(", ").toUpperCase();
-
-      return {
-        _id: post._id,
-        title: post.title,
-        slug: slugStr,
-        publishedAt: post.publishedAt || new Date().toISOString(),
-        excerpt: post.excerpt || fallbackMatch?.excerpt || "",
-        categories: cats,
-        categoryDisplay: catDisplay,
-        authorName: post.authorName || "RAM",
-        imageUrl: imgUrl,
-      };
-    });
-
-    const sanitySlugs = new Set(mappedSanity.map((p) => p.slug));
-
-    const mappedFallbacks: DisplayPost[] = FALLBACK_BLOG_POSTS.filter(
-      (fb) => !sanitySlugs.has(fb.slug.current)
-    ).map((fb) => ({
-      _id: fb._id,
-      title: fb.title,
-      slug: fb.slug.current,
-      publishedAt: fb.publishedAt,
-      excerpt: fb.excerpt,
-      categories: fb.categories,
-      categoryDisplay: fb.categoryDisplay,
-      authorName: fb.authorName,
-      imageUrl: fb.imageUrl,
-    }));
-
-    return [...mappedSanity, ...mappedFallbacks];
-  }, [sanityPosts]);
+  const allPosts = useMemo<DisplayPost[]>(() => mapBlogPosts(sanityPosts), [sanityPosts]);
 
   // Extract unique category filters
   const categories = useMemo(() => {
@@ -142,11 +64,14 @@ export function Blog() {
   return (
     <div className="relative w-full min-h-screen bg-[#FBFBFB] overflow-hidden flex-1 pb-28 sm:pb-36 text-[#0D0D0D] selection:bg-[#BFF549] selection:text-black">
       <Helmet>
-        <title>Activity & Updates | Open Brands</title>
+        <title>Blog: Websites That Book Jobs, Calls & Appointments | Open Brands</title>
         <meta
           name="description"
-          content="Read the latest insights, strategies, and B2B marketing case studies on our activity and updates feed."
+          content="Practical guides on website design, conversion, and local SEO for service businesses — contractors, law firms, clinics, and more."
         />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Blog | Open Brands" />
+        <meta property="og:url" content="https://www.openbrands.studio/blog" />
       </Helmet>
 
       {/* Interactive Canvas Particles matching the Homepage */}
@@ -251,11 +176,10 @@ export function Blog() {
                     >
                       {/* Image container: rounded rectangle with gentle radius */}
                       <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-gray-200/90 bg-gray-100 shadow-sm">
-                        <img
+                        <PostImage
                           src={post.imageUrl}
                           alt={post.title}
-                          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                          loading="eager"
+                          eager
                         />
                         <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </div>
@@ -293,11 +217,9 @@ export function Blog() {
                     >
                       {/* Image container */}
                       <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-gray-200/90 bg-gray-100 shadow-sm">
-                        <img
+                        <PostImage
                           src={post.imageUrl}
                           alt={post.title}
-                          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                          loading="lazy"
                         />
                         <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </div>

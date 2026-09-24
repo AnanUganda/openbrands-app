@@ -52,6 +52,14 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'authorBio',
+      title: 'Author bio',
+      description: 'Short paragraph shown in the blog post sidebar and byline',
+      type: 'text',
+      rows: 3,
+      validation: (Rule) => Rule.max(300),
+    }),
+    defineField({
       name: 'authorImage',
       title: 'Author photo',
       type: 'image',

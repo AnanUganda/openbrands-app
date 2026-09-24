@@ -1,6 +1,6 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useParams } from 'react-router-dom';
-import { HelmetProvider } from 'react-helmet-async';
+import { BrowserRouter, Routes, Route, Navigate, useParams, useLocation } from 'react-router-dom';
+import { HelmetProvider, Helmet } from 'react-helmet-async';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
 import { ScrollToTop } from '@/components/scroll-to-top';
@@ -16,6 +16,41 @@ import { NotFound } from '@/pages/NotFound';
 
 import { SmoothScroll } from '@/components/ui/smooth-scroll';
 
+const SITE_URL = 'https://www.openbrands.studio';
+const DEFAULT_TITLE = 'Open Brands | Results-Driven B2B Marketing Agency';
+const DEFAULT_DESCRIPTION =
+  'We build structured, done-for-you lead generation systems that drive real growth for B2B service businesses and high-ticket offers.';
+const SHARE_IMAGE = `${SITE_URL}/open-brands-logo.png`;
+
+/**
+ * Site-wide head defaults. Individual pages render their own <Helmet> after this
+ * one, so anything they set (title, description, og:*, canonical) wins.
+ */
+function SiteHead() {
+  const { pathname } = useLocation();
+  const canonical = `${SITE_URL}${pathname === '/' ? '' : pathname.replace(/\/$/, '')}`;
+
+  // React 19 hoists metadata natively rather than de-duplicating it, so every tag
+  // needs exactly one owner. The blog pages set their own social tags.
+  const pageOwnsSocialTags = pathname === '/blog' || pathname.startsWith('/blog/');
+
+  return (
+    <Helmet>
+      <link rel="canonical" href={canonical} />
+      {!pageOwnsSocialTags && <meta property="og:type" content="website" />}
+      {!pageOwnsSocialTags && <meta property="og:site_name" content="Open Brands" />}
+      {!pageOwnsSocialTags && <meta property="og:title" content={DEFAULT_TITLE} />}
+      {!pageOwnsSocialTags && <meta property="og:description" content={DEFAULT_DESCRIPTION} />}
+      {!pageOwnsSocialTags && <meta property="og:url" content={canonical} />}
+      {!pageOwnsSocialTags && <meta property="og:image" content={SHARE_IMAGE} />}
+      {!pageOwnsSocialTags && <meta name="twitter:card" content="summary_large_image" />}
+      {!pageOwnsSocialTags && <meta name="twitter:title" content={DEFAULT_TITLE} />}
+      {!pageOwnsSocialTags && <meta name="twitter:description" content={DEFAULT_DESCRIPTION} />}
+      {!pageOwnsSocialTags && <meta name="twitter:image" content={SHARE_IMAGE} />}
+    </Helmet>
+  );
+}
+
 /** Redirects the retired /projects/:slug and /templates/:slug URLs to /portfolio/:slug. */
 function LegacyDetailRedirect() {
   const { slug } = useParams<{ slug: string }>();
@@ -28,6 +63,7 @@ export default function App() {
       <BrowserRouter>
         <SmoothScroll>
           <ScrollToTop />
+          <SiteHead />
           <div className="min-h-screen flex flex-col font-sans selection:bg-[#BFF549]/40 bg-[#FBFBFB] text-[#0D0D0D] relative">
 
             <Navbar />

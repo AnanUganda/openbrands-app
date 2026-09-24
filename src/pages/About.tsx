@@ -12,7 +12,6 @@ export function About() {
           name="description"
           content="About Twijjukye Anan, founder and lead designer at Open Brands. Building high-converting, considered websites for service businesses."
         />
-        <link rel="canonical" href="https://www.openbrands.studio/about" />
       </Helmet>
 
       {/* Texture Background with 70% opacity */}

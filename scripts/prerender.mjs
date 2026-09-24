@@ -364,11 +364,15 @@ async function prerender() {
             head.querySelectorAll('meta[property="twitter:description"]').forEach((el) => el.remove());
           }
 
-          // og:image and twitter:image
-          // TODO: Replace favicon.png with a real 1200x630 social share image once created.
-          const placeholderImage = `${siteOrigin}/favicon.png`;
-          setMetaTag('meta[property="og:image"]', 'property', 'og:image', placeholderImage);
-          setMetaTag('meta[name="twitter:image"]', 'name', 'twitter:image', placeholderImage);
+          // og:image and twitter:image: keep whatever the page set (a blog post's
+          // own cover image, say) and only fall back when the page set nothing.
+          // TODO: Replace the fallback with a real 1200x630 social share image once created.
+          const pageImage = head
+            .querySelector('meta[property="og:image"]')
+            ?.getAttribute('content');
+          const shareImage = pageImage || `${siteOrigin}/open-brands-logo.png`;
+          setMetaTag('meta[property="og:image"]', 'property', 'og:image', shareImage);
+          setMetaTag('meta[name="twitter:image"]', 'name', 'twitter:image', shareImage);
           head.querySelectorAll('meta[property="twitter:image"]').forEach((el) => el.remove());
 
           // robots: explicit on every page so the directive is never ambiguous
