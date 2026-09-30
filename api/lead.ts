@@ -1,7 +1,50 @@
-import { insertRow, supabaseConfigured } from "./_lib/supabase";
-
 type VercelRequest = any;
 type VercelResponse = any;
+
+// ---------------------------------------------------------------------------
+// Supabase REST write.
+//
+// Inlined rather than imported from a shared module: Vercel does not bundle
+// underscore-prefixed paths under api/, so importing one crashes the function
+// at load time. Duplicated in api/lead.ts and api/subscribe.ts on purpose.
+//
+// Requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (server-side only).
+// ---------------------------------------------------------------------------
+const supabaseConfigured = () =>
+  Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+
+async function insertRow(
+  table: string,
+  row: Record<string, unknown>,
+  options: { onConflict?: string } = {}
+): Promise<void> {
+  const url = process.env.SUPABASE_URL as string;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY as string;
+
+  const endpoint = new URL(`/rest/v1/${table}`, url);
+  if (options.onConflict) {
+    endpoint.searchParams.set("on_conflict", options.onConflict);
+  }
+
+  const response = await fetch(endpoint.toString(), {
+    method: "POST",
+    headers: {
+      apikey: key,
+      Authorization: `Bearer ${key}`,
+      "Content-Type": "application/json",
+      Prefer: options.onConflict
+        ? "return=minimal,resolution=merge-duplicates"
+        : "return=minimal",
+    },
+    body: JSON.stringify(row),
+  });
+
+  if (!response.ok) {
+    const detail = await response.text();
+    throw new Error(`Supabase insert into ${table} failed (${response.status}): ${detail}`);
+  }
+}
+
 
 interface LeadPayload {
   name: string;
