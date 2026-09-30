@@ -8,6 +8,7 @@ import { ProcessSection } from '@/components/process-section';
 import { WhoWeServeSection } from '@/components/who-we-serve-section';
 import { ServicesSection } from '@/components/services-section';
 import { TestimonialsSection } from '@/components/testimonials-section';
+import { ResultsSection } from '@/components/results-section';
 import { FaqSection } from '@/components/faq-section';
 
 export function Home() {
@@ -21,6 +22,7 @@ export function Home() {
       <ProblemSection />
       <ServicesSection />
       <TestimonialsSection />
+      <ResultsSection />
       <ImageAutoSlider />
       <TransformationSection />
       <WhoWeServeSection />
