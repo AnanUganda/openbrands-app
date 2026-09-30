@@ -1,3 +1,5 @@
+import { insertRow, supabaseConfigured } from "./_lib/supabase";
+
 type VercelRequest = any;
 type VercelResponse = any;
 
@@ -272,7 +274,36 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // -------------------------------------------------------------
-    // TASK 3: Resend Emails (Auto-Reply & Notification)
+    // TASK 3: Supabase (durable store of record)
+    // -------------------------------------------------------------
+    if (supabaseConfigured()) {
+      const supabaseTask = (async () => {
+        try {
+          await insertRow("leads", {
+            name: trimmedName,
+            email: trimmedEmail,
+            business: trimmedBusiness || null,
+            phone: trimmedPhone || null,
+            website: trimmedWebsite || null,
+            message: trimmedMessage || null,
+            budget: budget || null,
+            services: Array.isArray(services) && services.length > 0 ? services : null,
+            source: source || "contact_form",
+            referrer: referrer || null,
+            utm: utm && Object.keys(utm).length > 0 ? utm : null,
+          });
+          console.log("Supabase lead stored successfully!");
+        } catch (supabaseErr) {
+          console.error("Supabase Execution Error:", supabaseErr);
+        }
+      })();
+      tasks.push(supabaseTask);
+    } else {
+      console.warn("Supabase URL or service role key missing in process.env");
+    }
+
+    // -------------------------------------------------------------
+    // TASK 4: Resend Emails (Auto-Reply & Notification)
     // -------------------------------------------------------------
     if (RESEND_API_KEY) {
       const emailTask = (async () => {

@@ -15,6 +15,8 @@ export function Blog() {
   const [activeCategory, setActiveCategory] = useState("ALL");
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [subscribing, setSubscribing] = useState(false);
+  const [subscribeError, setSubscribeError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -52,13 +54,38 @@ export function Blog() {
   const featuredPosts = filteredPosts.slice(0, 2);
   const secondaryPosts = filteredPosts.slice(2);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) return;
-    setSubscribed(true);
-    setTimeout(() => {
+    if (!email.trim() || subscribing) return;
+
+    setSubscribing(true);
+    setSubscribeError(null);
+
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email.trim(),
+          source: "blog_newsletter",
+          referrer: typeof document !== "undefined" ? document.referrer : "",
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Something went wrong. Please try again.");
+      }
+
+      setSubscribed(true);
       setEmail("");
-    }, 4000);
+    } catch (err) {
+      setSubscribeError(
+        err instanceof Error ? err.message : "Something went wrong. Please try again."
+      );
+    } finally {
+      setSubscribing(false);
+    }
   };
 
   return (
@@ -286,17 +313,22 @@ export function Blog() {
                       required
                       placeholder="Enter your email"
                       value={email}
+                      disabled={subscribing}
                       onChange={(e) => setEmail(e.target.value)}
                       className="flex-1 bg-white border border-gray-300 focus:border-[#0D0D0D] text-[#0D0D0D] placeholder:text-gray-400 rounded-full px-5 py-3.5 text-sm shadow-sm outline-none transition-colors duration-200"
                     />
                     <button
                       type="submit"
-                      className="bg-[#BFF549] hover:bg-[#aee63d] text-black font-bold px-7 py-3.5 rounded-full text-sm transition-all duration-300 shadow-[0_4px_20px_rgba(191,245,73,0.35)] flex items-center justify-center gap-2 cursor-pointer shrink-0"
+                      disabled={subscribing}
+                      className="bg-[#BFF549] hover:bg-[#aee63d] disabled:opacity-60 disabled:cursor-not-allowed text-black font-bold px-7 py-3.5 rounded-full text-sm transition-all duration-300 shadow-[0_4px_20px_rgba(191,245,73,0.35)] flex items-center justify-center gap-2 cursor-pointer shrink-0"
                     >
-                      <span>Subscribe</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <span>{subscribing ? "Subscribing..." : "Subscribe"}</span>
+                      {!subscribing && <ArrowRight className="w-4 h-4" />}
                     </button>
                   </div>
+                )}
+                {subscribeError && (
+                  <p className="mt-3 text-sm text-red-600">{subscribeError}</p>
                 )}
               </form>
             </div>
