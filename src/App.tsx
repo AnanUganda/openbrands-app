@@ -9,10 +9,10 @@ import { Contact } from '@/pages/Contact';
 import { About } from '@/pages/About';
 import { Portfolio } from '@/pages/Portfolio';
 import { PortfolioDetail } from '@/pages/PortfolioDetail';
-import { Hiring } from '@/pages/Hiring';
 import { Blog } from '@/pages/Blog';
 import { BlogPost } from '@/pages/BlogPost';
 import { NotFound } from '@/pages/NotFound';
+import { ThankYou } from '@/pages/ThankYou';
 
 import { SmoothScroll } from '@/components/ui/smooth-scroll';
 
@@ -70,6 +70,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/thank-you" element={<ThankYou />} />
               <Route path="/about" element={<About />} />
               <Route path="/portfolio" element={<Portfolio />} />
               <Route path="/portfolio/:slug" element={<PortfolioDetail />} />
@@ -78,7 +79,6 @@ export default function App() {
               <Route path="/templates" element={<Navigate to="/portfolio" replace />} />
               <Route path="/projects/:slug" element={<LegacyDetailRedirect />} />
               <Route path="/templates/:slug" element={<LegacyDetailRedirect />} />
-              <Route path="/hiring" element={<Hiring />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               {/* Catch-all: any unknown URL → 404 page */}

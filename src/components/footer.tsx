@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ArrowRight, PlayCircle } from "lucide-react";
 import { motion } from "motion/react";
 import { ButtonWithIcon } from "@/components/ui/button-with-icon";
@@ -229,7 +229,25 @@ const MarqueeItem = () => (
   </div>
 );
 
+const FOOTER_LINK_CLASS =
+  "bg-white/80 border border-gray-200 px-6 py-3 rounded-full text-gray-600 font-semibold text-xs md:text-sm hover:text-[#0D0D0D] hover:bg-white shadow-xs";
+
+const FooterLinks = () => (
+  <div className="flex flex-wrap justify-center gap-3 md:gap-6 w-full mt-2">
+    <MagneticButton as={Link} to="/about" className={FOOTER_LINK_CLASS}>
+      About
+    </MagneticButton>
+    <MagneticButton as={Link} to="/blog" className={FOOTER_LINK_CLASS}>
+      Blog
+    </MagneticButton>
+  </div>
+);
+
 export function Footer() {
+  // /contact closes with its own testimonial, so it drops the ticker and CTA.
+  const { pathname } = useLocation();
+  const hideCta = pathname.replace(/\/$/, "") === "/contact";
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -238,7 +256,7 @@ export function Footer() {
     <>
       <style dangerouslySetInnerHTML={{ __html: STYLES }} />
       
-      <footer className="relative w-full flex flex-col justify-between overflow-hidden bg-[#FBFBFB] text-[#0D0D0D] cinematic-footer-wrapper border-t border-gray-200 pt-20 md:pt-28 pb-8 min-h-[680px]">
+      <footer className={`relative w-full flex flex-col justify-between overflow-hidden bg-[#FBFBFB] text-[#0D0D0D] cinematic-footer-wrapper border-t border-gray-200 pb-8 ${hideCta ? "pt-12 min-h-[320px]" : "pt-20 md:pt-28 min-h-[680px]"}`}>
         {/* Ambient Light & Grid Background */}
         <div className="footer-aurora absolute left-1/2 top-1/2 h-[60vh] w-[80vw] -translate-x-1/2 -translate-y-1/2 animate-footer-breathe rounded-[50%] bg-[#BFF549]/15 blur-[120px] pointer-events-none z-0" />
         <div className="footer-bg-grid absolute inset-0 z-0 pointer-events-none opacity-20" />
@@ -254,6 +272,8 @@ export function Footer() {
           OPEN BRANDS
         </motion.div>
 
+        {!hideCta && (
+        <>
         {/* 1. Diagonal Sleek Marquee (Top of footer) */}
         <div className="w-full overflow-hidden border-y border-gray-200/80 bg-white/80 backdrop-blur-md py-4 z-10 -rotate-1 scale-105 shadow-sm mb-12">
           <div className="flex w-max animate-footer-scroll-marquee text-xs md:text-sm font-bold tracking-[0.3em] text-gray-600 uppercase">
@@ -305,19 +325,19 @@ export function Footer() {
             </div>
 
             {/* Secondary Text Links */}
-            <div className="flex flex-wrap justify-center gap-3 md:gap-6 w-full mt-2">
-              <MagneticButton as={Link} to="/about" className="bg-white/80 border border-gray-200 px-6 py-3 rounded-full text-gray-600 font-semibold text-xs md:text-sm hover:text-[#0D0D0D] hover:bg-white shadow-xs">
-                About
-              </MagneticButton>
-              <MagneticButton as={Link} to="/blog" className="bg-white/80 border border-gray-200 px-6 py-3 rounded-full text-gray-600 font-semibold text-xs md:text-sm hover:text-[#0D0D0D] hover:bg-white shadow-xs">
-                Blog
-              </MagneticButton>
-              <MagneticButton as={Link} to="/hiring" className="bg-white/80 border border-gray-200 px-6 py-3 rounded-full text-gray-600 font-semibold text-xs md:text-sm hover:text-[#0D0D0D] hover:bg-white shadow-xs">
-                Hiring
-              </MagneticButton>
-            </div>
+            <FooterLinks />
           </motion.div>
         </div>
+
+        </>
+        )}
+
+        {/* /contact hides the CTA block above, so it shows the links on their own */}
+        {hideCta && (
+          <div className="relative z-10 w-full px-6 mb-4">
+            <FooterLinks />
+          </div>
+        )}
 
         {/* 3. Bottom Bar / Credits */}
         <div className="relative z-20 w-full pt-10 pb-4 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-6">

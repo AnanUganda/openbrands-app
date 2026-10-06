@@ -20,14 +20,14 @@ const SANITY_QUERY_URL =
     '*[_type in ["post","portfolio"] && defined(slug.current)]{_type, "slug": slug.current, _updatedAt}'
   );
 
-const STATIC_ROUTES = ['/', '/contact', '/portfolio', '/about', '/blog', '/hiring'];
+const STATIC_ROUTES = ['/', '/contact', '/thank-you', '/portfolio', '/about', '/blog'];
 
 // Rendered for visitors, deliberately kept out of the search index.
 // Portfolio detail pages are ~200-300 words of near-identical copy. Thin pages
 // drag down site-wide quality assessment on a low-authority domain. They stay
 // crawlable as noindex,follow so link equity still flows, and are excluded from
 // the sitemap. To index one, write a real case study and narrow this pattern.
-const NOINDEX_PATTERNS = [/^\/portfolio\/[^/]+$/];
+const NOINDEX_PATTERNS = [/^\/portfolio\/[^/]+$/, /^\/thank-you$/];
 
 function isNoIndexRoute(route) {
   return NOINDEX_PATTERNS.some((re) => re.test(route));

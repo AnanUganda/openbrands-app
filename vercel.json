@@ -11,6 +11,11 @@
       "permanent": true
     },
     {
+      "source": "/hiring",
+      "destination": "/",
+      "permanent": true
+    },
+    {
       "source": "/aboutme",
       "destination": "/",
       "permanent": true

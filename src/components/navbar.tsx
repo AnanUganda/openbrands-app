@@ -16,7 +16,7 @@ export function Navbar() {
   const navLinks = [
     { to: '/portfolio', label: 'Work' },
     { to: '/about', label: 'About' },
-    { to: '/blog', label: 'Blog' },
+    { to: '/contact', label: 'Contact Us' },
   ];
 
   const handleLinkClick = () => {

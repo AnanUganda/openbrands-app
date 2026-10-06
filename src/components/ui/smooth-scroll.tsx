@@ -6,6 +6,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+declare global {
+  interface Window {
+    /** The active Lenis instance, for in-page links that need to scroll with it. */
+    lenisInstance?: Lenis;
+  }
+}
+
 interface SmoothScrollProps {
   children: ReactNode;
 }
@@ -36,6 +43,8 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
     // Lenis animates scroll on its own loop, so ScrollTrigger has to be told
     // when position changes — otherwise triggers fire against a stale scroll
     // value and reveals go off early or late.
+    window.lenisInstance = lenis;
+
     const onScroll = () => ScrollTrigger.update();
     lenis.on("scroll", onScroll);
 
@@ -49,6 +58,7 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
       gsap.ticker.remove(raf);
       lenis.off("scroll", onScroll);
       lenis.destroy();
+      if (window.lenisInstance === lenis) delete window.lenisInstance;
     };
   }, []);
 

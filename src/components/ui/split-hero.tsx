@@ -25,7 +25,7 @@ function LogoRow() {
   return (
     <div className="flex flex-col gap-3 w-full max-w-md lg:max-w-xl overflow-hidden">
       <div className="text-sm md:text-base font-bold text-[#0D0D0D]">
-        Backed by Leading <span className="text-gray-500 font-medium">Startups & Enterprises</span>
+        The stack <span className="text-gray-500 font-medium">behind every website I build</span>
       </div>
 
       {/* Horizontal Continuous Ticker Animation */}
