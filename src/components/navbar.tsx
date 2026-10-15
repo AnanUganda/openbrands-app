@@ -5,6 +5,7 @@ import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
 import { ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ButtonWithIcon } from '@/components/ui/button-with-icon';
+import { CAL_BOOKING_URL, handleBookingClick } from '@/lib/cal-booking';
 
 export function Navbar() {
   const [open, setOpen] = React.useState(false);
@@ -101,7 +102,7 @@ export function Navbar() {
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-3">
-            <ButtonWithIcon to="/contact" variant="lime" size="sm">
+            <ButtonWithIcon href={CAL_BOOKING_URL} onClick={handleBookingClick} variant="lime" size="sm">
               Book a Strategy Call
             </ButtonWithIcon>
           </div>
@@ -194,11 +195,14 @@ export function Navbar() {
                   className="pt-6 mt-4 border-t border-gray-200/80 flex flex-col gap-3"
                 >
                   <ButtonWithIcon
-                    to="/contact"
+                    href={CAL_BOOKING_URL}
                     variant="lime"
                     size="lg"
                     className="w-full justify-center"
-                    onClick={() => setOpen(false)}
+                    onClick={(e) => {
+                      setOpen(false);
+                      handleBookingClick(e);
+                    }}
                   >
                     Book a Strategy Call
                   </ButtonWithIcon>

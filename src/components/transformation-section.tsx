@@ -4,6 +4,7 @@ import { SectionLabel } from "./ui/section-label";
 import { SplitTextReveal } from "./ui/split-text-reveal";
 import { Link } from "react-router-dom";
 import { ButtonWithIcon } from "./ui/button-with-icon";
+import { CAL_BOOKING_URL, handleBookingClick } from "@/lib/cal-booking";
 
 const cards = [
   {
@@ -49,7 +50,7 @@ export function TransformationSection() {
               <p className="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed max-w-md">
                 We help service businesses build a powerful online presence that does 3 things:
               </p>
-              <ButtonWithIcon to="/contact" variant="lime" size="lg">
+              <ButtonWithIcon href={CAL_BOOKING_URL} onClick={handleBookingClick} variant="lime" size="lg">
                 Schedule Strategy Call
               </ButtonWithIcon>
             </motion.div>

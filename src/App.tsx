@@ -15,6 +15,7 @@ import { NotFound } from '@/pages/NotFound';
 import { ThankYou } from '@/pages/ThankYou';
 
 import { SmoothScroll } from '@/components/ui/smooth-scroll';
+import { loadCalEmbed } from '@/lib/cal-booking';
 
 const SITE_URL = 'https://www.openbrands.studio';
 const DEFAULT_TITLE = 'Open Brands | Results-Driven B2B Marketing Agency';
@@ -58,6 +59,10 @@ function LegacyDetailRedirect() {
 }
 
 export default function App() {
+  React.useEffect(() => {
+    loadCalEmbed();
+  }, []);
+
   return (
     <HelmetProvider>
       <BrowserRouter>

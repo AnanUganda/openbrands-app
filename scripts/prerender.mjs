@@ -482,6 +482,9 @@ async function prerender() {
         head.appendChild(robots);
       }
       robots.setAttribute('content', 'noindex, nofollow');
+
+      // Same as the routes above: the app injects Cal.com's embed.js at runtime.
+      head.querySelectorAll('script[src*="app.cal.com/embed"]').forEach((el) => el.remove());
     });
 
     const notFoundHtml = await page.evaluate(

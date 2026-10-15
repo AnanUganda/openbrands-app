@@ -2,6 +2,7 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 import { motion } from "motion/react";
 import { ButtonWithIcon } from "@/components/ui/button-with-icon";
+import { CAL_BOOKING_URL, handleBookingClick } from "@/lib/cal-booking";
 
 export function About() {
   return (
@@ -164,7 +165,8 @@ export function About() {
                 {/* Direct Call to Action */}
                 <div className="pt-1">
                   <ButtonWithIcon
-                    to="/contact"
+                    href={CAL_BOOKING_URL}
+                    onClick={handleBookingClick}
                     variant="lime"
                     size="lg"
                     className="w-full justify-center"

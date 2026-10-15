@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { motion } from "motion/react";
 import { CheckCircle2 } from "lucide-react";
 import { ButtonWithIcon } from "@/components/ui/button-with-icon";
+import { CAL_BOOKING_URL, handleBookingClick } from "@/lib/cal-booking";
 
 export function ThankYou() {
   return (
@@ -26,7 +27,7 @@ export function ThankYou() {
         <p className="text-base sm:text-xl text-gray-600 font-medium leading-relaxed mb-10 text-balance">
           {"I'll send your website review within 24 hours. If you'd rather talk now, you can still book a call."}
         </p>
-        <ButtonWithIcon to="/contact#book" variant="lime" size="lg">
+        <ButtonWithIcon href={CAL_BOOKING_URL} onClick={handleBookingClick} variant="lime" size="lg">
           Book a call
         </ButtonWithIcon>
       </motion.div>

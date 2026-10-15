@@ -1,9 +1,9 @@
 import { motion } from "motion/react";
 import { Layout, Zap, TrendingUp } from "lucide-react";
-import { Link } from "react-router-dom";
 
 import { SectionLabel } from "./ui/section-label";
 import { SplitTextReveal } from "./ui/split-text-reveal";
+import { CAL_BOOKING_URL, handleBookingClick } from "@/lib/cal-booking";
 
 const services = [
   {
@@ -130,12 +130,13 @@ export function ServicesSection() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="flex justify-center"
         >
-          <Link
-            to="/contact"
+          <a
+            href={CAL_BOOKING_URL}
+            onClick={handleBookingClick}
             className="inline-flex items-center justify-center rounded-full border border-gray-300 bg-white/60 px-8 py-3.5 text-base font-semibold text-[#0D0D0D] transition-all hover:bg-white hover:border-[#0D0D0D] shadow-xs cursor-pointer"
           >
             Not sure which fits? Book a 30-minute call
-          </Link>
+          </a>
         </motion.div>
 
       </div>

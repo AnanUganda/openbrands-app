@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { SectionLabel } from "./ui/section-label";
 import { SplitTextReveal } from "./ui/split-text-reveal";
 import { ButtonWithIcon } from "./ui/button-with-icon";
+import { CAL_BOOKING_URL, handleBookingClick } from "@/lib/cal-booking";
 
 interface SectorItem {
   id: string;
@@ -107,7 +108,7 @@ export function WhoWeServeSection() {
             </SplitTextReveal>
           </div>
 
-          <ButtonWithIcon to="/contact" variant="lime" size="lg">
+          <ButtonWithIcon href={CAL_BOOKING_URL} onClick={handleBookingClick} variant="lime" size="lg">
             Book a Strategy Call
           </ButtonWithIcon>
         </motion.div>
@@ -246,7 +247,7 @@ export function WhoWeServeSection() {
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ duration: 0.45, delay: 0.28, ease: gsapEase }}
                             >
-                              <ButtonWithIcon to={sector.ctaLink} variant="lime" size="default">
+                              <ButtonWithIcon href={CAL_BOOKING_URL} onClick={handleBookingClick} variant="lime" size="default">
                                 {sector.ctaText}
                               </ButtonWithIcon>
                             </motion.div>

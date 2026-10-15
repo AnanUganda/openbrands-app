@@ -8,15 +8,10 @@ import { ButtonWithIcon } from "@/components/ui/button-with-icon";
 import { authenticTestimonials } from "@/components/ui/stagger-testimonials";
 import { getUtmParams, trackLeadGenerated } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
+import { CAL_BOOKING_URL, handleBookingClick, openBookingPopup } from "@/lib/cal-booking";
 
 // TODO: replace the placeholder below with the real value.
 const GOOGLE_REVIEWS_URL = "[GOOGLE_REVIEWS_URL]";
-const GOOGLE_ADS_BOOKING_CONVERSION = "AW-18495990613/YbVkCLSx750dENXWyfNE";
-
-const CAL_LINK = "twijjukye-anan-m21aet/30min";
-const CAL_NAMESPACE = "30min";
-const CAL_ORIGIN = "https://app.cal.com";
-const CAL_EMBED_SRC = "https://app.cal.com/embed/embed.js";
 
 // Jeriah Raber's quote mentions sales; Jeremy Horning's runs at the bottom of the page.
 const cardTestimonial = authenticTestimonials.find((t) => t.name === "Jeriah Raber");
@@ -45,91 +40,6 @@ const inputClass =
   "w-full bg-gray-50/80 border border-gray-200 rounded-2xl px-4 py-3.5 text-[#0D0D0D] font-medium placeholder-gray-400 focus:outline-none focus:border-[#0D0D0D] focus:bg-white transition-colors";
 const labelClass = "block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2";
 
-type CalApi = ((...args: unknown[]) => void) & {
-  q?: unknown[][];
-  ns?: Record<string, CalApi>;
-  loaded?: boolean;
-  config?: Record<string, unknown>;
-};
-
-declare global {
-  interface Window {
-    Cal?: CalApi;
-  }
-}
-
-/**
- * Cal.com's embed bootstrap, as published in their inline embed snippet: it
- * queues calls on window.Cal and injects embed.js on the first one.
- */
-function getCal(): CalApi {
-  if (window.Cal) return window.Cal;
-  const push = (api: CalApi, args: unknown[]) => {
-    (api.q = api.q || []).push(args);
-  };
-  const cal: CalApi = function (...args: unknown[]) {
-    if (!cal.loaded) {
-      cal.ns = {};
-      cal.q = cal.q || [];
-      document.head.appendChild(document.createElement("script")).src = CAL_EMBED_SRC;
-      cal.loaded = true;
-    }
-    if (args[0] === "init") {
-      const api: CalApi = function (...apiArgs: unknown[]) {
-        push(api, apiArgs);
-      };
-      const namespace = args[1];
-      if (typeof namespace === "string") {
-        cal.ns![namespace] = cal.ns![namespace] || api;
-        push(cal.ns![namespace], args);
-        push(cal, ["initNamespace", namespace]);
-      } else {
-        push(cal, args);
-      }
-      return;
-    }
-    push(cal, args);
-  };
-  window.Cal = cal;
-  return cal;
-}
-
-let bookingReported = false;
-
-/** Inits the Cal.com namespace and its listeners once per page load. */
-function getCalNamespace(): CalApi {
-  const Cal = getCal();
-  if (Cal.ns?.[CAL_NAMESPACE]) return Cal.ns[CAL_NAMESPACE];
-
-  Cal("init", CAL_NAMESPACE, { origin: CAL_ORIGIN });
-  Cal.config = Cal.config || {};
-  Cal.config.forwardQueryParams = true;
-  const cal = Cal.ns![CAL_NAMESPACE];
-
-  cal("ui", {
-    cssVarsPerTheme: { dark: { "cal-brand": "#afe63d" } },
-    hideEventTypeDetails: false,
-    layout: "month_view",
-  });
-
-  cal("on", {
-    action: "bookingSuccessfulV2",
-    callback: () => {
-      if (bookingReported) return;
-      bookingReported = true;
-      try {
-        if (typeof window.gtag === "function") {
-          window.gtag("event", "conversion", { send_to: GOOGLE_ADS_BOOKING_CONVERSION });
-        }
-      } catch {
-        // Tracking must never break the booking flow.
-      }
-    },
-  });
-
-  return cal;
-}
-
 function RequiredMark() {
   return <span className="text-red-500">*</span>;
 }
@@ -143,19 +53,6 @@ export function Contact() {
   const [error, setError] = useState<string | null>(null);
 
   const bookRef = useRef<HTMLDivElement>(null);
-
-  // Load Cal.com's embed with the page so the pop-up opens without a delay.
-  useEffect(() => {
-    getCalNamespace();
-  }, []);
-
-  const openCal = useCallback(() => {
-    getCalNamespace()("modal", {
-      calLink: CAL_LINK,
-      calOrigin: CAL_ORIGIN,
-      config: { layout: "month_view", useSlotsViewOnSmallScreen: "true" },
-    });
-  }, []);
 
   const reviewRef = useRef<HTMLElement>(null);
 
@@ -171,8 +68,8 @@ export function Contact() {
 
   const scrollToBooking = useCallback(() => {
     scrollToSection(bookRef.current);
-    openCal();
-  }, [openCal, scrollToSection]);
+    openBookingPopup();
+  }, [scrollToSection]);
 
   // Nav anchors (/contact#book, /contact#review). After a route change, wait for
   // the scroll-to-top reset to run first; on this page, scroll straight away.
@@ -354,11 +251,8 @@ export function Contact() {
             </div>
 
             <ButtonWithIcon
-              href="#book"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToBooking();
-              }}
+              href={CAL_BOOKING_URL}
+              onClick={handleBookingClick}
               variant="lime"
               size="lg"
               className="w-full sm:w-fit"

@@ -4,6 +4,7 @@ import { SectionLabel } from "./ui/section-label";
 import { SplitTextReveal } from "./ui/split-text-reveal";
 import { ButtonWithIcon } from "./ui/button-with-icon";
 import { prefersReducedMotion } from "@/lib/motion";
+import { CAL_BOOKING_URL, handleBookingClick } from "@/lib/cal-booking";
 
 interface Stat {
   /** Exact string shown once the count-up finishes, and to screen readers throughout. */
@@ -247,7 +248,7 @@ export function ResultsSection() {
           <p className="text-base sm:text-lg font-medium text-[#0D0D0D]">
             Want numbers like these for your business?
           </p>
-          <ButtonWithIcon to="/contact" variant="lime" size="lg">
+          <ButtonWithIcon href={CAL_BOOKING_URL} onClick={handleBookingClick} variant="lime" size="lg">
             Book a Strategy Call
           </ButtonWithIcon>
         </motion.div>

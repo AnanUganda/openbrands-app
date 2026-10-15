@@ -6,6 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 import { ArrowRight, PlayCircle } from "lucide-react";
 import { motion } from "motion/react";
 import { ButtonWithIcon } from "@/components/ui/button-with-icon";
+import { CAL_BOOKING_URL, handleBookingClick } from "@/lib/cal-booking";
 
 // -------------------------------------------------------------------------
 // 1. THEME-ADAPTIVE INLINE STYLES
@@ -312,7 +313,7 @@ export function Footer() {
           >
             {/* Primary & Secondary CTA Links */}
             <div className="flex flex-wrap justify-center items-center gap-4 w-full">
-              <ButtonWithIcon to="/contact" variant="lime" size="lg">
+              <ButtonWithIcon href={CAL_BOOKING_URL} onClick={handleBookingClick} variant="lime" size="lg">
                 Book a Free Strategy Call
               </ButtonWithIcon>
               

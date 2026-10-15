@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { SectionLabel } from "./ui/section-label";
 import { SplitTextReveal } from "./ui/split-text-reveal";
 import { ButtonWithIcon } from "./ui/button-with-icon";
+import { CAL_BOOKING_URL, handleBookingClick } from "@/lib/cal-booking";
 
 const pitfalls = [
   "I built my website, but it doesn't bring clients.",
@@ -99,7 +100,7 @@ export function ProblemSection() {
             </p>
 
             {/* Primary CTA Button */}
-            <ButtonWithIcon to="/contact" variant="lime" size="lg">
+            <ButtonWithIcon href={CAL_BOOKING_URL} onClick={handleBookingClick} variant="lime" size="lg">
               Book a Strategy Call
             </ButtonWithIcon>
 

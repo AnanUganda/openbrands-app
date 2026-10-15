@@ -8,6 +8,7 @@ import { Particles } from '@/components/ui/particles';
 import { SectionLabel } from '@/components/ui/section-label';
 import { SplitTextReveal } from '@/components/ui/split-text-reveal';
 import { ButtonWithIcon } from '@/components/ui/button-with-icon';
+import { CAL_BOOKING_URL, handleBookingClick } from '@/lib/cal-booking';
 
 function LogoRow() {
   const logos = [
@@ -137,7 +138,7 @@ export default function SplitHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.45, ease: easeCubic }}
         >
-          <ButtonWithIcon to="/contact" variant="lime" size="lg">
+          <ButtonWithIcon href={CAL_BOOKING_URL} onClick={handleBookingClick} variant="lime" size="lg">
             Book a Strategy Call
           </ButtonWithIcon>
 

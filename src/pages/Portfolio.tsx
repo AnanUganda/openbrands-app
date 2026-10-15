@@ -7,6 +7,7 @@ import { fetchWithCache, urlFor } from "@/lib/sanity";
 import { SectionLabel } from "@/components/ui/section-label";
 import { SplitTextReveal } from "@/components/ui/split-text-reveal";
 import { ButtonWithIcon } from "@/components/ui/button-with-icon";
+import { CAL_BOOKING_URL, handleBookingClick } from "@/lib/cal-booking";
 
 export const PORTFOLIO_QUERY = `*[_type == "portfolio" && defined(slug.current)] | order(featured desc, publishedAt desc) {
   _id,
@@ -273,7 +274,7 @@ export function Portfolio() {
           </p>
 
           {/* Primary CTA Button */}
-          <ButtonWithIcon to="/contact" variant="lime" size="lg">
+          <ButtonWithIcon href={CAL_BOOKING_URL} onClick={handleBookingClick} variant="lime" size="lg">
             Book a Call
           </ButtonWithIcon>
         </motion.div>
