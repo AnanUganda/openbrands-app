@@ -9,9 +9,9 @@ import { authenticTestimonials } from "@/components/ui/stagger-testimonials";
 import { getUtmParams, trackLeadGenerated } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
-// TODO: replace the placeholders below with the real values.
+// TODO: replace the placeholder below with the real value.
 const GOOGLE_REVIEWS_URL = "[GOOGLE_REVIEWS_URL]";
-const GOOGLE_ADS_BOOKING_CONVERSION = "[GOOGLE_ADS_BOOKING_CONVERSION]";
+const GOOGLE_ADS_BOOKING_CONVERSION = "AW-18495990613/YbVkCLSx750dENXWyfNE";
 
 const CAL_LINK = "twijjukye-anan-m21aet/30min";
 const CAL_NAMESPACE = "30min";
@@ -94,9 +94,41 @@ function getCal(): CalApi {
   return cal;
 }
 
-let calListenersAttached = false;
 let bookingReported = false;
-let onCalReady: (() => void) | null = null;
+
+/** Inits the Cal.com namespace and its listeners once per page load. */
+function getCalNamespace(): CalApi {
+  const Cal = getCal();
+  if (Cal.ns?.[CAL_NAMESPACE]) return Cal.ns[CAL_NAMESPACE];
+
+  Cal("init", CAL_NAMESPACE, { origin: CAL_ORIGIN });
+  Cal.config = Cal.config || {};
+  Cal.config.forwardQueryParams = true;
+  const cal = Cal.ns![CAL_NAMESPACE];
+
+  cal("ui", {
+    cssVarsPerTheme: { dark: { "cal-brand": "#afe63d" } },
+    hideEventTypeDetails: false,
+    layout: "month_view",
+  });
+
+  cal("on", {
+    action: "bookingSuccessfulV2",
+    callback: () => {
+      if (bookingReported) return;
+      bookingReported = true;
+      try {
+        if (typeof window.gtag === "function") {
+          window.gtag("event", "conversion", { send_to: GOOGLE_ADS_BOOKING_CONVERSION });
+        }
+      } catch {
+        // Tracking must never break the booking flow.
+      }
+    },
+  });
+
+  return cal;
+}
 
 function RequiredMark() {
   return <span className="text-red-500">*</span>;
@@ -110,61 +142,18 @@ export function Contact() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const bookRef = useRef<HTMLElement>(null);
-  const calRef = useRef<HTMLDivElement>(null);
-  const calStarted = useRef(false);
-  const [calReady, setCalReady] = useState(false);
+  const bookRef = useRef<HTMLDivElement>(null);
 
-  // The Cal.com listeners are registered once per page load, so they reach the
-  // mounted component through this module-level hook.
+  // Load Cal.com's embed with the page so the pop-up opens without a delay.
   useEffect(() => {
-    onCalReady = () => setCalReady(true);
-    return () => {
-      onCalReady = null;
-    };
+    getCalNamespace();
   }, []);
 
-  const startCal = useCallback(() => {
-    const el = calRef.current;
-    if (calStarted.current || !el) return;
-    calStarted.current = true;
-
-    const Cal = getCal();
-    if (!Cal.ns?.[CAL_NAMESPACE]) {
-      Cal("init", CAL_NAMESPACE, { origin: CAL_ORIGIN });
-      Cal.config = Cal.config || {};
-      Cal.config.forwardQueryParams = true;
-    }
-    const cal = Cal.ns![CAL_NAMESPACE];
-
-    if (!calListenersAttached) {
-      calListenersAttached = true;
-      cal("on", { action: "linkReady", callback: () => onCalReady?.() });
-      // Newer embeds emit bookingSuccessfulV2 alongside bookingSuccessful; count one.
-      const reportBooking = () => {
-        if (bookingReported) return;
-        bookingReported = true;
-        // Skip until a real Google Ads conversion ID (AW-…) replaces the placeholder.
-        if (!GOOGLE_ADS_BOOKING_CONVERSION.startsWith("AW-")) return;
-        try {
-          window.gtag?.("event", "conversion", { send_to: GOOGLE_ADS_BOOKING_CONVERSION });
-        } catch {
-          // Tracking must never break the booking flow.
-        }
-      };
-      cal("on", { action: "bookingSuccessful", callback: reportBooking });
-      cal("on", { action: "bookingSuccessfulV2", callback: reportBooking });
-    }
-
-    cal("inline", {
-      elementOrSelector: el,
-      config: { layout: "month_view", useSlotsViewOnSmallScreen: "true" },
+  const openCal = useCallback(() => {
+    getCalNamespace()("modal", {
       calLink: CAL_LINK,
-    });
-    cal("ui", {
-      cssVarsPerTheme: { dark: { "cal-brand": "#afe63d" } },
-      hideEventTypeDetails: false,
-      layout: "month_view",
+      calOrigin: CAL_ORIGIN,
+      config: { layout: "month_view", useSlotsViewOnSmallScreen: "true" },
     });
   }, []);
 
@@ -181,48 +170,9 @@ export function Contact() {
   }, []);
 
   const scrollToBooking = useCallback(() => {
-    startCal();
     scrollToSection(bookRef.current);
-  }, [startCal, scrollToSection]);
-
-  // Load Cal.com once the calendar nears the viewport. It sits above the fold on
-  // desktop, so also wait for the page's own load to finish first.
-  useEffect(() => {
-    const section = bookRef.current;
-    if (!section) return;
-
-    let waitingForLoad = false;
-    const startAfterLoad = () => {
-      if (document.readyState === "complete") {
-        startCal();
-      } else {
-        waitingForLoad = true;
-        window.addEventListener("load", startCal, { once: true });
-      }
-    };
-
-    if (!("IntersectionObserver" in window)) {
-      startAfterLoad();
-      return () => {
-        if (waitingForLoad) window.removeEventListener("load", startCal);
-      };
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          startAfterLoad();
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "600px 0px" }
-    );
-    observer.observe(section);
-    return () => {
-      observer.disconnect();
-      if (waitingForLoad) window.removeEventListener("load", startCal);
-    };
-  }, [startCal]);
+    openCal();
+  }, [openCal, scrollToSection]);
 
   // Nav anchors (/contact#book, /contact#review). After a route change, wait for
   // the scroll-to-top reset to run first; on this page, scroll straight away.
@@ -368,15 +318,15 @@ export function Contact() {
           </p>
         </motion.div>
 
-        {/* 2. Primary: call card with the calendar beside it */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch mb-10">
+        {/* 2. Primary: call card; "Choose a time" opens the Cal.com pop-up */}
+        <div id="book" ref={bookRef} className="max-w-2xl mx-auto mb-10 scroll-mt-24">
 
           {/* Card 1: primary */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-            className="lg:col-span-5 bg-white border-2 border-[#BFF549] rounded-3xl p-6 sm:p-10 shadow-[0_4px_20px_rgba(191,245,73,0.3)] relative overflow-hidden"
+            className="bg-white border-2 border-[#BFF549] rounded-3xl p-6 sm:p-10 shadow-[0_4px_20px_rgba(191,245,73,0.3)] relative overflow-hidden"
           >
             <span className="inline-flex items-center rounded-full bg-[#BFF549] text-[#0D0D0D] px-3 py-1 text-xs font-bold uppercase tracking-wider mb-6">
               Recommended · 30 minutes
@@ -457,29 +407,6 @@ export function Contact() {
               </figure>
             )}
           </motion.div>
-
-          {/* Calendar */}
-          <motion.section
-            id="book"
-            ref={bookRef}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            className="lg:col-span-7 scroll-mt-24 bg-white border border-gray-200/90 rounded-3xl shadow-sm overflow-hidden flex flex-col"
-          >
-            <h2 className="text-xl sm:text-2xl font-bold text-[#0D0D0D] tracking-tight px-6 sm:px-10 pt-6 sm:pt-10 pb-2">
-              Pick a time for your call
-            </h2>
-            <div className="relative flex-1">
-              {!calReady && (
-                <div className="absolute inset-0 flex items-center justify-center text-gray-400" aria-hidden="true">
-                  <Loader2 className="w-6 h-6 animate-spin" />
-                </div>
-              )}
-              {/* Cal.com sizes its iframe to the content; the min height avoids a jump on load. */}
-              <div ref={calRef} className="relative w-full h-full min-h-[640px] overflow-auto" />
-            </div>
-          </motion.section>
         </div>
 
         {/* Secondary: free website review */}
