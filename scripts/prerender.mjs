@@ -386,6 +386,10 @@ async function prerender() {
           Array.from(head.querySelectorAll('meta[name="robots"]'))
             .slice(0, -1)
             .forEach((el) => el.remove());
+
+          // Cal.com's embed.js is injected by the app at runtime. A baked-in copy
+          // runs before window.Cal exists and then loads twice, breaking the pop-up.
+          head.querySelectorAll('script[src*="app.cal.com/embed"]').forEach((el) => el.remove());
         },
         { canonicalUrl, siteOrigin: SITE_ORIGIN, noindex: isNoIndexRoute(route) }
       );
